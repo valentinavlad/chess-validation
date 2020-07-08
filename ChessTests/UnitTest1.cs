@@ -10,6 +10,7 @@ namespace ChessTests
         public void Test1()
         {
             var board = new Board();
+            
             Assert.Null(board);
         }
     }
