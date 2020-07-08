@@ -28,6 +28,7 @@ namespace ChessTable
             squares[0, 6] = new Square(0, 6, new Piece(PieceColor.Black, PieceName.Knight));
             squares[0, 7] = new Square(0, 7, new Piece(PieceColor.Black, PieceName.Rook));
 
+            //initialize black pawns
             for (int i = 1; i == 1 ; i++)
             {
                 for (int j = 0; j < 8; j++)
@@ -45,6 +46,7 @@ namespace ChessTable
                 }
             }
 
+            //initialize white pawns
             for (int i = 6; i == 6; i++)
             {
                 for (int j = 0; j < 8; j++)
@@ -52,6 +54,7 @@ namespace ChessTable
                     squares[i, j] = new Square(i, j, new Piece(PieceColor.White, PieceName.Pawn));
                 }
             }
+
             //initialize white pieces
             squares[7, 0] = new Square(7, 0, new Piece(PieceColor.White, PieceName.Rook));
             squares[7, 1] = new Square(7, 1, new Piece(PieceColor.White, PieceName.Knight));
