@@ -9,9 +9,11 @@ namespace ChessTests
         [Fact]
         public void ReadFromFileTest()
         {
-            var file = ReadFromFile.ProcessFile("chess-moves.txt");
+            var listOfMoves = ReadFromFile.ProcessFile("chess-moves.txt");
 
-            Assert.Null(file);
+            string move = "Be5";
+            var res = ReadFromFile.Test(move);
+            Assert.Null(listOfMoves);
         }
         [Fact]
         public void Test1()
