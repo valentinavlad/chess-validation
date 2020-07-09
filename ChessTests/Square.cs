@@ -2,6 +2,12 @@
 {
     public class Square
     {
+        public Square(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
+
         public Square(int x, int y, Piece piece)
         {
             X = x;

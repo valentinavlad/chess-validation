@@ -1,5 +1,6 @@
 using ChessTable;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace ChessTests
@@ -10,9 +11,12 @@ namespace ChessTests
         public void ReadFromFileTest()
         {
             var listOfMoves = ReadFromFile.ProcessFile("chess-moves.txt");
+            string move1 = listOfMoves[0].BlackMoves;
+            string move2 = listOfMoves[0].WhiteMoves;
 
-            string move = "Be5";
-            var res = ReadFromFile.Test(move);
+            var square = ReadFromFile.ConvertChessCoordonatesToArrayIndexes(move1);
+
+            Assert.NotNull(square);
             Assert.Null(listOfMoves);
         }
         [Fact]

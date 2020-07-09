@@ -32,27 +32,5 @@ namespace ChessTests
                 };
             }
         }
-
-        //Be5
-        public static string ConvertChessCoordonatesToArrayIndexes(string move)
-        {
-            string files = "abcdefgh";
-            string ranks = "87654321";
-
-            if (move.Length > 2)
-            {
-                var result = move.Skip(1).Take(2).ToString();
-                return CoordonatesConverter(result, files, ranks);
-            }
-
-            return  CoordonatesConverter(move, files, ranks);
-       
-        }
-
-        private static string CoordonatesConverter(string move, string files, string ranks)
-        {
-            return move.Aggregate("", (ac, t) =>
-                                  char.IsLetter(t) ? ac += files.IndexOf(t) : ac += ranks.IndexOf(t));
-        }
     }
 }

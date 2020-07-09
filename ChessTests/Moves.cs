@@ -4,7 +4,18 @@ namespace ChessTests
 {
     public class Moves
     {
-        public string BlackMoves { get; set; }
-        public string WhiteMoves { get; set; }
+        private string blackMoves;
+        private string whiteMoves;
+
+        public string BlackMoves
+        {
+            get { return blackMoves; }   
+            set { blackMoves = "black " + value; }
+        }
+        public string WhiteMoves
+        {
+            get { return whiteMoves; }
+            set { whiteMoves = "white " + value; }
+        }
     }
 }
