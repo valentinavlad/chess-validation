@@ -14,9 +14,15 @@ namespace ChessTests
             string move1 = listOfMoves[0].BlackMoves;
             string move2 = listOfMoves[0].WhiteMoves;
 
-            var square = ReadFromFile.ConvertChessCoordonatesToArrayIndexes(move1);
+            var cell = ConvertAMoveIntoACellInstance.ConvertChessCoordonatesToArrayIndexes(move1);
 
-            Assert.NotNull(square);
+            var board = new Board();
+            //add a piece on table
+
+            board.AddPieceInCell(cell);
+
+
+            Assert.NotNull(cell);
             Assert.Null(listOfMoves);
         }
         [Fact]

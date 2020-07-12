@@ -5,9 +5,9 @@ using System.Text;
 
 namespace ChessTests
 {
-    public static class ConvertAMoveIntoASquareInstance
+    public static class ConvertAMoveIntoACellInstance
     {
-        public static Square ConvertChessCoordonatesToArrayIndexes(string move)
+        public static Cell ConvertChessCoordonatesToArrayIndexes(string move)
         {
             string stripColorFromMove = move.Substring(6);
             string getColorPiece = move.Substring(0, 5);
@@ -25,7 +25,7 @@ namespace ChessTests
             PieceName pieceName;
             GetColorAndPieceName(stripColorFromMove, getColorPiece, out pieceColor, out pieceName);
 
-            return new Square(i, j, new Piece(pieceColor, pieceName));
+            return new Cell(i, j, new Piece(i, j ,pieceColor, pieceName));
         }
 
         private static void GetColorAndPieceName(string stripColorFromMove, string getColorPiece, out PieceColor pieceColor, out PieceName pieceName)
@@ -45,7 +45,7 @@ namespace ChessTests
             string ranks = "87654321";
 
             if (move.Length > 2)
-            {
+            { 
                 return move.Skip(1).Take(2).Aggregate("", (ac, t) =>
                     char.IsLetter(t) ? ac += files.IndexOf(t) : ac += ranks.IndexOf(t));
             }

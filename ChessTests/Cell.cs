@@ -1,14 +1,14 @@
 ﻿namespace ChessTests
 {
-    public class Square
+    public class Cell
     {
-        public Square(int x, int y)
+        public Cell(int x, int y)
         {
             X = x;
             Y = y;
         }
 
-        public Square(int x, int y, Piece piece)
+        public Cell(int x, int y, Piece piece)
         {
             X = x;
             Y = y;
