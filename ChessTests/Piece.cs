@@ -1,4 +1,6 @@
 ﻿
+using ChessTable;
+
 namespace ChessTests
 {
     public class Piece
@@ -20,10 +22,17 @@ namespace ChessTests
             Y = y;
             PieceColor = pieceColor;
             PieceName = pieceName;
+            Moved = false;
         }
 
         public int X { get; set; }
         public int Y { get; set; }
+        public bool Moved
+        {
+            set;
+            get;
+        }
+
         public PieceColor PieceColor { get; set; }
         public PieceName PieceName { get; set; }
 

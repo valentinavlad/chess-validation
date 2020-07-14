@@ -7,7 +7,8 @@ namespace ChessTests
 {
     public static class ConvertAMoveIntoACellInstance
     {
-        public static Cell ConvertChessCoordonatesToArrayIndexes(string move)
+        //white e5
+        public static Moves ConvertChessCoordonatesToArrayIndexes(string move)
         {
             string stripColorFromMove = move.Substring(6);
             string getColorPiece = move.Substring(0, 5);
@@ -25,7 +26,7 @@ namespace ChessTests
             PieceName pieceName;
             GetColorAndPieceName(stripColorFromMove, getColorPiece, out pieceColor, out pieceName);
 
-            return new Cell(i, j, new Piece(i, j ,pieceColor, pieceName));
+            return new Moves(new Piece(i, j, pieceColor, pieceName));
         }
 
         private static void GetColorAndPieceName(string stripColorFromMove, string getColorPiece, out PieceColor pieceColor, out PieceName pieceName)

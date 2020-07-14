@@ -2,21 +2,17 @@
 {
     public class Cell
     {
-        public Cell(int x, int y)
+        public Cell(Piece piece)
         {
-            X = x;
-            Y = y;
-        }
-
-        public Cell(int x, int y, Piece piece)
-        {
-            X = x;
-            Y = y;
             Piece = piece;
         }
-
-        public int X { get; set; }
-        public int Y { get; set; }
         public Piece Piece { get; set; }
+
+        public Piece ReleaseCell()
+        {
+            Piece releasedPiece = Piece;
+            Piece = null;
+            return releasedPiece;
+        }
     }
 }

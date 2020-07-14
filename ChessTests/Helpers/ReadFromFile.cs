@@ -27,8 +27,8 @@ namespace ChessTests
 
                 yield return new Moves
                 {
-                    BlackMoves = columns[0],
-                    WhiteMoves = columns[1]
+                    WhiteMoves = columns[0],
+                    BlackMoves = columns[1]
                 };
             }
         }
