@@ -37,6 +37,8 @@ namespace ChessTests
             //piece = FindPieceWhoNeedsToBeMoved(cellDestination)
 
             //Move(piece, cellDestination)
+
+            //after move check if is promotion
         }
     }
 }

@@ -116,15 +116,14 @@ namespace ChessTable
 
         public Cell TransformCoordonatesIntoCell(string move)
         {
-            int x, y;
-            ConvertAMoveIntoACellInstance.ConvertChessCoordonatesToArrayIndexes(move, out x, out y);
+            var coordinate = ConvertAMoveIntoACellInstance.ConvertChessCoordinatesToArrayIndexes(move);
 
-            if (x < 0 || x > 7 || y < 0 || y > 7)
+            if (coordinate.X < 0 || coordinate.X > 7 || coordinate.Y < 0 || coordinate.Y > 7)
             {
                 throw new IndexOutOfRangeException("Index out of bound");
             }
 
-            return cells[x, y];
+            return cells[coordinate.X, coordinate.Y];
         }
 
         private PieceName GetPieceNameFromMoveInFile(string move)

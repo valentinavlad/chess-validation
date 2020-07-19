@@ -1,5 +1,6 @@
 using ChessTable;
 using ChessTests.Pieces;
+using NuGet.Frameworks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -209,12 +210,20 @@ namespace ChessTests
         }
 
         [Fact]
-        public void CheckRegex()
+        public void CheckRegexForMovePawnToPromotionShouldReturnNewPiece()
         {
-            var move = "e5Q++";
-            var reg = ConvertAMoveIntoACellInstance.TryParseChessCoordonatesToArrayIndexes(move);
-        
-            
+            var notation = "e8Q++";
+            var color = PieceColor.White;
+            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(notation, color);
+
+            Assert.NotNull(move.Coordinate);
+            Assert.NotNull(move.Promotion);
+            Assert.IsType<Queen>(move.Promotion);
+            Assert.Equal(color, move.Promotion.pieceColor);
+            Assert.False(move.IsCheck);
+            Assert.True(move.IsCheckMate);
         }
+
+
     }
 }
