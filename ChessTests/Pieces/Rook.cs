@@ -5,12 +5,12 @@ using System.Text;
 
 namespace ChessTests.Pieces
 {
-    public class King : Piece
+    public class Rook : Piece
     {
 
-        public King(PieceColor pieceColor) : base(pieceColor)
+        public Rook(PieceColor pieceColor) : base(pieceColor)
         {
-            Name = PieceName.King;
+            Name = PieceName.Rook;
         }
 
         public override bool PieceCanMove(Board board, Cell start, Cell end)

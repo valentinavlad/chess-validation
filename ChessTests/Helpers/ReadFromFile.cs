@@ -9,7 +9,7 @@ namespace ChessTests
 {
     public static class ReadFromFile
     {
-        public static List<Moves> ProcessFile(string path)
+        public static List<string> ProcessFile(string path)
         {
             return
                 File.ReadAllLines(path)
@@ -19,18 +19,16 @@ namespace ChessTests
                 .ToList();
         }
 
-        private static IEnumerable<Moves> ParseLinesToMoves(this IEnumerable<string> lines)
+        private static IEnumerable<string> ParseLinesToMoves(this IEnumerable<string> lines)
         {
             foreach (var line in lines)
             {
                 var columns = line.Split(",");
 
-                yield return new Moves
-                {
-                    WhiteMoves = columns[0],
-                    BlackMoves = columns[1]
-                };
+                yield return columns[0];
+                yield return columns[1];
             }
+       
         }
     }
 }

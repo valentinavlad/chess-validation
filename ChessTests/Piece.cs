@@ -3,38 +3,26 @@ using ChessTable;
 
 namespace ChessTests
 {
-    public class Piece
+    public abstract class Piece
     {
-        public Piece()
+        public Cell InitialPosition { get; set; }
+        public Cell CurrentPosition { get; set; }
+
+        public PieceColor pieceColor;
+        public PieceName Name { get; set; }
+
+        public Piece(PieceColor pieceColor)
         {
-          
+            this.pieceColor = pieceColor;
         }
 
-        public Piece(PieceColor pieceColor, PieceName pieceName)
+        public abstract bool PieceCanMove(Board board, Cell start, Cell end);
+
+        public bool IsOnInitialPosition()
         {
-            PieceColor = pieceColor;
-            PieceName = pieceName;
+            return InitialPosition == CurrentPosition;
         }
 
-        public Piece(int x, int y, PieceColor pieceColor, PieceName pieceName)
-        {
-            X = x;
-            Y = y;
-            PieceColor = pieceColor;
-            PieceName = pieceName;
-            Moved = false;
-        }
-
-        public int X { get; set; }
-        public int Y { get; set; }
-        public bool Moved
-        {
-            set;
-            get;
-        }
-
-        public PieceColor PieceColor { get; set; }
-        public PieceName PieceName { get; set; }
 
     }
 }

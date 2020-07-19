@@ -3,15 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ChessTests.Pieces
+namespace ChessTests
 {
-    public class King : Piece
+    public class Bishop : Piece
     {
 
-        public King(PieceColor pieceColor) : base(pieceColor)
+        public Bishop(PieceColor pieceColor) : base(pieceColor)
         {
-            Name = PieceName.King;
+            Name = PieceName.Bishop;
         }
+
 
         public override bool PieceCanMove(Board board, Cell start, Cell end)
         {

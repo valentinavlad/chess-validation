@@ -6,12 +6,12 @@ namespace ChessTests
 {
     public enum PieceName
     {
-        None,
+
         Pawn,
         Rook,
-        Knight,
+        King,
         Bishop,
         Queen,
-        King
+        Knight
     }
 }
