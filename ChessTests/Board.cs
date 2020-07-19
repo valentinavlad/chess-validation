@@ -119,6 +119,23 @@ namespace ChessTable
 
                     throw new InvalidOperationException("Illegal move!");
                 }
+
+                if (playerColor == PieceColor.Black && move.IsCapture)
+                {
+                    //destination cell ->d3
+                    int x = destinationCell.X - 1;
+                    int jRight = destinationCell.Y + 1;
+                    int jLeft = destinationCell.Y - 1;
+
+                    int y = move.Y == jRight ? jRight : jLeft;
+
+                    if (cells[x, y].Piece != null && cells[x, y].Piece.Name == PieceName.Pawn)
+                    {
+                        return cells[x, y].Piece;
+                    }
+
+                    throw new InvalidOperationException("Illegal move!");
+                }
                 throw new InvalidOperationException("Illegal move!");
 
             }

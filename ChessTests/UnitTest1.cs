@@ -229,47 +229,63 @@ namespace ChessTests
         }
 
         [Theory]
-        [InlineData("d3", "dxc4", false)]
-        [InlineData("b3", "bxc4", false)]
-        [InlineData("e6","dxc4", true)]
-        public void WhitePawnCaptureBlackPawn(string whitePawnCoordinates, string moveAN, bool expectsException)
+        //white pawn captures
+        [InlineData("d3", "c4", "dxc4", false, PieceColor.White)]
+        [InlineData("b3", "c4", "bxc4", false, PieceColor.White)]
+        [InlineData("e6", "c4", "dxc4", true, PieceColor.White)]
+        //black pawn captures
+        [InlineData("d3", "c4", "cxd3", false, PieceColor.Black)]
+        [InlineData("d3", "e4", "exd3", false, PieceColor.Black)]
+        [InlineData("d3", "e6", "cxd3", true, PieceColor.Black)]
+        public void WhitePawnCaptureBlackPawn(string whitePawnCoordinates, string blackPawnCoordinates, string moveAN, bool expectsException, PieceColor currentPlayer)
         {
             var board = new Board(false);
-            var pawnBlack = board.AddPiece("c4", new Pawn(PieceColor.Black));
+            var pawnBlack = board.AddPiece(blackPawnCoordinates, new Pawn(PieceColor.Black));
             var pawnWhite = board.AddPiece(whitePawnCoordinates, new Pawn(PieceColor.White));
-            var currentPlayer = PieceColor.White;
 
             Assert.Equal(pawnWhite, board.CellAt(whitePawnCoordinates).Piece);
-            Assert.Equal(pawnBlack, board.CellAt("c4").Piece);
+            Assert.Equal(pawnBlack, board.CellAt(blackPawnCoordinates).Piece);
 
             var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, currentPlayer);
-            Piece pawnWhite2 = null;
+            Piece attackerPawn = null;
             //Assert.Equal(3, move.Y);
             if (!expectsException)
             {
                 //cauta piesa alba care face mutarea
-                 pawnWhite2 = board.FindPieceWhoNeedsToBeMoved(moveAN, currentPlayer);
+                attackerPawn = board.FindPieceWhoNeedsToBeMoved(moveAN, currentPlayer);
                 //determina celula destinatie
                 var cellDestination = board.TransformCoordonatesIntoCell(move.Coordinate);
 
                 //cauta daca exista pion pe celula destinatie
                 // capturez pionul negru de pe diagonala
                 //resetez pozitia curenta a pionului negru
-                board.CapturePiece(pawnWhite2, cellDestination);
+                board.CapturePiece(attackerPawn, cellDestination);
 
                 //mut pionul pe celula destinatie
-                board.Move(pawnWhite2, cellDestination);
+                board.Move(attackerPawn, cellDestination);
 
-                //verific pozitia pionului alb, sa fie pe celula c4
-                Assert.Equal(pawnWhite, board.CellAt("c4").Piece);
+                if(currentPlayer == PieceColor.White)
+                {
+                    //verific pozitia pionului alb, sa fie pe celula c4
+                    Assert.Equal(attackerPawn, board.CellAt(blackPawnCoordinates).Piece);
 
-                //verific ca pionul negru nu mai exista pe board
-                Assert.Null(pawnBlack.CurrentPosition);
+                    //verific ca pionul negru nu mai exista pe board
+                    Assert.Null(pawnBlack.CurrentPosition);
+                }
+                else
+                {
+                    //verific pozitia pionului alb, sa fie pe celula c4
+                    Assert.Equal(attackerPawn, board.CellAt(whitePawnCoordinates).Piece);
+
+                    //verific ca pionul alb nu mai exista pe board
+                    Assert.Null(pawnWhite.CurrentPosition);
+                }
+      
             }
             else
             {
                 //daca nu exista piesa, arunc exceptie
-                Action exception = () => pawnWhite2 = board.FindPieceWhoNeedsToBeMoved(moveAN, currentPlayer);
+                Action exception = () => board.FindPieceWhoNeedsToBeMoved(moveAN, currentPlayer);
                 Assert.Throws<InvalidOperationException>(exception);
             }
         }
