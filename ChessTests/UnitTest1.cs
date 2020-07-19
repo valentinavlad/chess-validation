@@ -10,6 +10,7 @@ namespace ChessTests
 {
     public class UnitTest1
     {
+
         [Fact]
         public void InitialBoardShouldHavePiecesOnPLace()
         {
@@ -64,9 +65,9 @@ namespace ChessTests
         {
             var board = new Board();
 
-            var cell = board.TransformCoordonatesIntoCell("e4");
+            var cell = board.CellAt("e4");
 
-            var pawnOnInitialPos = board.TransformCoordonatesIntoCell("e2");
+            var pawnOnInitialPos = board.CellAt("e2");
             
             Assert.Null(cell.Piece);
             Assert.NotNull(pawnOnInitialPos.Piece);
@@ -77,7 +78,7 @@ namespace ChessTests
         {
             var board = new Board();
 
-            Action exception = () => board.TransformCoordonatesIntoCell("08");
+            Action exception = () => board.CellAt("a9");
             Assert.Throws<IndexOutOfRangeException>(exception);
         }
 
@@ -87,7 +88,7 @@ namespace ChessTests
         {
             var board = new Board();
 
-            Action exception = () => board.TransformCoordonatesIntoCell("80");
+            Action exception = () => board.CellAt("i8");
             Assert.Throws<IndexOutOfRangeException>(exception);
         }
 
@@ -95,15 +96,14 @@ namespace ChessTests
         public void FindWhitePawnWhoNeedsToBeMovedTest()
         {
             var board = new Board();
-            var cell = board.TransformCoordonatesIntoCell("e3");
+            var cell = board.CellAt("e3");
             var player = PieceColor.White;
-            var piece = board.FindPieceWhoNeedsToBeMoved("e3", player);
+            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation("e3", player);
+            var piece = board.FindPieceWhoNeedsToBeMoved(move, player);
 
             Assert.NotNull(piece);
             Assert.IsType<Pawn>(piece);
 
-
-            var cell2 = board.TransformCoordonatesIntoCell("e4");
             var piece2 = board.FindPieceWhoNeedsToBeMoved("e4", player);
 
             Assert.NotNull(piece2);
@@ -115,14 +115,12 @@ namespace ChessTests
         public void FindBlackPawnWhoNeedsToBeMovedTest()
         {
             var board = new Board();
-            var cell = board.TransformCoordonatesIntoCell("e6");
             var player = PieceColor.Black;
             var piece = board.FindPieceWhoNeedsToBeMoved("e6", player);
 
             Assert.NotNull(piece);
             Assert.IsType<Pawn>(piece);
 
-            var cell2 = board.TransformCoordonatesIntoCell("e5");
             var piece2 = board.FindPieceWhoNeedsToBeMoved("e5", player);
 
             Assert.NotNull(piece2);
@@ -141,7 +139,7 @@ namespace ChessTests
             Assert.True(pawn.IsOnInitialPosition());
 
             //to do move
-            var cell = board.TransformCoordonatesIntoCell("a4");
+            var cell = board.CellAt("a4");
             board.Move(pawn, cell);
             Assert.False(pawn.IsOnInitialPosition());
         }
@@ -151,7 +149,7 @@ namespace ChessTests
         {
             var board = new Board();
             var pawn = board.cells[6, 4].Piece;
-            var cell = board.TransformCoordonatesIntoCell("e4");
+            var cell = board.CellAt("e4");
             board.Move(pawn, cell);
 
             Assert.Equal(pawn, cell.Piece);
@@ -197,16 +195,83 @@ namespace ChessTests
 
        
         [Fact]
-        public void PromoteWhitePawn()
+        public void PromoteWhitePawnToQueen()
         {
-            //promote a pawn with no capture
-            var move = "d1Q";
+            //promote a pawn with no capture to Queen
             var board = new Board(false);
             //  var pawnBlack = board.CellAt("e2").Piece;
             var pawnBlack = board.AddPiece("d2", new Pawn(PieceColor.Black));
             var cell = board.CellAt("d2");
-
             Assert.Equal(pawnBlack, cell.Piece);
+
+            var moveAN = "d1Q";
+            //pe celula destinatie dupa mutarea pionului pe d1, ar trebui sa fie regina neagra
+
+            //caut piesa 
+            //am gasit piesa
+            var piece = board.FindPieceWhoNeedsToBeMoved(moveAN, PieceColor.Black);
+
+            //determin celula destinatie
+            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, PieceColor.Black);
+            var cellDestination = board.TransformCoordonatesIntoCell(move.Coordinate);
+
+            //fac mutarea pe celula destinatie
+            board.Move(piece, cellDestination);
+
+            //fac promovarea pionului la regina
+            //resetez pozitia curenta a pionului
+            //adaug o noua regina
+            var newQueen = board.PromotePawn(move, piece);
+
+            Assert.Null(pawnBlack.CurrentPosition);
+            Assert.IsType<Queen>(board.CellAt("d1").Piece);
+
+        }
+
+        [Theory]
+        [InlineData("d3", "dxc4", false)]
+        [InlineData("b3", "bxc4", false)]
+        [InlineData("e6","dxc4", true)]
+        public void WhitePawnCaptureBlackPawn(string whitePawnCoordinates, string moveAN, bool expectsException)
+        {
+            var board = new Board(false);
+            var pawnBlack = board.AddPiece("c4", new Pawn(PieceColor.Black));
+            var pawnWhite = board.AddPiece(whitePawnCoordinates, new Pawn(PieceColor.White));
+            var currentPlayer = PieceColor.White;
+
+            Assert.Equal(pawnWhite, board.CellAt(whitePawnCoordinates).Piece);
+            Assert.Equal(pawnBlack, board.CellAt("c4").Piece);
+
+            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, currentPlayer);
+            Piece pawnWhite2 = null;
+            //Assert.Equal(3, move.Y);
+            if (!expectsException)
+            {
+                //cauta piesa alba care face mutarea
+                 pawnWhite2 = board.FindPieceWhoNeedsToBeMoved(moveAN, currentPlayer);
+                //determina celula destinatie
+                var cellDestination = board.TransformCoordonatesIntoCell(move.Coordinate);
+
+                //cauta daca exista pion pe celula destinatie
+                // capturez pionul negru de pe diagonala
+                //resetez pozitia curenta a pionului negru
+                board.CapturePiece(pawnWhite2, cellDestination);
+
+                //mut pionul pe celula destinatie
+                board.Move(pawnWhite2, cellDestination);
+
+                //verific pozitia pionului alb, sa fie pe celula c4
+                Assert.Equal(pawnWhite, board.CellAt("c4").Piece);
+
+                //verific ca pionul negru nu mai exista pe board
+                Assert.Null(pawnBlack.CurrentPosition);
+            }
+            else
+            {
+                //daca nu exista piesa, arunc exceptie
+                Action exception = () => pawnWhite2 = board.FindPieceWhoNeedsToBeMoved(moveAN, currentPlayer);
+                Assert.Throws<InvalidOperationException>(exception);
+            }
         }
 
         [Fact]

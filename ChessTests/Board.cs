@@ -1,10 +1,6 @@
 ﻿using ChessTests;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
 using ChessTests.Pieces;
-using System.Security.Cryptography;
 
 namespace ChessTable
 {
@@ -47,6 +43,11 @@ namespace ChessTable
         }
 
         //e4
+        public Piece FindPieceWhoNeedsToBeMoved(string moveAN, PieceColor playerColor)
+        {
+            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, playerColor);
+            return FindPieceWhoNeedsToBeMoved(move, playerColor);
+        }
         public Piece FindPieceWhoNeedsToBeMoved(Move move, PieceColor playerColor)
         {
             //must check if board is in initial state
@@ -57,7 +58,7 @@ namespace ChessTable
             {      
                 //validate move forward
 
-                if(playerColor == PieceColor.White)
+                if(playerColor == PieceColor.White && !move.IsCapture)
                 {
                     //check for one cell movement
                     int i = destinationCell.X + 1;
@@ -84,7 +85,7 @@ namespace ChessTable
 
                 }
 
-                if(playerColor == PieceColor.Black)
+                if(playerColor == PieceColor.Black && !move.IsCapture)
                 {
                     int i = destinationCell.X - 1;
                     if (cells[i, destinationCell.Y].Piece != null &&
@@ -102,6 +103,22 @@ namespace ChessTable
 
                 }
 
+                if (playerColor == PieceColor.White && move.IsCapture)
+                {
+                    //destination cell ->c4
+                    int x = destinationCell.X + 1;
+                    int jRight = destinationCell.Y + 1;
+                    int jLeft = destinationCell.Y - 1;
+
+                    int y = move.Y == jRight ? jRight : jLeft;
+                  
+                    if(cells[x,y].Piece != null && cells[x,y].Piece.Name == PieceName.Pawn)
+                    {
+                        return cells[x, y].Piece;
+                    }
+
+                    throw new InvalidOperationException("Illegal move!");
+                }
                 throw new InvalidOperationException("Illegal move!");
 
             }
@@ -109,10 +126,23 @@ namespace ChessTable
             return null;
         }
 
-        //public Piece PromotePawn()
-        //{
+        public Piece PromotePawn(Move move, Piece pawn)
+        {
+            pawn.CurrentPosition = null;
+            var pawnPromovatesTo = AddPiece(move.Coordinate, move.Promotion);
+            return pawnPromovatesTo;
+        }
 
-        //}
+        public void CapturePiece(Piece pieceWhoMoves, Cell cellDestination)
+        {
+            //cauta daca exista pion pe celula destinatie
+            var pieceInPlace = cellDestination.Piece;
+            if (pieceInPlace != null && pieceInPlace.pieceColor != pieceWhoMoves.pieceColor)
+            {
+                pieceInPlace.CurrentPosition = null;
+                cellDestination.Piece = null;
+            }
+        }
 
         public Cell TransformCoordonatesIntoCell(Coordinate coordinate)
         {
@@ -124,11 +154,6 @@ namespace ChessTable
 
             return cells[coordinate.X, coordinate.Y];
         }
-
-        //private PieceName GetPieceNameFromMoveInFile(string move)
-        //{
-        //    return ConvertAMoveIntoACellInstance.ConvertPieceInitialFromMoveToPieceName(move);
-        //}
 
         private void InitializeBoard()
         {
@@ -197,9 +222,19 @@ namespace ChessTable
             return TransformCoordonatesIntoCell(result);
         }
 
+        internal Cell CellAt(Coordinate coordinates)
+        {
+            return TransformCoordonatesIntoCell(coordinates);
+        }
+
         internal Piece AddPiece(string coordsAN, Piece piece)
         {
-            var cell = CellAt(coordsAN);
+            var coordinates = ConvertAMoveIntoACellInstance.ConvertChessCoordinatesToArrayIndexes(coordsAN);
+            return AddPiece(coordinates, piece);
+        }
+        internal Piece AddPiece(Coordinate coordinates, Piece piece)
+        {
+            var cell = CellAt(coordinates);
             cell.Piece = piece;
             return cell.Piece;
         }

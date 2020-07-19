@@ -1,6 +1,7 @@
 ﻿using ChessTests.Pieces;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -13,19 +14,32 @@ namespace ChessTests
         public static Coordinate ConvertChessCoordinatesToArrayIndexes(string coordsAN)
         {
             Coordinate coordinate = new Coordinate();
-            string files = "abcdefgh";
-            string ranks = "87654321";
-
-            var coordinateFromMove = coordsAN.Aggregate("", (ac, t) =>
-                              char.IsLetter(t) ? ac += files.IndexOf(t) : ac += ranks.IndexOf(t));
-            if (coordinateFromMove.Length != 2)
+            if (coordsAN.Length != 2)
             {
                 throw new IndexOutOfRangeException("coordonates must be exactly 2");
             }
-            coordinate.Y = Convert.ToInt32(char.GetNumericValue(coordinateFromMove.First()));
-            coordinate.X = Convert.ToInt32(char.GetNumericValue(coordinateFromMove.Last()));
+            coordinate.X = ConvertChessCoordinateRankToArrayIndex(coordsAN);
+            coordinate.Y = ConvertChessCoordinateFileToArrayIndex(coordsAN);
 
             return coordinate;
+        }
+
+        public static int ConvertChessCoordinateFileToArrayIndex(string coordsAN)
+        {
+            string files = "abcdefgh"; //refers to columns => x
+           
+            var file = coordsAN.First();
+
+            return files.IndexOf(file);
+        }
+
+        public static int ConvertChessCoordinateRankToArrayIndex(string coordsAN)
+        {
+            string ranks = "87654321"; //refers to rows => y
+
+            var rank = coordsAN.Last();
+
+            return ranks.IndexOf(rank);
         }
 
         // Return the piece type from the move, that has been read from file.
@@ -49,6 +63,7 @@ namespace ChessTests
             char promotion = ' ';
             string checkOrCheckMate = "";
             string pieceUppercase = "";
+            string file = "";
             Move move = new Move();
             //moves with captures
             if (moveNotation.Contains('x'))
@@ -67,8 +82,9 @@ namespace ChessTests
                         // ... Get groups by name.
 
                         coordinatesFromMove = match.Groups["coordinates"].Value;
-                        pieceUppercase = match.Groups["pieceUppercase"].Value;
                         checkOrCheckMate = match.Groups["checkOrCheckMate"].Value;
+
+                        pieceUppercase = match.Groups["pieceUppercase"].Value;
                         move.IsCapture = true;
                     }
                     else
@@ -87,10 +103,15 @@ namespace ChessTests
                     {
                         // ... Get groups by name.
                         coordinatesFromMove = match.Groups["coordinates"].Value;
-                        promotion = match.Groups["promotion"].Value.First();
+                        if (match.Groups["promotion"].Value != "")
+                        {
+                            promotion = match.Groups["promotion"].Value.First();
+                        }
+                        
                         pieceUppercase = "P";
+                        file = match.Groups["file"].Value;
                         checkOrCheckMate = match.Groups["checkOrCheckMate"].Value;
-
+                        move.Y = ConvertChessCoordinateFileToArrayIndex(file);
                         move.IsCapture = true;
                     }
                     else
@@ -134,7 +155,11 @@ namespace ChessTests
                     {
                         // ... Get groups by name.
                         coordinatesFromMove = match.Groups["coordinates"].Value;
-                        promotion = match.Groups["promotion"].Value.First();
+                        if(match.Groups["promotion"].Value != "")
+                        {
+                            promotion = match.Groups["promotion"].Value.First();
+                        }
+                       
                         pieceUppercase = "P";
                         checkOrCheckMate = match.Groups["checkOrCheckMate"].Value;
                     }
@@ -152,6 +177,7 @@ namespace ChessTests
             move.Promotion = CreatePiece(promotion, pieceColor);
             move.PieceName = ConvertPieceInitialFromMoveToPieceName(pieceUppercase);
             move.Color = pieceColor;
+          
 
             if (checkOrCheckMate.Length == 1)
             {
