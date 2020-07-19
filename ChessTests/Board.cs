@@ -47,11 +47,11 @@ namespace ChessTable
         }
 
         //e4
-        public Piece FindPieceWhoNeedsToBeMoved(string move, PieceColor playerColor)
+        public Piece FindPieceWhoNeedsToBeMoved(Move move, PieceColor playerColor)
         {
             //must check if board is in initial state
-            var destinationCell = TransformCoordonatesIntoCell(move);
-            var pieceName = ConvertAMoveIntoACellInstance.ConvertPieceInitialFromMoveToPieceName(move);
+            var destinationCell = TransformCoordonatesIntoCell(move.Coordinate);
+            var pieceName = move.PieceName;
             
             if (pieceName == PieceName.Pawn)
             {      
@@ -114,10 +114,9 @@ namespace ChessTable
 
         //}
 
-        public Cell TransformCoordonatesIntoCell(string move)
+        public Cell TransformCoordonatesIntoCell(Coordinate coordinate)
         {
-            var coordinate = ConvertAMoveIntoACellInstance.ConvertChessCoordinatesToArrayIndexes(move);
-
+           
             if (coordinate.X < 0 || coordinate.X > 7 || coordinate.Y < 0 || coordinate.Y > 7)
             {
                 throw new IndexOutOfRangeException("Index out of bound");
@@ -126,10 +125,10 @@ namespace ChessTable
             return cells[coordinate.X, coordinate.Y];
         }
 
-        private PieceName GetPieceNameFromMoveInFile(string move)
-        {
-            return ConvertAMoveIntoACellInstance.ConvertPieceInitialFromMoveToPieceName(move);
-        }
+        //private PieceName GetPieceNameFromMoveInFile(string move)
+        //{
+        //    return ConvertAMoveIntoACellInstance.ConvertPieceInitialFromMoveToPieceName(move);
+        //}
 
         private void InitializeBoard()
         {
@@ -192,14 +191,15 @@ namespace ChessTable
             }
         }
 
-        internal Cell CellAt(string coordonates)
+        internal Cell CellAt(string coordsAN)
         {
-            return TransformCoordonatesIntoCell(coordonates);
+            var result = ConvertAMoveIntoACellInstance.ConvertChessCoordinatesToArrayIndexes(coordsAN);
+            return TransformCoordonatesIntoCell(result);
         }
 
-        internal Piece AddPiece(string coordonates, Piece piece)
+        internal Piece AddPiece(string coordsAN, Piece piece)
         {
-            var cell = CellAt(coordonates);
+            var cell = CellAt(coordsAN);
             cell.Piece = piece;
             return cell.Piece;
         }

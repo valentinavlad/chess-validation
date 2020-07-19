@@ -12,7 +12,10 @@ namespace ChessTests
         //iesa care vine mutatap
         public PieceName PieceName { get; set; }
 
+        public PieceColor Color { get; set; }
+
         public bool IsCheck { get; set; }
         public bool IsCheckMate { get; set; }
+        public bool IsCapture { get; set; }
     }
 }

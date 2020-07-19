@@ -10,13 +10,13 @@ namespace ChessTests
     public static class ConvertAMoveIntoACellInstance
     {
 
-        public static Coordinate ConvertChessCoordinatesToArrayIndexes(string move)
+        public static Coordinate ConvertChessCoordinatesToArrayIndexes(string coordsAN)
         {
             Coordinate coordinate = new Coordinate();
             string files = "abcdefgh";
             string ranks = "87654321";
 
-            var coordinateFromMove =  move.Aggregate("", (ac, t) =>
+            var coordinateFromMove = coordsAN.Aggregate("", (ac, t) =>
                               char.IsLetter(t) ? ac += files.IndexOf(t) : ac += ranks.IndexOf(t));
             if (coordinateFromMove.Length != 2)
             {
@@ -29,12 +29,12 @@ namespace ChessTests
         }
 
         // Return the piece type from the move, that has been read from file.
-        public static PieceName ConvertPieceInitialFromMoveToPieceName(string move)
+        public static PieceName ConvertPieceInitialFromMoveToPieceName(string pieceUppercase)
         {
             PieceName pieceName;
             string piecesNameInitials = "PRKBQN";
 
-            var pieceNameInitial = move.First();
+            var pieceNameInitial = pieceUppercase.First();
             var getNumericValueFromPieceName = char.IsUpper(pieceNameInitial) ? piecesNameInitials.IndexOf(pieceNameInitial) : 0;
 
             var values = Enum.GetValues(typeof(PieceName));
@@ -48,6 +48,8 @@ namespace ChessTests
             string coordinatesFromMove = "";
             char promotion = ' ';
             string checkOrCheckMate = "";
+            string pieceUppercase = "";
+            Move move = new Move();
             //moves with captures
             if (moveNotation.Contains('x'))
             {
@@ -55,11 +57,46 @@ namespace ChessTests
                 if (char.IsUpper(firstChar))
                 {
                     //move with capture
-                    
+
+                    string pattern = @"^(?<pieceUppercase>[BRQKN])(?<capture>[x])(?<coordinates>[a-h][1-8])(?<checkOrCheckMate>[+]{0,2})$";
+                    Regex reg = new Regex(pattern);
+                    Match match = Regex.Match(moveNotation, pattern);
+
+                    if (match.Success)
+                    {
+                        // ... Get groups by name.
+
+                        coordinatesFromMove = match.Groups["coordinates"].Value;
+                        pieceUppercase = match.Groups["pieceUppercase"].Value;
+                        checkOrCheckMate = match.Groups["checkOrCheckMate"].Value;
+                        move.IsCapture = true;
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("Invalid move!");
+                    }
                 }
                 else
                 {
                     //pawn move with capture and/or promotion
+                    string pattern = @"^(?<file>[a-h])(?<capture>[x])(?<coordinates>[a-h][1-8])(?<promotion>[BRQKN]{0,1})(?<checkOrCheckMate>[+]{0,2})$";
+                    Regex reg = new Regex(pattern);
+                    Match match = Regex.Match(moveNotation, pattern);
+
+                    if (match.Success)
+                    {
+                        // ... Get groups by name.
+                        coordinatesFromMove = match.Groups["coordinates"].Value;
+                        promotion = match.Groups["promotion"].Value.First();
+                        pieceUppercase = "P";
+                        checkOrCheckMate = match.Groups["checkOrCheckMate"].Value;
+
+                        move.IsCapture = true;
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("Invalid move!");
+                    }
                 }
             }
             //simple moves
@@ -68,7 +105,23 @@ namespace ChessTests
                 if (char.IsUpper(firstChar))
                 {
                     //move
-                    
+                    string pattern = @"^(?<pieceUppercase>[BRQKN])(?<coordinates>[a-h][1-8])(?<checkOrCheckMate>[+]{0,2})$";
+                    Regex reg = new Regex(pattern);
+                    Match match = Regex.Match(moveNotation, pattern);
+
+                    if (match.Success)
+                    {
+                        // ... Get groups by name.
+                        
+                        coordinatesFromMove = match.Groups["coordinates"].Value;
+                        pieceUppercase = match.Groups["pieceUppercase"].Value;
+                        checkOrCheckMate = match.Groups["checkOrCheckMate"].Value;
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("Invalid move!");
+                    }
+
                 }
                 else
                 {
@@ -82,17 +135,25 @@ namespace ChessTests
                         // ... Get groups by name.
                         coordinatesFromMove = match.Groups["coordinates"].Value;
                         promotion = match.Groups["promotion"].Value.First();
+                        pieceUppercase = "P";
                         checkOrCheckMate = match.Groups["checkOrCheckMate"].Value;
                     }
+                    else
+                    {
+                        throw new InvalidOperationException("Invalid move!");
+                    }
+                    
                 }
 
             }
             var coordinate = ConvertChessCoordinatesToArrayIndexes(coordinatesFromMove);
-            Move move = new Move();
+          
             move.Coordinate = coordinate;
             move.Promotion = CreatePiece(promotion, pieceColor);
-      
-            if(checkOrCheckMate.Length == 1)
+            move.PieceName = ConvertPieceInitialFromMoveToPieceName(pieceUppercase);
+            move.Color = pieceColor;
+
+            if (checkOrCheckMate.Length == 1)
             {
                 move.IsCheck = true; 
             }
