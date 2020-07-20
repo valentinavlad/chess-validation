@@ -10,7 +10,6 @@ namespace ChessTests
 {
     public class BoardTests
     {
-
         [Fact]
         public void InitialBoardShouldHavePiecesOnPLace()
         {
@@ -26,39 +25,7 @@ namespace ChessTests
             Assert.NotNull(rookWhite);
             Assert.IsType<Rook>(rookWhite);
             Assert.Equal(PieceColor.White, rookWhite.pieceColor);
-        }
-
-        [Fact]
-        public void ReadFromFileShoudReturnListOfMoves()
-        {
-            var listOfMoves = ReadFromFile.ProcessFile("chess-moves.txt");
-            
-            string move1 = listOfMoves[0];
-            string move2 = listOfMoves[1];
-            string move3 = listOfMoves[2];
-
-            Assert.Equal("e4", move1);
-            Assert.Equal("e5", move2);
-            Assert.Equal("Nf3", move3);
-        }
-
-        [Fact]
-        public void ConvertPieceInitialFromMoveToPieceNameShouldReturnPieceName()
-        {
-            var listOfMoves = ReadFromFile.ProcessFile("chess-moves.txt");
-
-            string move1 = listOfMoves[0];
-            string move3 = listOfMoves[2];
-            string move4 = listOfMoves[4];
-
-            var pieceTypeKnight = ConvertAMoveIntoACellInstance.ConvertPieceInitialFromMoveToPieceName(move3);
-            var pieceTypePawn = ConvertAMoveIntoACellInstance.ConvertPieceInitialFromMoveToPieceName(move1);
-            var pieceTypeBishop = ConvertAMoveIntoACellInstance.ConvertPieceInitialFromMoveToPieceName(move4);
-
-            Assert.Equal(PieceName.Bishop, pieceTypeBishop);
-            Assert.Equal(PieceName.Pawn, pieceTypePawn);
-            Assert.Equal(PieceName.Knight , pieceTypeKnight);
-        }
+        } 
 
         [Fact]
         public void InitializeBoardShoudReturnPiecesInInitialPosition()
@@ -389,9 +356,6 @@ namespace ChessTests
             Assert.True(move.IsCapture);
         }
 
-
-
-
         [Theory]
         //find queen on diagonal left-down, no obstacles
         [InlineData("d1", "Qf3", PieceColor.White)]
@@ -509,6 +473,34 @@ namespace ChessTests
             Assert.Equal(queen, board.CellAt("d5").Piece);
         }
 
+        [Theory]
+  
+        [InlineData("d2", "d1", "d4")]
+        [InlineData("d3", "d1", "d4")]
+        public void CheckPawnMovementWithObstacleShouldThrowException(string attackerCoords,
+            string opponentCoords, string moveAN)
+        {
+            var board = new Board(false);
+            board.AddPiece(attackerCoords, new Pawn(PieceColor.Black));
+            board.AddPiece(opponentCoords, new Queen(PieceColor.White));
 
+            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, PieceColor.White);
+
+            Action exception = () => board.FindPieceWhoNeedsToBeMoved(move, PieceColor.White);
+            Assert.Throws<InvalidOperationException>(exception);
+        }
+
+        [Fact]
+        public void Test()
+        {
+            var board = new Board(false);
+            board.AddPiece("c3", new Knight(PieceColor.White));
+            board.AddPiece("c2", new Pawn(PieceColor.White));
+            var moveAN = "c3";
+            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, PieceColor.White);
+
+            Action exception = () => board.FindPieceWhoNeedsToBeMoved(move, PieceColor.White);
+            Assert.Throws<InvalidOperationException>(exception);
+        }
     }
 }

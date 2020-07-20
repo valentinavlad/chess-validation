@@ -24,35 +24,21 @@ namespace ChessTests
             {
                 NextTurn(currentPlayer, moveAN);
                 MovesCounter++;
-                if (currentPlayer == PieceColor.White)
-                {
-                    currentPlayer = PieceColor.Black;
-                }
-                else
-                {
-                    currentPlayer = PieceColor.White;
-                }
-
             }
  
         }
 
         private void NextTurn(PieceColor player, string moveAN)
         {
-            //citesc mutarea din lista si returnez Cell si Piece(e5)
-
-            //coordonates: string =e5
-
-            //cellDestination = transform coordonates into a Cell -> function in Board
-            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, player);
-            var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);
-
-            //piece = FindPieceWhoNeedsToBeMoved(cellDestination)
-            var piece = board.FindPieceWhoNeedsToBeMoved(move, player);
-
-            //Move(piece, cellDestination)
-            board.Move(piece, destinationCell);
-
+            board.PlayMove(moveAN, player);
+            if (currentPlayer == PieceColor.White)
+            {
+                currentPlayer = PieceColor.Black;
+            }
+            else
+            {
+                currentPlayer = PieceColor.White;
+            }
             //moveAn imi spune ce mutare am sa fac
 
             //after move check if is promotion
