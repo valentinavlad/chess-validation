@@ -11,6 +11,7 @@ namespace ChessTests
         public PieceColor currentPlayer = PieceColor.White;
         public int MovesCounter { get; set; }
         public PieceColor Winner { get; set; }
+        public bool IsGameOver { get; set; }
         //lista piese capturate
         public void Play(List<string> listOfMoves)
         {
@@ -31,14 +32,9 @@ namespace ChessTests
                 {
                     currentPlayer = PieceColor.White;
                 }
-                
-       
-            }
-            //loop listMoves -> while are elem in list
-            // NextTurn(player=white, cooordonates)
 
-            // currentPlayer = black
-            // NextTurn(player=black, cooordonates)
+            }
+ 
         }
 
         private void NextTurn(PieceColor player, string moveAN)

@@ -8,7 +8,7 @@ using Xunit;
 
 namespace ChessTests
 {
-    public class UnitTest1
+    public class BoardTests
     {
 
         [Fact]
@@ -187,10 +187,8 @@ namespace ChessTests
             var board = new Board();
             var pawn = board.CellAt("e2").Piece;
             board.Move(pawn, board.CellAt("e4"));
-
-            
-            Assert.Equal(pawn, board.FindPieceWhoNeedsToBeMoved("e5", PieceColor.White));
-   
+        
+            Assert.Equal(pawn, board.FindPieceWhoNeedsToBeMoved("e5", PieceColor.White)); 
         }
 
         [Theory]
@@ -205,8 +203,7 @@ namespace ChessTests
             var pawnBlack = board.AddPiece(pawnCoord, new Pawn(pieceColor));
             var cell = board.CellAt(pawnCoord);
             Assert.Equal(pawnBlack, cell.Piece);
-
-           
+       
             //pe celula destinatie dupa mutarea pionului pe d1, ar trebui sa fie regina neagra
 
             //caut piesa 
@@ -245,8 +242,6 @@ namespace ChessTests
 
             var attacker0 = board.AddPiece(attackerCoords, new Pawn(attackerColor));
             var opponent0 = board.AddPiece(opponentCoords, new Rook(opponentColor));
-
-
 
 
             //Act
@@ -297,24 +292,14 @@ namespace ChessTests
             Assert.Equal(pawnWhite, board.CellAt(whitePawnCoordinates).Piece);
             Assert.Equal(pawnBlack, board.CellAt(blackPawnCoordinates).Piece);
 
-            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, currentPlayer);
+           
             Piece attackerPawn = null;
             //Assert.Equal(3, move.Y);
             if (!expectsException)
-            {
+            {           
                 //cauta piesa alba care face mutarea
-                attackerPawn = board.FindPieceWhoNeedsToBeMoved(moveAN, currentPlayer);
-                //determina celula destinatie
-                var cellDestination = board.TransformCoordonatesIntoCell(move.Coordinate);
-
-                //cauta daca exista pion pe celula destinatie
-                // capturez pionul negru de pe diagonala
-                //resetez pozitia curenta a pionului negru
-                board.CapturePiece(attackerPawn, cellDestination);
-
-                //mut pionul pe celula destinatie
-                board.Move(attackerPawn, cellDestination);
-
+                attackerPawn = board.PlayMove(moveAN, currentPlayer);
+               
                 if(currentPlayer == PieceColor.White)
                 {
                     //verific pozitia pionului alb, sa fie pe celula c4
@@ -331,7 +316,6 @@ namespace ChessTests
                     //verific ca pionul alb nu mai exista pe board
                     Assert.Null(pawnWhite.CurrentPosition);
                 }
-      
             }
             else
             {
@@ -404,5 +388,127 @@ namespace ChessTests
             Assert.False(move.IsCheckMate);
             Assert.True(move.IsCapture);
         }
+
+
+
+
+        [Theory]
+        //find queen on diagonal left-down, no obstacles
+        [InlineData("d1", "Qf3", PieceColor.White)]
+
+        //find queen on diagonal right-down, no obstacles
+        [InlineData("h1", "Qf3", PieceColor.White)]
+
+        //find queen on diagonal right-up, no obstacles
+        [InlineData("h5", "Qf3", PieceColor.White)]
+
+        //find queen on diagonal left-up, no obstacles
+        [InlineData("c6", "Qf3", PieceColor.White)]
+
+        //find queen horizintal left, no obstacles
+        [InlineData("b3", "Qf3", PieceColor.White)]
+
+        //find queen horizintal right, no obstacles
+        [InlineData("h3", "Qf3", PieceColor.White)]
+
+        //find queen vertical up, no obstacles
+        [InlineData("f6", "Qf3", PieceColor.White)]
+
+        //find queen vertical down no obstacles
+        [InlineData("f1", "Qf3", PieceColor.White)]
+        public void FindWhiteQueenOnAllRoutesNoObstacleShouldReturnQueen(string queenCoords, string moveAN, PieceColor currentPlayer)
+        {
+            //Arange
+            var board = new Board(false);
+
+            board.AddPiece(queenCoords, new Queen(currentPlayer));
+
+            //find queen on diagonal right-down
+            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, currentPlayer);
+
+            var queen = board.FindPieceWhoNeedsToBeMoved(move, PieceColor.White);
+
+            Assert.IsType<Queen>(queen);
+        }
+
+        [Theory]
+        //find queen on diagonal left-down, with obstacles
+        [InlineData("d1","e2", "Qf3", PieceColor.White)]
+
+        //find queen on diagonal right-down, with obstacles
+        [InlineData("h1", "g2", "Qf3", PieceColor.White)]
+
+        //find queen on diagonal right-up, with obstacles
+        [InlineData("h5", "g4", "Qf3", PieceColor.White)]
+
+        //find queen on diagonal left-up, with obstacles
+        [InlineData("c6", "d5", "Qf3", PieceColor.White)]
+
+        //find queen horizintal left, with obstacles
+        [InlineData("b3","d3", "Qf3", PieceColor.White)]
+        
+        //find queen horizintal right, with obstacles
+        [InlineData("h3","g3", "Qf3", PieceColor.White)]
+
+        //find queen vertical up, with obstacles
+        [InlineData("f6","f5", "Qf3", PieceColor.White)]
+
+        //find queen vertical down with obstacles
+        [InlineData("f1", "f2","Qf3", PieceColor.White)]
+        public void FindWhiteQueenOnAllRoutesWithObstacleShouldReturnNull(string queenCoords,string obstacleCoords, string moveAN, PieceColor currentPlayer)
+        {
+            //Arange
+            var board = new Board(false);
+
+            board.AddPiece(queenCoords, new Queen(currentPlayer));
+            board.AddPiece(obstacleCoords, new Pawn(currentPlayer));
+       
+        
+            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, currentPlayer);
+
+            var queen = board.FindPieceWhoNeedsToBeMoved(move, currentPlayer);
+
+            Assert.Null(queen);
+
+        }
+
+        [Theory]
+        //find queen on diagonal left-down, no obstacles
+        [InlineData("d1", "Qf3", PieceColor.White)]
+        public void MoveWhiteQueen(string queenCoords, string moveAN, PieceColor currentPlayer)
+        {
+            //Arange
+            var board = new Board(false);
+
+            board.AddPiece(queenCoords, new Queen(currentPlayer));
+
+            //find queen on diagonal right-down
+            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, currentPlayer);
+            var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);
+
+            var queen = board.PlayMove(moveAN, currentPlayer);
+
+          
+            Assert.Equal(queen, board.CellAt("f3").Piece);
+        }
+        //TO DO test queen move with capture
+
+        [Theory]
+        //find queen on diagonal left-down, no obstacles
+        [InlineData("f5", "d5", "Qxd5", PieceColor.White)]
+        public void WhiteQueenCapture(string queenCoords,string opponentCoords, string moveAN, PieceColor currentPlayer)
+        {
+            //Arange
+            var board = new Board(false);
+
+            board.AddPiece(queenCoords, new Queen(currentPlayer));
+            board.AddPiece(opponentCoords, new Bishop(PieceColor.Black));
+
+            Piece queen = board.PlayMove(moveAN, currentPlayer);
+
+            Assert.Equal(queen, board.CellAt("d5").Piece);
+        }
+
+
     }
 }

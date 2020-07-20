@@ -18,22 +18,22 @@ namespace ChessTests.Tests
             Assert.Equal(listOfMoves.Count, game.MovesCounter);
         }
 
-        [Fact]
-        public void FinalTest()
-        {
-            var listOfMoves = ReadFromFile.ProcessFile("chess-moves.txt");
+        //[Fact]
+        //public void FinalTest()
+        //{
+        //    var listOfMoves = ReadFromFile.ProcessFile("chess-moves.txt");
 
-            var game = new Game();
-            game.Play(listOfMoves);
+        //    var game = new Game();
+        //    game.Play(listOfMoves);
 
-            Assert.Equal(listOfMoves.Count, game.MovesCounter);
+        //    Assert.Equal(listOfMoves.Count, game.MovesCounter);
 
-            //assert daca jocul s-a gatat
-            Assert.True(game.IsGameOver);
+        //    //assert daca jocul s-a gatat
+        //    Assert.True(game.IsGameOver);
 
-            //assert cu cine a castigat
-            Assert.Equal(PieceColor.Black, game.Winner);
-        }
+        //    //assert cu cine a castigat
+        //    Assert.Equal(PieceColor.Black, game.Winner);
+        //}
         //aici de testat daca jocul jucat se finalizeaza cum trebuie
         //sah, sah mat
         //next turn sa reflecte state-ul jocului

@@ -1,13 +1,14 @@
 ﻿using ChessTests;
 using System;
 using ChessTests.Pieces;
+using System.Collections.Generic;
 
 namespace ChessTable
 {
     public class Board
     {
         public Cell[,] cells;
-
+        
         //has pieces
 
         //......
@@ -32,17 +33,16 @@ namespace ChessTable
 
             //resets the previous cell, after the piece is moved
            
-            if (piece.Name == PieceName.Pawn)
-            {
+            //if (piece.Name == PieceName.Pawn)
+            //{
                 var previousPosition = piece.CurrentPosition;
                 destinationCell.Piece = piece;
                 previousPosition.Piece = null;
-            }
+           // }
 
             piece.CurrentPosition = destinationCell;
         }
 
-        //e4
         public Piece FindPieceWhoNeedsToBeMoved(string moveAN, PieceColor playerColor)
         {
             var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, playerColor);
@@ -55,91 +55,152 @@ namespace ChessTable
             var pieceName = move.PieceName;
             
             if (pieceName == PieceName.Pawn)
-            {      
-                //validate move forward
-
-                if(playerColor == PieceColor.White && !move.IsCapture)
-                {
-                    //check for one cell movement
-                    int i = destinationCell.X + 1;
-                    if (cells[i, destinationCell.Y].Piece != null &&
-                    cells[i, destinationCell.Y].Piece.Name == PieceName.Pawn)
-                    {
-                        return cells[i, destinationCell.Y].Piece;
-                    }
-
-
-                    //check for two cell movements
-                    i = i + 1;
-                    if (cells[i, destinationCell.Y].Piece != null &&
-                        cells[i, destinationCell.Y].Piece.Name == PieceName.Pawn)
-                    {
-                        var piece = cells[i, destinationCell.Y].Piece;
-                        if(piece.IsOnInitialPosition() == false)
-                        {
-                            throw new InvalidOperationException("Pawn is in an invalid state!");
-                        }
-                        return cells[i, destinationCell.Y].Piece;
-                    }
-
-
-                }
-
-                if(playerColor == PieceColor.Black && !move.IsCapture)
-                {
-                    int i = destinationCell.X - 1;
-                    if (cells[i, destinationCell.Y].Piece != null &&
-                        cells[i, destinationCell.Y].Piece.Name == PieceName.Pawn)
-                    {
-                        return cells[i, destinationCell.Y].Piece;
-                    }
-
-                    i = i - 1;
-                    if (cells[i, destinationCell.Y].Piece != null &&
-                        cells[i, destinationCell.Y].Piece.Name == PieceName.Pawn)
-                    {
-                        return cells[i, destinationCell.Y].Piece;
-                    }
-
-                }
-
-                if (playerColor == PieceColor.White && move.IsCapture)
-                {
-                    //destination cell ->c4
-                    int x = destinationCell.X + 1;
-                    int jRight = destinationCell.Y + 1;
-                    int jLeft = destinationCell.Y - 1;
-
-                    int y = move.Y == jRight ? jRight : jLeft;
-                  
-                    if(cells[x,y].Piece != null && cells[x,y].Piece.Name == PieceName.Pawn)
-                    {
-                        return cells[x, y].Piece;
-                    }
-
-                    throw new InvalidOperationException("Illegal move!");
-                }
-
-                if (playerColor == PieceColor.Black && move.IsCapture)
-                {
-                    //destination cell ->d3
-                    int x = destinationCell.X - 1;
-                    int jRight = destinationCell.Y + 1;
-                    int jLeft = destinationCell.Y - 1;
-
-                    int y = move.Y == jRight ? jRight : jLeft;
-
-                    if (cells[x, y].Piece != null && cells[x, y].Piece.Name == PieceName.Pawn)
-                    {
-                        return cells[x, y].Piece;
-                    }
-
-                    throw new InvalidOperationException("Illegal move!");
-                }
-                throw new InvalidOperationException("Illegal move!");
-
+            {
+                //TO DO validate move forward
+                return Pawn.ValidateMovementAndReturnPiece(this, move, playerColor);
             }
-          
+            if (pieceName == PieceName.Queen)
+            {
+                var findQueens = new List<Piece>();
+                //find queen diagonal right-down
+                //TO DO -> OPTIMIZE FOR LOOPS
+                
+                for (int i = destinationCell.X + 1, j = destinationCell.Y + 1; i < 8 && j < 8; i++, j++)
+                {
+
+                    //there is no piece on the cells
+                    if (cells[i, j].Piece == null) continue;
+
+                    //there is an obstacle in the way, must throw exception or return
+
+                    if (cells[i, j].Piece.Name == PieceName.Queen && playerColor == cells[i, j].Piece.pieceColor)
+                    {
+                        findQueens.Add(cells[i, j].Piece);
+                        return cells[i, j].Piece;
+                    }
+
+                    break;
+
+                }
+                //find queen diagonal left-down
+                for (int i = destinationCell.X + 1, j = destinationCell.Y - 1; i < 8 && j >= 0; i++, j--)
+                {
+                    //there is no piece on the cells
+                    if (cells[i, j].Piece == null) continue;
+
+                    //there is an obstacle in the way, must throw exception or return
+
+                    if (cells[i, j].Piece.Name == PieceName.Queen && playerColor == cells[i, j].Piece.pieceColor)
+                    {
+                        findQueens.Add(cells[i, j].Piece);
+                        return cells[i, j].Piece;
+                    }
+
+                    break;
+                }
+
+                //find queen diagonal right-up
+                for (int i = destinationCell.X - 1, j = destinationCell.Y + 1; i >= 0 && j < 8; i--, j++)
+                {
+                    //there is no piece on the cells
+                    if (cells[i, j].Piece == null) continue;
+
+                    //there is an obstacle in the way, must throw exception or return
+
+                    if (cells[i, j].Piece.Name == PieceName.Queen && playerColor == cells[i, j].Piece.pieceColor)
+                    {
+                        findQueens.Add(cells[i, j].Piece);
+                        return cells[i, j].Piece;
+                    }
+
+                    break;
+                }
+
+                //find queen diagonal left-up
+                for (int i = destinationCell.X - 1, j = destinationCell.Y - 1; i >= 0 && j >= 0; i--, j--)
+                {
+                    //there is no piece on the cells
+                    if (cells[i, j].Piece == null) continue;
+
+                    //there is an obstacle in the way, must throw exception or return
+
+                    if (cells[i, j].Piece.Name == PieceName.Queen && playerColor == cells[i, j].Piece.pieceColor)
+                    {
+                        findQueens.Add(cells[i, j].Piece);
+                        return cells[i, j].Piece;
+                    }
+
+                    break;
+                }
+                
+                //find queen horizontal left
+                for (int j = destinationCell.Y - 1;  j >= 0; j--)
+                {
+                    //there is no piece on the cells
+                    if (cells[destinationCell.X, j].Piece == null) continue;
+
+                    //there is an obstacle in the way, must throw exception or return
+
+                    if (cells[destinationCell.X, j].Piece.Name == PieceName.Queen && playerColor == cells[destinationCell.X, j].Piece.pieceColor)
+                    {
+                        findQueens.Add(cells[destinationCell.X, j].Piece);
+                        return cells[destinationCell.X, j].Piece;
+                    }
+
+                    break;
+                }
+
+                //find queen horizontal right
+                for (int j = destinationCell.Y + 1; j < 8; j++)
+                {
+                    //there is no piece on the cells
+                    if (cells[destinationCell.X, j].Piece == null) continue;
+
+                    //there is an obstacle in the way, must throw exception or return
+
+                    if (cells[destinationCell.X, j].Piece.Name == PieceName.Queen && playerColor == cells[destinationCell.X, j].Piece.pieceColor)
+                    {
+                        findQueens.Add(cells[destinationCell.X, j].Piece);
+                        return cells[destinationCell.X, j].Piece;
+                    }
+
+                    break;
+                }
+
+                //find queen vertical up
+                for (int i = destinationCell.X - 1; i >= 0; i--)
+                {
+                    //there is no piece on the cells
+                    if (cells[i, destinationCell.Y].Piece == null) continue;
+
+                    //there is an obstacle in the way, must throw exception or return
+
+                    if (cells[i, destinationCell.Y].Piece.Name == PieceName.Queen && playerColor == cells[i, destinationCell.Y].Piece.pieceColor)
+                    {
+                        findQueens.Add(cells[i, destinationCell.Y].Piece);
+                        return cells[i, destinationCell.Y].Piece;
+                    }
+
+                    break;
+                }
+
+                //find queen vertical down
+                for (int i = destinationCell.X + 1; i < 8; i++)
+                {
+                    //there is no piece on the cells
+                    if (cells[i, destinationCell.Y].Piece == null) continue;
+
+                    //there is an obstacle in the way, must throw exception or return
+
+                    if (cells[i, destinationCell.Y].Piece.Name == PieceName.Queen && playerColor == cells[i, destinationCell.Y].Piece.pieceColor)
+                    {
+                        findQueens.Add(cells[i, destinationCell.Y].Piece);
+                        return cells[i, destinationCell.Y].Piece;
+                    }
+
+                    break;
+                }
+            }
             return null;
         }
 
@@ -152,13 +213,23 @@ namespace ChessTable
 
         public void CapturePiece(Piece attacker, Cell cellDestination)
         {
-            //cauta daca exista pion pe celula destinatie
-            var opponent = cellDestination.Piece;
-            if (opponent != null && opponent.pieceColor != attacker.pieceColor)
+            if (CellHasOpponentPiece(attacker, cellDestination))
             {
+                var opponent = cellDestination.Piece;
                 opponent.CurrentPosition = null;
                 cellDestination.Piece = null;
             }
+            else
+            {
+                throw new InvalidOperationException("Invalid move!");
+            }
+        }
+
+        private bool CellHasOpponentPiece(Piece attacker, Cell cellDestination) 
+        {
+            //cauta daca exista pion pe celula destinatie
+            var opponent = cellDestination.Piece;
+            return opponent != null && opponent.pieceColor != attacker.pieceColor;        
         }
 
         public Cell TransformCoordonatesIntoCell(Coordinate coordinate)
@@ -254,6 +325,28 @@ namespace ChessTable
             var cell = CellAt(coordinates);
             cell.Piece = piece;
             return cell.Piece;
+        }
+        public Piece PlayMove(string moveAN, PieceColor currentPlayer)
+        {
+            //find queen on diagonal right-down
+            //interpretarea mutarii
+            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, currentPlayer);
+            //executia
+            var destinationCell = TransformCoordonatesIntoCell(move.Coordinate);
+
+            var piece = FindPieceWhoNeedsToBeMoved(move, currentPlayer);
+
+            if (move.IsCapture)
+            {
+                CapturePiece(piece, destinationCell);
+            }
+
+            Move(piece, destinationCell);
+            //TO DO promote pawn if necessary
+            //TO DO verify if move makes check
+            //TO DO verify if move makes check mate
+            
+            return piece;
         }
     }
 }
