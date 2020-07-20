@@ -64,14 +64,13 @@ namespace ChessTable
                 var findQueens = new List<Piece>();
                 //find queen diagonal right-down
                 //TO DO -> OPTIMIZE FOR LOOPS
-                
+                //TO DO -> implement file if there are more queens that points to the same opponet piece
+                //LookDownRight
                 for (int i = destinationCell.X + 1, j = destinationCell.Y + 1; i < 8 && j < 8; i++, j++)
                 {
 
                     //there is no piece on the cells
                     if (cells[i, j].Piece == null) continue;
-
-                    //there is an obstacle in the way, must throw exception or return
 
                     if (cells[i, j].Piece.Name == PieceName.Queen && playerColor == cells[i, j].Piece.pieceColor)
                     {
@@ -79,6 +78,7 @@ namespace ChessTable
                         return cells[i, j].Piece;
                     }
 
+                    //there is an obstacle in the way, must throw exception or return
                     break;
 
                 }

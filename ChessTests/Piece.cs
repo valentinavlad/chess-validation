@@ -17,7 +17,7 @@ namespace ChessTests
         }
 
         public abstract bool PieceCanMove(Board board, Cell start, Cell end);
-
+      
         public bool IsOnInitialPosition()
         {
             return InitialPosition == CurrentPosition;

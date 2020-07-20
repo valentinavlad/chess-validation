@@ -11,7 +11,9 @@ namespace ChessTests
         UpLeft,
         UpRight,
         DownLeft,
-        DownRight
+        DownRight,
+        Left,
+        Right
 
     }
 }
