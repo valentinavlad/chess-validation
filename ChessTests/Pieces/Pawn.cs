@@ -22,162 +22,74 @@ namespace ChessTests
         public static Piece ValidateMovementAndReturnPiece (Board board, Move move, PieceColor playerColor)
         {
             var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);
-        
-            var cells = board.cells;
+    
             if (playerColor == PieceColor.White && !move.IsCapture)
             {
-
-
-                if (destinationCell.Piece != null)
-                {
-                    throw new InvalidOperationException("Invalid Move");
-                }
-
-
-                var cell = destinationCell.LookDown();
-
-                if (cell.HasPawn() && cell.BelongsTo(playerColor))
-                {
-                    return cell.Piece;
-                }
-                if (cell.HasPiece())
-                {
-                    throw new InvalidOperationException("Invalid Move");
-
-                }
-
-
-
-                ////check for one cell movement
-                //int i = destinationCell.X + 1;
-
-                //var pieceExists = cells[i, destinationCell.Y].Piece != null;
-                //var pieceIsPawn = pieceExists && cells[i, destinationCell.Y].Piece.Name == PieceName.Pawn;
-                //var pieceBelongsToPlayer = pieceExists && cells[i, destinationCell.Y].Piece.pieceColor == playerColor;
-
-                //if (pieceIsPawn && pieceBelongsToPlayer)
-                //{
-                //    return cells[i, destinationCell.Y].Piece;
-                //}
-
-                //if (pieceExists)
-                //{
-                //    throw new InvalidOperationException("Invalid Move");
-                //}
-
-
-
-
-
-                //check for two cell movements
-                var i = destinationCell.X + 1;
-
-
-
-
-
-
-
-                i = i + 1;
-                var pieceExists = cells[i, destinationCell.Y].Piece != null;
-                var pieceIsPawn = pieceExists && cells[i, destinationCell.Y].Piece.Name == PieceName.Pawn;
-                var pieceBelongsToPlayer = pieceExists && cells[i, destinationCell.Y].Piece.pieceColor == playerColor;
-                
-                if (pieceIsPawn && pieceBelongsToPlayer)
-                {
-                    var piece = cells[i, destinationCell.Y].Piece;
-                    if (piece.IsOnInitialPosition() == false)
-                    {
-                        throw new InvalidOperationException("Pawn is in an invalid state!");
-                    }
-                    return cells[i, destinationCell.Y].Piece;
-                }
-
-
-
-
-
-
-
-
+                 return FindPawn(destinationCell, Orientation.Down, playerColor);
             }
 
             if (playerColor == PieceColor.Black && !move.IsCapture)
             {
-                int i = destinationCell.X - 1;
-                if (cells[i, destinationCell.Y].Piece != null &&
-                    cells[i, destinationCell.Y].Piece.Name == PieceName.Pawn)
-                {
-                    return cells[i, destinationCell.Y].Piece;
-                }
-
-                i = i - 1;
-                if (cells[i, destinationCell.Y].Piece != null &&
-                    cells[i, destinationCell.Y].Piece.Name == PieceName.Pawn)
-                {
-                    return cells[i, destinationCell.Y].Piece;
-                }
-
+                return FindPawn(destinationCell, Orientation.Up, playerColor);
             }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             if (playerColor == PieceColor.White && move.IsCapture)
             {
-                //destination cell ->c4
-                int i = destinationCell.X + 1;
-                int jRight = destinationCell.Y + 1;
-                int jLeft = destinationCell.Y - 1;
-
-                int j = move.Y == jRight ? jRight : jLeft;
-
-                var pieceExists = cells[i, j].Piece != null;
-                var pieceIsPawn = pieceExists && cells[i, j].Piece.Name == PieceName.Pawn;
-                var pieceBelongsToPlayer = pieceExists && cells[i, j].Piece.pieceColor == playerColor;
-
-                if (pieceExists && pieceIsPawn && pieceBelongsToPlayer)
-                {
-                    return cells[i, j].Piece;
-                }
-
-                throw new InvalidOperationException("Illegal move!");
+                return FindPawnWhoCaptures(destinationCell, Orientation.Down, playerColor, move);
             }
 
             if (playerColor == PieceColor.Black && move.IsCapture)
             {
-                //destination cell ->d3
-                int x = destinationCell.X - 1;
-                int jRight = destinationCell.Y + 1;
-                int jLeft = destinationCell.Y - 1;
-
-                int y = move.Y == jRight ? jRight : jLeft;
-
-                if (cells[x, y].Piece != null && cells[x, y].Piece.Name == PieceName.Pawn)
-                {
-                    return cells[x, y].Piece;
-                }
-
-                throw new InvalidOperationException("Illegal move!");
+                return FindPawnWhoCaptures(destinationCell, Orientation.Up, playerColor, move);
             }
 
             throw new InvalidOperationException("Illegal move!");
         }
 
+        private static Piece FindPawnWhoCaptures(Cell destinationCell, Orientation orientation, PieceColor playerColor, Move move)
+        {
+            var cell = destinationCell.Look(orientation, move.Y);
+            if(cell.HasPiece() && cell.HasPiece() && cell.BelongsTo(playerColor))
+            {
+                return cell.Piece;
+            }
+            
+            throw new InvalidOperationException("Illegal move!");
+        }
+
+        private static Piece FindPawn(Cell destinationCell,Orientation orientation, PieceColor playerColor)
+        {
+
+            if (destinationCell.HasPiece())
+            {
+                throw new InvalidOperationException("Invalid Move");
+            }
+
+            var cell = destinationCell.Look(orientation);
+
+            if (cell.HasPawn() && cell.BelongsTo(playerColor))
+            {
+                return cell.Piece;
+            }
+            if (cell.HasPiece())
+            {
+                throw new InvalidOperationException("Invalid Move");
+
+            }
+
+            //check for two cell movements
+            cell = cell.Look(orientation);
+            if (cell.HasPawn() && cell.BelongsTo(playerColor))
+            {
+                var piece = cell.Piece;
+                if (piece.IsOnInitialPosition() == false)
+                {
+                    throw new InvalidOperationException("Pawn is in an invalid state!");
+                }
+                return piece;
+            }
+
+            throw new InvalidOperationException("Pawn is in an invalid state!");
+        }
     }
 }

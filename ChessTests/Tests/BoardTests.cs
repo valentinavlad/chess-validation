@@ -494,7 +494,7 @@ namespace ChessTests
         public void Test()
         {
             var board = new Board(false);
-            board.AddPiece("c3", new Knight(PieceColor.White));
+            board.AddPiece("c3", new Knight(PieceColor.Black));
             board.AddPiece("c2", new Pawn(PieceColor.White));
             var moveAN = "c3";
             var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, PieceColor.White);
@@ -502,5 +502,7 @@ namespace ChessTests
             Action exception = () => board.FindPieceWhoNeedsToBeMoved(move, PieceColor.White);
             Assert.Throws<InvalidOperationException>(exception);
         }
+        //TO DO create a test with the pawns in the https://chesshub.com/analysis/1750307/edit
+
     }
 }
