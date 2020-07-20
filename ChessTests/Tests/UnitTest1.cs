@@ -193,26 +193,29 @@ namespace ChessTests
    
         }
 
-       
-        [Fact]
-        public void PromoteWhitePawnToQueen()
+        [Theory]
+        //white pawn captures
+        [InlineData("d2", "d1Q", PieceColor.Black)]
+        [InlineData("d7", "d8Q", PieceColor.White)]
+        public void PawnPromotesToQueen(string pawnCoord, string moveAN, PieceColor pieceColor)
         {
             //promote a pawn with no capture to Queen
             var board = new Board(false);
-            //  var pawnBlack = board.CellAt("e2").Piece;
-            var pawnBlack = board.AddPiece("d2", new Pawn(PieceColor.Black));
-            var cell = board.CellAt("d2");
+
+            var pawnBlack = board.AddPiece(pawnCoord, new Pawn(pieceColor));
+            var cell = board.CellAt(pawnCoord);
             Assert.Equal(pawnBlack, cell.Piece);
 
-            var moveAN = "d1Q";
+           
             //pe celula destinatie dupa mutarea pionului pe d1, ar trebui sa fie regina neagra
 
             //caut piesa 
             //am gasit piesa
-            var piece = board.FindPieceWhoNeedsToBeMoved(moveAN, PieceColor.Black);
+            //****
+            var piece = board.FindPieceWhoNeedsToBeMoved(moveAN, pieceColor);
 
             //determin celula destinatie
-            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, PieceColor.Black);
+            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, pieceColor);
             var cellDestination = board.TransformCoordonatesIntoCell(move.Coordinate);
 
             //fac mutarea pe celula destinatie
@@ -222,9 +225,57 @@ namespace ChessTests
             //resetez pozitia curenta a pionului
             //adaug o noua regina
             var newQueen = board.PromotePawn(move, piece);
-
+            //***extract into a method in board
             Assert.Null(pawnBlack.CurrentPosition);
-            Assert.IsType<Queen>(board.CellAt("d1").Piece);
+            Assert.IsType<Queen>(board.CellAt(move.Coordinate).Piece);
+
+        }
+
+        [Theory]
+        //white pawn captures
+        [InlineData("d2", "c1", "dxc1Q", PieceColor.Black)]
+        [InlineData("d3", "c2", "dxc2Q", PieceColor.Black)]
+      //  [InlineData("d7", "d8Q", PieceColor.White)]
+        public void PawnCapturesAndPromotesToQueen(string attackerCoords, string opponentCoords, string moveAN, PieceColor attackerColor)
+        {
+            //promote a pawn with no capture to Queen
+            //Arrange
+            var board = new Board(false);
+            var opponentColor = attackerColor == PieceColor.Black ? PieceColor.White : PieceColor.Black;
+
+            var attacker0 = board.AddPiece(attackerCoords, new Pawn(attackerColor));
+            var opponent0 = board.AddPiece(opponentCoords, new Rook(opponentColor));
+
+
+
+
+            //Act
+            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, attackerColor);
+            //caut piesa care face capturarea
+            var attacker = board.FindPieceWhoNeedsToBeMoved(move, attackerColor);
+     
+
+            //determina celula destinatie
+            var cellDestination = board.TransformCoordonatesIntoCell(move.Coordinate);
+
+            //cauta piesa oponenta
+            var opponent = cellDestination.Piece;
+
+            //verific daca pe celula destinatie exista o piesa oponenta
+            //am capturat tura
+            board.CapturePiece(attacker, cellDestination);
+
+            //fac mutarea pe celula destinatie
+            board.Move(attacker, cellDestination);
+
+            //am promovat pionul 'attacker' in regina
+            //resetez pozitia pionului atacant
+            //resetez pozitia turei oponente
+
+            var newQueen = board.PromotePawn(move, attacker);
+    
+            Assert.Null(opponent.CurrentPosition);
+            Assert.IsType<Queen>(board.CellAt(move.Coordinate).Piece);
 
         }
 
@@ -237,7 +288,7 @@ namespace ChessTests
         [InlineData("d3", "c4", "cxd3", false, PieceColor.Black)]
         [InlineData("d3", "e4", "exd3", false, PieceColor.Black)]
         [InlineData("d3", "e6", "cxd3", true, PieceColor.Black)]
-        public void WhitePawnCaptureBlackPawn(string whitePawnCoordinates, string blackPawnCoordinates, string moveAN, bool expectsException, PieceColor currentPlayer)
+        public void PawnCapture(string whitePawnCoordinates, string blackPawnCoordinates, string moveAN, bool expectsException, PieceColor currentPlayer)
         {
             var board = new Board(false);
             var pawnBlack = board.AddPiece(blackPawnCoordinates, new Pawn(PieceColor.Black));

@@ -150,13 +150,13 @@ namespace ChessTable
             return pawnPromovatesTo;
         }
 
-        public void CapturePiece(Piece pieceWhoMoves, Cell cellDestination)
+        public void CapturePiece(Piece attacker, Cell cellDestination)
         {
             //cauta daca exista pion pe celula destinatie
-            var pieceInPlace = cellDestination.Piece;
-            if (pieceInPlace != null && pieceInPlace.pieceColor != pieceWhoMoves.pieceColor)
+            var opponent = cellDestination.Piece;
+            if (opponent != null && opponent.pieceColor != attacker.pieceColor)
             {
-                pieceInPlace.CurrentPosition = null;
+                opponent.CurrentPosition = null;
                 cellDestination.Piece = null;
             }
         }
