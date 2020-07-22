@@ -13,9 +13,5 @@ namespace ChessTests.Pieces
             Name = PieceName.King;
         }
 
-        public override bool PieceCanMove(Board board, Cell start, Cell end)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

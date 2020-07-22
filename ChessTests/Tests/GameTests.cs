@@ -18,6 +18,18 @@ namespace ChessTests.Tests
             Assert.Equal(listOfMoves.Count, game.MovesCounter);
         }
 
+        [Fact]
+        public void PlayGameWithPawnsAndQueenMovement()
+        {
+            var listOfMoves = new List<string>() 
+            {
+                "d4", "e5", "dxe5", "f5","Qd5", "Qh4", "Qxd7", "c5" 
+            };
+            var game = new Game();
+            game.Play(listOfMoves);
+
+            Assert.Equal(listOfMoves.Count, game.MovesCounter);
+        }
         //[Fact]
         //public void FinalTest()
         //{

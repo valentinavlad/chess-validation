@@ -12,11 +12,9 @@ namespace ChessTests
         {
             Name = PieceName.Bishop;
         }
-
-
-        public override bool PieceCanMove(Board board, Cell start, Cell end)
+        public static Piece ValidateMovementAndReturnPiece(Board board, Move move, PieceColor playerColor)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }

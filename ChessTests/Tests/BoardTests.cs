@@ -399,26 +399,26 @@ namespace ChessTests
         //find queen on diagonal left-down, with obstacles
         [InlineData("d1","e2", "Qf3", PieceColor.White)]
 
-        //find queen on diagonal right-down, with obstacles
-        [InlineData("h1", "g2", "Qf3", PieceColor.White)]
+        ////find queen on diagonal right-down, with obstacles
+        //[InlineData("h1", "g2", "Qf3", PieceColor.White)]
 
-        //find queen on diagonal right-up, with obstacles
-        [InlineData("h5", "g4", "Qf3", PieceColor.White)]
+        ////find queen on diagonal right-up, with obstacles
+        //[InlineData("h5", "g4", "Qf3", PieceColor.White)]
 
-        //find queen on diagonal left-up, with obstacles
-        [InlineData("c6", "d5", "Qf3", PieceColor.White)]
+        ////find queen on diagonal left-up, with obstacles
+        //[InlineData("c6", "d5", "Qf3", PieceColor.White)]
 
-        //find queen horizintal left, with obstacles
-        [InlineData("b3","d3", "Qf3", PieceColor.White)]
+        ////find queen horizintal left, with obstacles
+        //[InlineData("b3","d3", "Qf3", PieceColor.White)]
         
-        //find queen horizintal right, with obstacles
-        [InlineData("h3","g3", "Qf3", PieceColor.White)]
+        ////find queen horizintal right, with obstacles
+        //[InlineData("h3","g3", "Qf3", PieceColor.White)]
 
-        //find queen vertical up, with obstacles
-        [InlineData("f6","f5", "Qf3", PieceColor.White)]
+        ////find queen vertical up, with obstacles
+        //[InlineData("f6","f5", "Qf3", PieceColor.White)]
 
-        //find queen vertical down with obstacles
-        [InlineData("f1", "f2","Qf3", PieceColor.White)]
+        ////find queen vertical down with obstacles
+        //[InlineData("f1", "f2","Qf3", PieceColor.White)]
         public void FindWhiteQueenOnAllRoutesWithObstacleShouldReturnNull(string queenCoords,string obstacleCoords, string moveAN, PieceColor currentPlayer)
         {
             //Arange
@@ -502,7 +502,21 @@ namespace ChessTests
             Action exception = () => board.FindPieceWhoNeedsToBeMoved(move, PieceColor.White);
             Assert.Throws<InvalidOperationException>(exception);
         }
-        //TO DO create a test with the pawns in the https://chesshub.com/analysis/1750307/edit
+     
+        //ambiguous moves regarding the white queen
+        [Fact]
+        public void FindPieceWhoNeedsToBeMovedWithTwoWhiteQueensShouldReturnTheRightQueen()
+        {
+            var board = new Board(false);
+            board.AddPiece("g4", new Queen(PieceColor.White));
+            board.AddPiece("c6", new Queen(PieceColor.White));
+            board.AddPiece("d3", new Pawn(PieceColor.White));
+            var moveAN = "Qce4";
+            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, PieceColor.White);
 
+            Piece queen = board.PlayMove(moveAN, PieceColor.White);
+
+            Assert.Equal(queen, board.CellAt("e4").Piece);
+        }
     }
 }

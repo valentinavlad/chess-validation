@@ -1,6 +1,7 @@
 ﻿using ChessTable;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace ChessTests
@@ -12,9 +13,56 @@ namespace ChessTests
             Name = PieceName.Queen;
         }
 
-        public override bool PieceCanMove(Board board, Cell start, Cell end)
+        public static Piece ValidateMovementAndReturnPiece(Board board, Move move, PieceColor playerColor)
         {
-            throw new NotImplementedException();
+            var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);
+
+            var orientations = new List<Orientation>()
+            {
+                Orientation.Up,  Orientation.DownLeft, Orientation.UpRight,
+                Orientation.Right, Orientation.DownRight,
+                Orientation.Down, 
+                Orientation.Left,  Orientation.UpLeft
+            };
+
+            var findQueens = new List<Piece>();
+            foreach (var orientation in orientations)
+            {
+                //var loop = true;
+                var currentCell = destinationCell;
+                while (true)
+                {
+                    //there is no piece on the cells
+                    currentCell = currentCell.Look(orientation);
+
+                    //Search looks out of board
+                    if (currentCell == null) break;
+
+                    if (currentCell.Piece == null) continue;
+
+
+                    if (currentCell.Piece.Name == PieceName.Queen && playerColor == currentCell.Piece.pieceColor)
+                    {
+                        findQueens.Add(currentCell.Piece);
+                    }
+
+                    //there is an obstacle in the way, must throw exception or return
+                    break;
+                }
+            }
+
+
+            if (findQueens.Count == 1)
+            {
+                return findQueens.First();
+            }
+
+            else if(findQueens.Count > 1)
+            {
+                return findQueens.Find(q => q.CurrentPosition.Y == move.Y);
+            }
+          
+            return null;
         }
     }
 }

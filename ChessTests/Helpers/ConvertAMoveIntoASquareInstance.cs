@@ -123,25 +123,49 @@ namespace ChessTests
             //simple moves
             else
             {
+                
+                //
                 if (char.IsUpper(firstChar))
                 {
-                    //move
-                    string pattern = @"^(?<pieceUppercase>[BRQKN])(?<coordinates>[a-h][1-8])(?<checkOrCheckMate>[+]{0,2})$";
-                    Regex reg = new Regex(pattern);
-                    Match match = Regex.Match(moveNotation, pattern);
 
-                    if (match.Success)
+                    if (moveNotation.Skip(1).Take(2).All(c => char.IsLetter(c) && (c >= 'a' && c <= 'h')))
                     {
-                        // ... Get groups by name.
-                        
-                        coordinatesFromMove = match.Groups["coordinates"].Value;
-                        pieceUppercase = match.Groups["pieceUppercase"].Value;
-                        checkOrCheckMate = match.Groups["checkOrCheckMate"].Value;
+                        //Ambiguous Move
+                        string pattern = @"^(?<pieceUppercase>[BRQKN])(?<file>[a-h])(?<coordinates>[a-h][1-8])(?<checkOrCheckMate>[+]{0,2})$";
+                        Regex reg = new Regex(pattern);
+                        Match match = Regex.Match(moveNotation, pattern);
+                        if (match.Success)
+                        {
+                            // ... Get groups by name.
+
+                            coordinatesFromMove = match.Groups["coordinates"].Value;
+                            pieceUppercase = match.Groups["pieceUppercase"].Value;
+                            checkOrCheckMate = match.Groups["checkOrCheckMate"].Value;
+                            file = match.Groups["file"].Value;                         
+                            move.Y = ConvertChessCoordinateFileToArrayIndex(file);
+                        }
                     }
                     else
                     {
-                        throw new InvalidOperationException("Invalid move!");
+                        //move
+                        string pattern = @"^(?<pieceUppercase>[BRQKN])(?<coordinates>[a-h][1-8])(?<checkOrCheckMate>[+]{0,2})$";
+                        Regex reg = new Regex(pattern);
+                        Match match = Regex.Match(moveNotation, pattern);
+
+                        if (match.Success)
+                        {
+                            // ... Get groups by name.
+
+                            coordinatesFromMove = match.Groups["coordinates"].Value;
+                            pieceUppercase = match.Groups["pieceUppercase"].Value;
+                            checkOrCheckMate = match.Groups["checkOrCheckMate"].Value;
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException("Invalid move!");
+                        }
                     }
+                   
 
                 }
                 else

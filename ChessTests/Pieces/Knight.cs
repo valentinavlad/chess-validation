@@ -15,10 +15,5 @@ namespace ChessTests
         }
 
 
-
-        public override bool PieceCanMove(Board board, Cell start, Cell end)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -13,12 +13,6 @@ namespace ChessTests
             Name = PieceName.Pawn;
         }
 
-
-        public override bool PieceCanMove(Board board, Cell start, Cell end)
-        {
-            throw new NotImplementedException();
-        }
-
         public static Piece ValidateMovementAndReturnPiece (Board board, Move move, PieceColor playerColor)
         {
             var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);

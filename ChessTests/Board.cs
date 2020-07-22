@@ -54,47 +54,16 @@ namespace ChessTable
             //must check if board is in initial state
             var destinationCell = TransformCoordonatesIntoCell(move.Coordinate);
             var pieceName = move.PieceName;
-            
-            if (pieceName == PieceName.Pawn)
+
+            switch (pieceName)
             {
-                return Pawn.ValidateMovementAndReturnPiece(this, move, playerColor);
+                case PieceName.Pawn:
+                    return Pawn.ValidateMovementAndReturnPiece(this, move, playerColor);
+                case PieceName.Queen:
+                    return Queen.ValidateMovementAndReturnPiece(this, move, playerColor);
+                default:
+                    return null;
             }
-
-            if (pieceName == PieceName.Queen)
-            {
-            
-                var orientations = new List<Orientation>() { Orientation.Down, Orientation.DownLeft,Orientation.DownRight,
-                Orientation.Left, Orientation.Right, Orientation.Up, Orientation.UpLeft, Orientation.UpRight};
-        
-                var findQueens = new List<Piece>();
-                foreach (var orientation in orientations)
-                {
-                    //var loop = true;
-                    var currentCell = destinationCell;
-                    while (true)
-                    {
-                        //there is no piece on the cells
-                        currentCell = currentCell.Look(orientation);
-
-                        //Search looks out of board
-                        if (currentCell == null) break;
-
-                        if (currentCell.Piece == null) continue;
-
-
-                        if (currentCell.Piece.Name == PieceName.Queen && playerColor == currentCell.Piece.pieceColor)
-                        {
-                            findQueens.Add(currentCell.Piece);
-                            return currentCell.Piece;
-                        }
-
-                        //there is an obstacle in the way, must throw exception or return
-                        break;
-                    }
-                }
-                
-            }
-            return null;
         }
 
         public Piece PromotePawn(Move move, Piece pawn)
@@ -214,17 +183,19 @@ namespace ChessTable
             var coordinates = ConvertAMoveIntoACellInstance.ConvertChessCoordinatesToArrayIndexes(coordsAN);
             return AddPiece(coordinates, piece);
         }
+
         internal Piece AddPiece(Coordinate coordinates, Piece piece)
         {
             var cell = CellAt(coordinates);
             cell.Piece = piece;
             return cell.Piece;
         }
+
         public Piece PlayMove(string moveAN, PieceColor currentPlayer)
         {
-            //find queen on diagonal right-down
             //interpretarea mutarii
             var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, currentPlayer);
+
             //executia
             var destinationCell = TransformCoordonatesIntoCell(move.Coordinate);
 

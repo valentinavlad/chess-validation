@@ -3,7 +3,7 @@ using ChessTable;
 
 namespace ChessTests
 {
-    public abstract class Piece
+    public class Piece
     {
         public Cell InitialPosition { get; set; }
         public Cell CurrentPosition { get; set; }
@@ -16,8 +16,6 @@ namespace ChessTests
             this.pieceColor = pieceColor;
         }
 
-        public abstract bool PieceCanMove(Board board, Cell start, Cell end);
-      
         public bool IsOnInitialPosition()
         {
             return InitialPosition == CurrentPosition;
