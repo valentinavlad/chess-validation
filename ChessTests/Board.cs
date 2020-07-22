@@ -8,7 +8,8 @@ namespace ChessTable
     public class Board
     {
         public Cell[,] cells;
-        
+        //list active black pieces 
+        //list active white pieces
         //has pieces
 
         //......
@@ -56,150 +57,42 @@ namespace ChessTable
             
             if (pieceName == PieceName.Pawn)
             {
-                //TO DO validate move forward
                 return Pawn.ValidateMovementAndReturnPiece(this, move, playerColor);
             }
+
             if (pieceName == PieceName.Queen)
             {
+            
+                var orientations = new List<Orientation>() { Orientation.Down, Orientation.DownLeft,Orientation.DownRight,
+                Orientation.Left, Orientation.Right, Orientation.Up, Orientation.UpLeft, Orientation.UpRight};
+        
                 var findQueens = new List<Piece>();
-                //find queen diagonal right-down
-                //TO DO -> OPTIMIZE FOR LOOPS
-                //TO DO -> implement file if there are more queens that points to the same opponet piece
-                //LookDownRight
-                for (int i = destinationCell.X + 1, j = destinationCell.Y + 1; i < 8 && j < 8; i++, j++)
+                foreach (var orientation in orientations)
                 {
-
-                    //there is no piece on the cells
-                    if (cells[i, j].Piece == null) continue;
-
-                    if (cells[i, j].Piece.Name == PieceName.Queen && playerColor == cells[i, j].Piece.pieceColor)
+                    //var loop = true;
+                    var currentCell = destinationCell;
+                    while (true)
                     {
-                        findQueens.Add(cells[i, j].Piece);
-                        return cells[i, j].Piece;
+                        //there is no piece on the cells
+                        currentCell = currentCell.Look(orientation);
+
+                        //Search looks out of board
+                        if (currentCell == null) break;
+
+                        if (currentCell.Piece == null) continue;
+
+
+                        if (currentCell.Piece.Name == PieceName.Queen && playerColor == currentCell.Piece.pieceColor)
+                        {
+                            findQueens.Add(currentCell.Piece);
+                            return currentCell.Piece;
+                        }
+
+                        //there is an obstacle in the way, must throw exception or return
+                        break;
                     }
-
-                    //there is an obstacle in the way, must throw exception or return
-                    break;
-
-                }
-                //find queen diagonal left-down
-                for (int i = destinationCell.X + 1, j = destinationCell.Y - 1; i < 8 && j >= 0; i++, j--)
-                {
-                    //there is no piece on the cells
-                    if (cells[i, j].Piece == null) continue;
-
-                    //there is an obstacle in the way, must throw exception or return
-
-                    if (cells[i, j].Piece.Name == PieceName.Queen && playerColor == cells[i, j].Piece.pieceColor)
-                    {
-                        findQueens.Add(cells[i, j].Piece);
-                        return cells[i, j].Piece;
-                    }
-
-                    break;
-                }
-
-                //find queen diagonal right-up
-                for (int i = destinationCell.X - 1, j = destinationCell.Y + 1; i >= 0 && j < 8; i--, j++)
-                {
-                    //there is no piece on the cells
-                    if (cells[i, j].Piece == null) continue;
-
-                    //there is an obstacle in the way, must throw exception or return
-
-                    if (cells[i, j].Piece.Name == PieceName.Queen && playerColor == cells[i, j].Piece.pieceColor)
-                    {
-                        findQueens.Add(cells[i, j].Piece);
-                        return cells[i, j].Piece;
-                    }
-
-                    break;
-                }
-
-                //find queen diagonal left-up
-                for (int i = destinationCell.X - 1, j = destinationCell.Y - 1; i >= 0 && j >= 0; i--, j--)
-                {
-                    //there is no piece on the cells
-                    if (cells[i, j].Piece == null) continue;
-
-                    //there is an obstacle in the way, must throw exception or return
-
-                    if (cells[i, j].Piece.Name == PieceName.Queen && playerColor == cells[i, j].Piece.pieceColor)
-                    {
-                        findQueens.Add(cells[i, j].Piece);
-                        return cells[i, j].Piece;
-                    }
-
-                    break;
                 }
                 
-                //find queen horizontal left
-                for (int j = destinationCell.Y - 1;  j >= 0; j--)
-                {
-                    //there is no piece on the cells
-                    if (cells[destinationCell.X, j].Piece == null) continue;
-
-                    //there is an obstacle in the way, must throw exception or return
-
-                    if (cells[destinationCell.X, j].Piece.Name == PieceName.Queen && playerColor == cells[destinationCell.X, j].Piece.pieceColor)
-                    {
-                        findQueens.Add(cells[destinationCell.X, j].Piece);
-                        return cells[destinationCell.X, j].Piece;
-                    }
-
-                    break;
-                }
-
-                //find queen horizontal right
-                for (int j = destinationCell.Y + 1; j < 8; j++)
-                {
-                    //there is no piece on the cells
-                    if (cells[destinationCell.X, j].Piece == null) continue;
-
-                    //there is an obstacle in the way, must throw exception or return
-
-                    if (cells[destinationCell.X, j].Piece.Name == PieceName.Queen && playerColor == cells[destinationCell.X, j].Piece.pieceColor)
-                    {
-                        findQueens.Add(cells[destinationCell.X, j].Piece);
-                        return cells[destinationCell.X, j].Piece;
-                    }
-
-                    break;
-                }
-
-                //find queen vertical up
-                for (int i = destinationCell.X - 1; i >= 0; i--)
-                {
-                    //there is no piece on the cells
-                    if (cells[i, destinationCell.Y].Piece == null) continue;
-
-                    //there is an obstacle in the way, must throw exception or return
-
-                    if (cells[i, destinationCell.Y].Piece.Name == PieceName.Queen && playerColor == cells[i, destinationCell.Y].Piece.pieceColor)
-                    {
-                        findQueens.Add(cells[i, destinationCell.Y].Piece);
-                        return cells[i, destinationCell.Y].Piece;
-                    }
-
-                    break;
-                }
-
-                //find queen vertical down
-                for (int i = destinationCell.X + 1; i < 8; i++)
-                {
-                    //there is no piece on the cells
-                    if (cells[i, destinationCell.Y].Piece == null) continue;
-
-                    //there is an obstacle in the way, must throw exception or return
-
-                    if (cells[i, destinationCell.Y].Piece.Name == PieceName.Queen && playerColor == cells[i, destinationCell.Y].Piece.pieceColor)
-                    {
-                        findQueens.Add(cells[i, destinationCell.Y].Piece);
-                        return cells[i, destinationCell.Y].Piece;
-                    }
-
-                    break;
-                }
             }
             return null;
         }

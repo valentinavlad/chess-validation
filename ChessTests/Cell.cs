@@ -59,6 +59,7 @@ namespace ChessTests
         {
             int i = X + 1;
             //TO DO Verify if the coords are on the table
+            if (i >= 8) return null;
             return cells[i, Y];
         }
 
@@ -66,6 +67,7 @@ namespace ChessTests
         {
             int i = X - 1;
             //TO DO Verify if the coords are on the table
+            if (i < 0) return null;
             return cells[i, Y];
         }
 
@@ -74,6 +76,7 @@ namespace ChessTests
             int i = X + 1;
             int j = Y + 1;
             //TO DO Verify if the coords are on the table
+            if (i >= 8 || j >= 8) return null;
             return cells[i, j];
         }
 
@@ -82,6 +85,7 @@ namespace ChessTests
             int i = X + 1;
             int j = Y - 1;
             //TO DO Verify if the coords are on the table
+            if (i >= 8 || j < 0) return null;
             return cells[i, j];
         }
 
@@ -90,6 +94,7 @@ namespace ChessTests
             int i = X - 1;
             int j = Y - 1;
             //TO DO Verify if the coords are on the table
+            if (i < 0 || j < 0) return null;
             return cells[i, j];
         }
         
@@ -98,9 +103,25 @@ namespace ChessTests
             int i = X - 1;
             int j = Y + 1;
             //TO DO Verify if the coords are on the table
+            if (i < 0 || j >= 8) return null;
             return cells[i, j];
         }
-        
+
+        private Cell LookRight()
+        {
+            int j = Y + 1;
+
+            if (j >= 8) return null;
+            return cells[X, j];
+        }
+
+        private Cell LookLeft()
+        {
+            int j = Y - 1;
+            if (j < 0) return null;
+            return cells[X, j];
+        }
+
         public Cell Look(Orientation orientation, int fileY = -1)
         {
 
@@ -123,11 +144,17 @@ namespace ChessTests
             {
                 if (Orientation.Up == orientation) return LookUp();
                 if (Orientation.Down == orientation) return LookDown();
+                if (Orientation.DownRight == orientation) return LookDownRight();
+                if (Orientation.DownLeft == orientation) return LookDownLeft();
+                if (Orientation.Left == orientation) return LookLeft();
+                if (Orientation.Right == orientation) return LookRight();
+                if (Orientation.UpLeft == orientation) return LookUpLeft();
+                if (Orientation.UpRight == orientation) return LookUpRight();
+               
             }
             return null;
         }
 
-    
 
         public bool HasPawn()
         {
