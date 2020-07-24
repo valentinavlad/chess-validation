@@ -542,6 +542,7 @@ namespace ChessTests
         }
 
         //TO DO test for find  bishop with obstacle
+        [Theory]
         [InlineData("c5", "d4", "Be3", PieceColor.Black)]
         public void FindWhiteBishopOnAllRoutesWithObstacleShouldReturnNull(string bishopCoords, string obstacleCoords, string moveAN, PieceColor currentPlayer)
         {
@@ -583,6 +584,43 @@ namespace ChessTests
             Assert.IsType<Bishop>(bishop);
         }
 
-        //TO DO 2 ambiguity bishop
+        [Theory]
+
+        [InlineData("c5","d6", "Bce7", PieceColor.Black)]
+        public void MoveBishopWithObstacleShouldReturnNull(string bishopCoords,string obstacleCoords,  string moveAN, PieceColor currentPlayer)
+        {
+            //Arange
+            var board = new Board(false);
+
+            board.AddPiece(bishopCoords, new Bishop(currentPlayer));
+            board.AddPiece(obstacleCoords, new Bishop(PieceColor.White));
+         
+
+            //Act
+            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, currentPlayer);
+            //var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);
+
+            var bishop = board.FindPieceWhoNeedsToBeMoved(moveAN, currentPlayer);
+
+            //Assert
+            Assert.Null(bishop);
+
+        }
+
+        //ambiguous moves regarding the black bishop
+        [Fact]
+        public void FindPieceWhoNeedsToBeMovedWithTwoBlackBishopsShouldReturnTheRightBishop()
+        {
+            var board = new Board(false);
+            board.AddPiece("a7", new Bishop(PieceColor.Black));
+            board.AddPiece("d6", new Bishop(PieceColor.Black));
+         
+            var moveAN = "Bdb8";
+            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, PieceColor.White);
+
+            Piece bishop = board.PlayMove(moveAN, PieceColor.Black);
+
+            Assert.Equal(bishop, board.CellAt("b8").Piece);
+        }
     }
 }
