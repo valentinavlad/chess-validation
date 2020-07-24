@@ -14,6 +14,5 @@ namespace ChessTests
         DownRight,
         Left,
         Right
-
     }
 }

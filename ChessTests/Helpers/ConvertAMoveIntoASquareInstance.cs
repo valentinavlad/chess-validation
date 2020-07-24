@@ -64,7 +64,10 @@ namespace ChessTests
             string checkOrCheckMate = "";
             string pieceUppercase = "";
             string file = "";
+ 
             Move move = new Move();
+        
+          
             //moves with captures
             if (moveNotation.Contains('x'))
             {
@@ -121,10 +124,39 @@ namespace ChessTests
                 }
             }
             //simple moves
+
+            //castling
+            else if (moveNotation.StartsWith('0'))
+            {
+                string pattern = @"^(?<castling>[0]([-][0]){1,2})$";
+                Regex reg = new Regex(pattern);
+                Match match = Regex.Match(moveNotation, pattern);
+                string castling = match.Groups["castling"].Value;
+
+                int countZerosForCastling = castling.Aggregate(0, (ac, c) => {
+                    return ac = c == '0' ? ac += 1 : ac;
+                });
+
+                if (match.Success)
+                {
+                    //white castling
+                    if (countZerosForCastling == 2)
+                    {
+                        move.IsKingCastling = true;
+
+                    }
+                    if (countZerosForCastling == 3)
+                    {
+                        move.IsQueenCastling = true;
+                    }
+                    coordinatesFromMove = "c1";
+                    pieceUppercase = "K";
+                }
+                //  return move;
+            }
             else
             {
-                
-                //
+
                 if (char.IsUpper(firstChar))
                 {
 
@@ -211,6 +243,7 @@ namespace ChessTests
             {
                 move.IsCheckMate = true;
             }
+            
             return move;       
         }
 

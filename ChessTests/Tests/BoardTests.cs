@@ -291,7 +291,17 @@ namespace ChessTests
                 Assert.Throws<InvalidOperationException>(exception);
             }
         }
+        [Fact]
+        public void CheckRegexForKingCastlingShouldReturnNewPiece()
+        {
+            var notation = "0-0";
+            var color = PieceColor.White;
+            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(notation, color);
 
+      
+            Assert.True(move.IsKingCastling);
+            Assert.False(move.IsQueenCastling);
+        }
         [Fact]
         public void CheckRegexForMovePawnToPromotionShouldReturnNewPiece()
         {

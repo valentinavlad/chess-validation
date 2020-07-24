@@ -122,6 +122,75 @@ namespace ChessTests
             return cells[X, j];
         }
 
+        //knight looks
+        private Cell LShapeLookUpLeftDown()
+        {
+            int i = X - 1;
+            int j = Y - 2;
+            if (i < 0 || j < 0) return null;
+            return cells[i, j];
+        }
+        private Cell LShapeLookUpLeftUp()
+        {
+            int i = X - 2;
+            int j = Y - 1;
+            if (i < 0 || j < 0) return null;
+            return cells[i, j];
+        }
+        private Cell LShapeLookUpRightUp()
+        {
+            int i = X - 2;
+            int j = Y + 1;
+            if (i < 0 || j >= 8) return null;
+            return cells[i, j];
+        }
+        private Cell LShapeLookDownLeftUp()
+        {
+            int i = X + 1;
+            int j = Y - 1;
+            if (i >= 8 || j < 0) return null;
+            return cells[i, j];
+        }
+        private Cell LShapeLookDownLeftDown()
+        {
+            int i = X + 2;
+            int j = Y - 1;
+            if (i >= 8 || j < 0) return null;
+            return cells[i, j];
+        }
+        private Cell LShapeLookDownRightUp()
+        {
+            int i = X + 1;
+            int j = Y + 2;
+            if (i >= 8 || j >= 8) return null;
+            return cells[i, j];
+        }
+        private Cell LShapeLookDownLRightDown()
+        {
+            int i = X + 2;
+            int j = Y + 1;
+            if (i >= 8 || j >= 8) return null;
+            return cells[i, j];
+        }
+        private Cell LShapeLookUpRightDown()
+        {
+            int i = X - 1;
+            int j = Y + 2;
+            if (i < 0 || j >= 8) return null;
+            return cells[i, j];
+        }
+        public Cell LookLShape(KnightOrientation orientation)
+        {
+            if (KnightOrientation.DownLeftDown == orientation) return LShapeLookDownLeftDown();
+            if (KnightOrientation.DownLeftUp == orientation) return LShapeLookDownLeftUp();
+            if (KnightOrientation.DownRightDown == orientation) return LShapeLookDownLRightDown();
+            if (KnightOrientation.DownRightUp == orientation) return LShapeLookDownRightUp();
+            if (KnightOrientation.UpLeftDown == orientation) return LShapeLookUpLeftDown();
+            if (KnightOrientation.UpLeftUp == orientation) return LShapeLookUpLeftUp();
+            if (KnightOrientation.UpRightDown == orientation) return LShapeLookUpRightDown();
+            if (KnightOrientation.UpRightUp == orientation) return LShapeLookUpRightUp();
+            return null;
+        }
         public Cell Look(Orientation orientation, int fileY = -1)
         {
 
@@ -150,11 +219,12 @@ namespace ChessTests
                 if (Orientation.Right == orientation) return LookRight();
                 if (Orientation.UpLeft == orientation) return LookUpLeft();
                 if (Orientation.UpRight == orientation) return LookUpRight();
-               
+           
             }
             return null;
         }
 
+    
 
         public bool HasPawn()
         {

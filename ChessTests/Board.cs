@@ -65,6 +65,10 @@ namespace ChessTable
                     return Bishop.ValidateMovementAndReturnPiece(this, move, playerColor);
                 case PieceName.Rook:
                     return Rook.ValidateMovementAndReturnPiece(this, move, playerColor);
+                case PieceName.King:
+                    return King.ValidateMovementAndReturnPiece(this, move, playerColor);
+                case PieceName.Knight:
+                    return Knight.ValidateMovementAndReturnPiece(this, move, playerColor);
                 default:
                     return null;
             }
@@ -201,9 +205,18 @@ namespace ChessTable
             var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, currentPlayer);
 
             //executia
+            //TO DO if is castling fix errors on destination cell, dont have coords
             var destinationCell = TransformCoordonatesIntoCell(move.Coordinate);
 
+            //find king
+            
             var piece = FindPieceWhoNeedsToBeMoved(move, currentPlayer);
+
+            if (move.IsKingCastling)
+            {
+                Castling(piece, currentPlayer, destinationCell);
+                return null;
+            }
 
             if (move.IsCapture)
             {
@@ -216,6 +229,31 @@ namespace ChessTable
             //TO DO verify if move makes check mate
             
             return piece;
+        }
+
+        private void Castling(Piece king, PieceColor currentPlayer, Cell destinationCell)
+        {
+            //white rocada mica
+            if (currentPlayer == PieceColor.White)
+            {
+
+                //I have the king
+                //i need to find the rook from left side
+                var currentCell = destinationCell;
+                for (int i = currentCell.Y; i > 0; i--)
+                {
+                    currentCell = currentCell.Look(Orientation.Left);
+                    if (currentCell.Piece == null) continue;
+                    if (currentCell.Piece.Name != PieceName.Rook) throw new InvalidOperationException("Invalid move!");
+                    if (currentCell.Piece.Name == PieceName.Rook && currentPlayer == currentCell.Piece.pieceColor && king.IsOnInitialPosition())
+                    {
+                        var rook = currentCell.Piece;
+                        Move(king, destinationCell);
+                        Move(rook, destinationCell.Look(Orientation.Right));
+                    }
+                }
+            }
+            //TO DO rest of cases in castling
         }
     }
 }

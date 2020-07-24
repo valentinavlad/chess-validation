@@ -13,5 +13,62 @@ namespace ChessTests.Pieces
             Name = PieceName.King;
         }
 
+        public static Piece ValidateMovementAndReturnPiece(Board board, Move move, PieceColor playerColor)
+        {
+            var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);
+            if (destinationCell.HasPiece() && destinationCell.Piece.pieceColor == playerColor)
+            {
+                throw new InvalidOperationException("Invalid Move");
+            }
+            var orientations = new List<Orientation>()
+            {
+                Orientation.Up, Orientation.UpLeft, Orientation.Left,  
+                Orientation.DownLeft,  Orientation.Down, Orientation.DownRight,
+                
+                Orientation.Right, Orientation.UpRight
+
+
+            };
+            if (move.IsKingCastling)
+            {
+                var currentCell = destinationCell;
+                for (int i = currentCell.Y; i <= 3 ; i++)
+                {
+                    currentCell = currentCell.Look(Orientation.Right);
+                    if (currentCell.Piece == null) continue;
+                    if (currentCell.Piece.Name == PieceName.King && playerColor == currentCell.Piece.pieceColor)
+                    {
+                        return currentCell.Piece;
+                    }
+                }
+     
+            }
+
+            foreach (var orientation in orientations)
+            {
+                //var loop = true;
+                var currentCell = destinationCell;
+    
+                    //there is no piece on the cells
+                    currentCell = currentCell.Look(orientation);
+
+                    //Search looks out of board
+                    if (currentCell == null) continue;
+
+                    if (currentCell.Piece == null) continue;
+
+
+                    if (currentCell.Piece.Name == PieceName.King && playerColor == currentCell.Piece.pieceColor)
+                    {
+                        return currentCell.Piece;
+                    }
+
+                    //there is an obstacle in the way, must throw exception or return
+                    break;
+                
+            }
+
+            return null;
+        }
     }
 }
