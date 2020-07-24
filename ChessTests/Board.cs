@@ -61,6 +61,8 @@ namespace ChessTable
                     return Pawn.ValidateMovementAndReturnPiece(this, move, playerColor);
                 case PieceName.Queen:
                     return Queen.ValidateMovementAndReturnPiece(this, move, playerColor);
+                case PieceName.Bishop:
+                    return Bishop.ValidateMovementAndReturnPiece(this, move, playerColor);
                 default:
                     return null;
             }

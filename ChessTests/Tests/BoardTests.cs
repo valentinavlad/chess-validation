@@ -399,26 +399,26 @@ namespace ChessTests
         //find queen on diagonal left-down, with obstacles
         [InlineData("d1","e2", "Qf3", PieceColor.White)]
 
-        ////find queen on diagonal right-down, with obstacles
-        //[InlineData("h1", "g2", "Qf3", PieceColor.White)]
+        //find queen on diagonal right-down, with obstacles
+        [InlineData("h1", "g2", "Qf3", PieceColor.White)]
 
-        ////find queen on diagonal right-up, with obstacles
-        //[InlineData("h5", "g4", "Qf3", PieceColor.White)]
+        //find queen on diagonal right-up, with obstacles
+        [InlineData("h5", "g4", "Qf3", PieceColor.White)]
 
-        ////find queen on diagonal left-up, with obstacles
-        //[InlineData("c6", "d5", "Qf3", PieceColor.White)]
+        //find queen on diagonal left-up, with obstacles
+        [InlineData("c6", "d5", "Qf3", PieceColor.White)]
 
-        ////find queen horizintal left, with obstacles
-        //[InlineData("b3","d3", "Qf3", PieceColor.White)]
-        
-        ////find queen horizintal right, with obstacles
-        //[InlineData("h3","g3", "Qf3", PieceColor.White)]
+        //find queen horizintal left, with obstacles
+        [InlineData("b3", "d3", "Qf3", PieceColor.White)]
 
-        ////find queen vertical up, with obstacles
-        //[InlineData("f6","f5", "Qf3", PieceColor.White)]
+        //find queen horizintal right, with obstacles
+        [InlineData("h3", "g3", "Qf3", PieceColor.White)]
 
-        ////find queen vertical down with obstacles
-        //[InlineData("f1", "f2","Qf3", PieceColor.White)]
+        //find queen vertical up, with obstacles
+        [InlineData("f6", "f5", "Qf3", PieceColor.White)]
+
+        //find queen vertical down with obstacles
+        [InlineData("f1", "f2", "Qf3", PieceColor.White)]
         public void FindWhiteQueenOnAllRoutesWithObstacleShouldReturnNull(string queenCoords,string obstacleCoords, string moveAN, PieceColor currentPlayer)
         {
             //Arange
@@ -518,5 +518,71 @@ namespace ChessTests
 
             Assert.Equal(queen, board.CellAt("e4").Piece);
         }
+
+        [Theory]
+        //find bishop on diagonal right-down, no obstacles
+        [InlineData("c8", "Bg4", PieceColor.Black)]      
+        [InlineData("d1", "Bf3", PieceColor.White)]
+        public void MoveBishop(string bishopCoords, string moveAN, PieceColor currentPlayer)
+        {
+            //Arange
+            var board = new Board(false);
+
+            board.AddPiece(bishopCoords, new Bishop(currentPlayer));
+
+           //Act
+            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, currentPlayer);
+            var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);
+
+            var bishop = board.PlayMove(moveAN, currentPlayer);
+
+            //Assert
+            Assert.Equal(bishop, board.CellAt(move.Coordinate).Piece);
+            Assert.IsType<Bishop>(bishop);
+        }
+
+        //TO DO test for find  bishop with obstacle
+        [InlineData("c5", "d4", "Be3", PieceColor.Black)]
+        public void FindWhiteBishopOnAllRoutesWithObstacleShouldReturnNull(string bishopCoords, string obstacleCoords, string moveAN, PieceColor currentPlayer)
+        {
+            //Arange
+            var board = new Board(false);
+
+            board.AddPiece(bishopCoords, new Bishop(currentPlayer));
+            board.AddPiece(obstacleCoords, new Pawn(PieceColor.White));
+
+
+            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, currentPlayer);
+
+            var bishop = board.FindPieceWhoNeedsToBeMoved(move, currentPlayer);
+
+            Assert.Null(bishop);
+
+        }
+
+        [Theory]
+        //find bishop on diagonal right-down, no obstacles
+      
+        [InlineData("f4", "Bxd6", PieceColor.White)]
+        public void MoveBishopWithCapture(string bishopCoords, string moveAN, PieceColor currentPlayer)
+        {
+            //Arange
+            var board = new Board(false);
+
+            board.AddPiece(bishopCoords, new Bishop(currentPlayer));
+            board.AddPiece("d6", new Pawn(PieceColor.Black));
+
+            //Act
+            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, currentPlayer);
+            var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);
+
+            var bishop = board.PlayMove(moveAN, currentPlayer);
+
+            //Assert
+            Assert.Equal(bishop, board.CellAt(move.Coordinate).Piece);
+            Assert.IsType<Bishop>(bishop);
+        }
+
+        //TO DO 2 ambiguity bishop
     }
 }
