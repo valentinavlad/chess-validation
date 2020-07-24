@@ -541,7 +541,6 @@ namespace ChessTests
             Assert.IsType<Bishop>(bishop);
         }
 
-        //TO DO test for find  bishop with obstacle
         [Theory]
         [InlineData("c5", "d4", "Be3", PieceColor.Black)]
         public void FindWhiteBishopOnAllRoutesWithObstacleShouldReturnNull(string bishopCoords, string obstacleCoords, string moveAN, PieceColor currentPlayer)

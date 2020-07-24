@@ -20,5 +20,6 @@ namespace ChessTests
         public bool IsCheck { get; set; }
         public bool IsCheckMate { get; set; }
         public bool IsCapture { get; set; }
+        public bool IsCastling { get; set; }
     }
 }
