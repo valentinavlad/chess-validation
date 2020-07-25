@@ -144,10 +144,17 @@ namespace ChessTests
             if (i < 0 || j >= 8) return null;
             return cells[i, j];
         }
+        private Cell LShapeLookUpRightDown()
+        {
+            int i = X - 1;
+            int j = Y + 2;
+            if (i < 0 || j >= 8) return null;
+            return cells[i, j];
+        }
         private Cell LShapeLookDownLeftUp()
         {
             int i = X + 1;
-            int j = Y - 1;
+            int j = Y - 2;
             if (i >= 8 || j < 0) return null;
             return cells[i, j];
         }
@@ -172,13 +179,7 @@ namespace ChessTests
             if (i >= 8 || j >= 8) return null;
             return cells[i, j];
         }
-        private Cell LShapeLookUpRightDown()
-        {
-            int i = X - 1;
-            int j = Y + 2;
-            if (i < 0 || j >= 8) return null;
-            return cells[i, j];
-        }
+  
         public Cell LookLShape(KnightOrientation orientation)
         {
             if (KnightOrientation.DownLeftDown == orientation) return LShapeLookDownLeftDown();

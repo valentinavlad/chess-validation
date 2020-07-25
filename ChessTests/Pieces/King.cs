@@ -28,23 +28,8 @@ namespace ChessTests.Pieces
                 
                 Orientation.Right, Orientation.UpRight
 
-
             };
 
-            //if (move.IsKingCastling)
-            //{
-            //    var currentCell = destinationCell;
-            //    for (int i = currentCell.Y; i <= 3 ; i++)
-            //    {
-            //        currentCell = currentCell.Look(Orientation.Right);
-            //        if (currentCell.Piece == null) continue;
-            //        if (currentCell.Piece.Name == PieceName.King && playerColor == currentCell.Piece.pieceColor)
-            //        {
-            //            return currentCell.Piece;
-            //        }
-            //    }
-     
-            //}
 
             if (move.IsKingCastling)
             {
@@ -79,7 +64,6 @@ namespace ChessTests.Pieces
 
             foreach (var orientation in orientations)
             {
-                //var loop = true;
                 var currentCell = destinationCell;
     
                     //there is no piece on the cells

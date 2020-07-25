@@ -159,8 +159,6 @@ namespace ChessTests.Tests.PiecesTest
             board.AddPiece("a1", new Rook(PieceColor.White));
             board.AddPiece("e1", new King(PieceColor.White));
 
-        
-
             var move = ConvertAMoveIntoACellInstance.ParseMoveNotation("0-0", PieceColor.White);
 
           

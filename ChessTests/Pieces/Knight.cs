@@ -41,9 +41,9 @@ namespace ChessTests
                     currentCell = currentCell.LookLShape(orientation);
 
                     //Search looks out of board
-                    if (currentCell == null) break;
+                    if (currentCell == null || currentCell.Piece == null) break;
 
-                    if (currentCell.Piece == null) continue;
+                    //if (currentCell.Piece == null) continue;
 
 
                     if (currentCell.Piece.Name == PieceName.Knight && playerColor == currentCell.Piece.pieceColor)
@@ -55,7 +55,7 @@ namespace ChessTests
                     break;
                 }
             }
-
+            //TO DO... finded just one knight, not 2!!!
 
             if (findKnight.Count == 1)
             {

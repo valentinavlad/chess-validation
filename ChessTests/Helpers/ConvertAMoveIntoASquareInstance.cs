@@ -76,7 +76,7 @@ namespace ChessTests
                 {
                     //move with capture
 
-                    string pattern = @"^(?<pieceUppercase>[BRQKN])(?<capture>[x])(?<coordinates>[a-h][1-8])(?<checkOrCheckMate>[+]{0,2})$";
+                    string pattern = @"^(?<pieceUppercase>[BRQKN])(?<file>[a-h]{0,1})(?<capture>[x])(?<coordinates>[a-h][1-8])(?<checkOrCheckMate>[+]{0,2})$";
                     Regex reg = new Regex(pattern);
                     Match match = Regex.Match(moveNotation, pattern);
 
@@ -89,6 +89,12 @@ namespace ChessTests
 
                         pieceUppercase = match.Groups["pieceUppercase"].Value;
                         move.IsCapture = true;
+                        file = match.Groups["file"].Value;
+                        if (file != "")
+                        {
+                            move.Y = ConvertChessCoordinateFileToArrayIndex(file);
+                        }
+                        
                     }
                     else
                     {
