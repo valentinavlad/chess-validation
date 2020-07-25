@@ -37,5 +37,80 @@ namespace ChessTests.Tests
             Assert.Equal(PieceName.Pawn, pieceTypePawn);
             Assert.Equal(PieceName.Knight, pieceTypeKnight);
         }
+
+        [Fact]
+        public void CheckRegexForKingCastlingShouldReturnNewPiece()
+        {
+            var notation = "0-0";
+            var color = PieceColor.White;
+            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(notation, color);
+
+
+            Assert.True(move.IsKingCastling);
+            Assert.False(move.IsQueenCastling);
+        }
+        [Fact]
+        public void CheckRegexForMovePawnToPromotionShouldReturnNewPiece()
+        {
+            var notation = "e8Q++";
+            var color = PieceColor.White;
+            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(notation, color);
+
+            Assert.NotNull(move.Coordinate);
+            Assert.NotNull(move.Promotion);
+            Assert.IsType<Queen>(move.Promotion);
+            Assert.Equal(color, move.Promotion.pieceColor);
+            Assert.False(move.IsCheck);
+            Assert.True(move.IsCheckMate);
+        }
+
+        [Fact]
+        public void CheckRegexForMoveBishopShouldReturn()
+        {
+            var notation = "Be5+";
+            var color = PieceColor.White;
+            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(notation, color);
+
+            Assert.NotNull(move.Coordinate);
+            Assert.Null(move.Promotion);
+
+            Assert.Equal(color, move.Color);
+            Assert.Equal(PieceName.Bishop, move.PieceName);
+            Assert.True(move.IsCheck);
+            Assert.False(move.IsCheckMate);
+        }
+
+        [Fact]
+        public void CheckRegexForMoveBishopWithCaptureShouldReturn()
+        {
+            var notation = "Bxe5";
+            var color = PieceColor.White;
+            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(notation, color);
+
+            Assert.NotNull(move.Coordinate);
+            Assert.Null(move.Promotion);
+
+            Assert.Equal(color, move.Color);
+            Assert.Equal(PieceName.Bishop, move.PieceName);
+            Assert.False(move.IsCheck);
+            Assert.False(move.IsCheckMate);
+            Assert.True(move.IsCapture);
+        }
+
+        [Fact]
+        public void CheckRegexForMovePawnWithCaptureAndPromotionShouldReturnNewPiece()
+        {
+            var notation = "exd8Q+";
+            var color = PieceColor.White;
+            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(notation, color);
+
+            Assert.NotNull(move.Coordinate);
+            Assert.NotNull(move.Promotion);
+            Assert.IsType<Queen>(move.Promotion);
+            Assert.Equal(color, move.Promotion.pieceColor);
+            Assert.True(move.IsCheck);
+            Assert.False(move.IsCheckMate);
+            Assert.True(move.IsCapture);
+        }
     }
 }
