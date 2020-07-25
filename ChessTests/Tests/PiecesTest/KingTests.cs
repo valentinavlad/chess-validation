@@ -139,6 +139,9 @@ namespace ChessTests.Tests.PiecesTest
             board.PlayMove("Nc6", PieceColor.Black);
 
             board.PlayMove("b3", PieceColor.White);
+            board.PlayMove("Qd7", PieceColor.Black);
+
+            board.PlayMove("f3", PieceColor.White);
             board.PlayMove("0-0", PieceColor.Black);
 
 
@@ -161,6 +164,31 @@ namespace ChessTests.Tests.PiecesTest
             var move = ConvertAMoveIntoACellInstance.ParseMoveNotation("0-0", PieceColor.White);
 
           
+            Action exception = () => board.PlayMove("0-0", PieceColor.White);
+
+            Assert.Throws<InvalidOperationException>(exception);
+        }
+
+        [Fact]
+        public void WhiteKingCastlingWithObstacle()
+        {
+            var board = new Board();
+
+
+            board.PlayMove("d4", PieceColor.White);
+            board.PlayMove("e6", PieceColor.Black);
+
+            board.PlayMove("Bf4", PieceColor.White);
+            board.PlayMove("g6", PieceColor.Black);
+
+            board.PlayMove("b3", PieceColor.White);
+            board.PlayMove("b6", PieceColor.Black);
+
+            board.PlayMove("Qd3", PieceColor.White);
+            board.PlayMove("b5", PieceColor.Black);
+
+        
+
             Action exception = () => board.PlayMove("0-0", PieceColor.White);
 
             Assert.Throws<InvalidOperationException>(exception);

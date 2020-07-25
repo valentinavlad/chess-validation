@@ -208,9 +208,9 @@ namespace ChessTable
             //TO DO if is castling fix errors on destination cell, dont have coords
             var destinationCell = TransformCoordonatesIntoCell(move.Coordinate);
 
-            //find king
             
             var piece = FindPieceWhoNeedsToBeMoved(move, currentPlayer);
+
             if (piece == null)
             {
                 throw new InvalidOperationException("Invalid move!");
@@ -227,8 +227,6 @@ namespace ChessTable
                 {
                     throw new InvalidOperationException("Invalid castling!");
                 }
-
-
             }
 
             if (move.IsQueenCastling)
@@ -259,26 +257,39 @@ namespace ChessTable
 
         private void KingCastling(Piece king, PieceColor currentPlayer, Cell destinationCell)
         {
-            var currentCell = destinationCell;
-            for (int i = currentCell.Y; i > 0; i--)
+            var currentCell = destinationCell.Look(Orientation.Right);
+            //check if all the squares till last(where is Rook) are free
+            if (currentCell.Piece == null)
             {
-                currentCell = currentCell.Look(Orientation.Left);
-                if (currentCell.Piece == null) continue;
-                if (currentCell.Piece.Name != PieceName.Rook) throw new InvalidOperationException("Invalid move!");
-                if (currentCell.Piece.Name == PieceName.Rook && currentPlayer == currentCell.Piece.pieceColor && king.IsOnInitialPosition())
+                for (int i = currentCell.Y - 1; i >= 0; i--)
                 {
-                    var rook = currentCell.Piece;
-                    Move(king, destinationCell);
-                    Move(rook, destinationCell.Look(Orientation.Right));
+                    currentCell = currentCell.Look(Orientation.Left);
+                    if (currentCell == null) break;
+                    if (currentCell.Piece != null && currentCell.Y != 0) throw new InvalidOperationException("Invalid state!");
+                    if (currentCell.Y == 0)
+                    {
+                        if (currentCell.Piece.Name == PieceName.Rook && currentPlayer == currentCell.Piece.pieceColor && king.IsOnInitialPosition())
+                        {
+                            var rook = currentCell.Piece;
+                            Move(king, destinationCell);
+                            Move(rook, destinationCell.Look(Orientation.Right));
+                        }
+                    }
                 }
             }
+            else
+            {
+                throw new InvalidOperationException("Invalid state!");
+            }
+           
+
         }
 
-        private void QueenCastling(Piece king, PieceColor currentPlayer, Cell destinationCell)
+        private void QueenCastling2(Piece king, PieceColor currentPlayer, Cell destinationCell)
         {
             var currentCell = destinationCell;
-            //for (int i = currentCell.Y; i <= 7; i++)
-            //{
+            for (int i = currentCell.Y + 1; i <= 7; i++)
+            {
                 currentCell = currentCell.Look(Orientation.Right);
                 //if (currentCell.Piece == null) continue;
                 if (currentCell.Piece.Name != PieceName.Rook) throw new InvalidOperationException("Invalid move!");
@@ -295,7 +306,29 @@ namespace ChessTable
                         throw new InvalidOperationException("Rook is invalid state!");
                     }
                 }
-            //}
+            }
+        }
+
+        private void QueenCastling(Piece king, PieceColor currentPlayer, Cell destinationCell)
+        {
+            var currentCell = destinationCell;
+            if (currentCell.Piece != null) throw new InvalidOperationException("Invalid state!");
+
+            currentCell = currentCell.Look(Orientation.Right);
+            if (currentCell.Piece.Name == PieceName.Rook && currentPlayer == currentCell.Piece.pieceColor && king.IsOnInitialPosition())
+            {
+                var rook = currentCell.Piece;
+                if (rook.IsOnInitialPosition())
+                {
+                    Move(king, destinationCell);
+                    Move(rook, destinationCell.Look(Orientation.Left));
+                }
+                else
+                {
+                    throw new InvalidOperationException("Rook is invalid state!");
+                }
+            }
+                   
         }
     }
 }
