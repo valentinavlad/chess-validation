@@ -72,5 +72,98 @@ namespace ChessTests.Tests.PiecesTest
             Assert.IsType<King>(king);
 
         }
+
+        [Fact]
+        public void WhiteKingCastling()
+        {
+            var board = new Board();
+
+
+            board.PlayMove("d4", PieceColor.White);
+            board.PlayMove("e6", PieceColor.Black);
+
+            board.PlayMove("Bf4", PieceColor.White);
+            board.PlayMove("g6", PieceColor.Black);
+
+            board.PlayMove("Nc3", PieceColor.White);
+            board.PlayMove("b6", PieceColor.Black);
+
+            board.PlayMove("Qd3", PieceColor.White);
+            board.PlayMove("b5", PieceColor.Black);
+
+            board.PlayMove("0-0", PieceColor.White);
+
+            Assert.IsType<King>(board.CellAt("c1").Piece);
+            Assert.IsType<Rook>(board.CellAt("d1").Piece);
+            Assert.Null(board.CellAt("a1").Piece);
+            Assert.Null(board.CellAt("e1").Piece);
+        }
+
+        [Fact]
+        public void WhiteQueenCastling()
+        {
+            var board = new Board();
+
+
+            board.PlayMove("e3", PieceColor.White);
+            board.PlayMove("e5", PieceColor.Black);
+
+            board.PlayMove("Bd3", PieceColor.White);
+            board.PlayMove("f5", PieceColor.Black);
+
+            board.PlayMove("Nh3", PieceColor.White);
+            board.PlayMove("g5", PieceColor.Black);
+
+            board.PlayMove("0-0-0", PieceColor.White);
+            board.PlayMove("d6", PieceColor.Black);
+
+
+            Assert.IsType<King>(board.CellAt("g1").Piece);
+            Assert.IsType<Rook>(board.CellAt("f1").Piece);
+            Assert.Null(board.CellAt("e1").Piece);
+            Assert.Null(board.CellAt("h1").Piece);
+        } 
+        [Fact]
+        public void BlackKingCastling()
+        {
+            var board = new Board();
+
+
+            board.PlayMove("c4", PieceColor.White);
+            board.PlayMove("d6", PieceColor.Black);
+
+            board.PlayMove("d3", PieceColor.White);
+            board.PlayMove("Bf5", PieceColor.Black);
+
+            board.PlayMove("e4", PieceColor.White);
+            board.PlayMove("Nc6", PieceColor.Black);
+
+            board.PlayMove("b3", PieceColor.White);
+            board.PlayMove("0-0", PieceColor.Black);
+
+
+            Assert.IsType<King>(board.CellAt("c8").Piece);
+            Assert.IsType<Rook>(board.CellAt("d8").Piece);
+            Assert.Null(board.CellAt("a8").Piece);
+            Assert.Null(board.CellAt("e8").Piece);
+        }
+
+        [Fact]
+        public void WhiteKingCastlingPiecesMovedShouldThrowException()
+        {
+            var board = new Board(false);
+
+            board.AddPiece("a1", new Rook(PieceColor.White));
+            board.AddPiece("e1", new King(PieceColor.White));
+
+        
+
+            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation("0-0", PieceColor.White);
+
+          
+            Action exception = () => board.PlayMove("0-0", PieceColor.White);
+
+            Assert.Throws<InvalidOperationException>(exception);
+        }
     }
 }

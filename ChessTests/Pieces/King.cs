@@ -20,6 +20,7 @@ namespace ChessTests.Pieces
             {
                 throw new InvalidOperationException("Invalid Move");
             }
+
             var orientations = new List<Orientation>()
             {
                 Orientation.Up, Orientation.UpLeft, Orientation.Left,  
@@ -29,6 +30,7 @@ namespace ChessTests.Pieces
 
 
             };
+
             if (move.IsKingCastling)
             {
                 var currentCell = destinationCell;
@@ -42,6 +44,21 @@ namespace ChessTests.Pieces
                     }
                 }
      
+            }
+
+            if (move.IsQueenCastling)
+            {
+                var currentCell = destinationCell;
+                for (int i = currentCell.Y; i > 4; i--)
+                {
+                    currentCell = currentCell.Look(Orientation.Left);
+                    if (currentCell.Piece == null) continue;
+                    if (currentCell.Piece.Name == PieceName.King && playerColor == currentCell.Piece.pieceColor)
+                    {
+                        return currentCell.Piece;
+                    }
+                }
+
             }
 
             foreach (var orientation in orientations)

@@ -143,13 +143,29 @@ namespace ChessTests
                     if (countZerosForCastling == 2)
                     {
                         move.IsKingCastling = true;
-
+                        if (pieceColor == PieceColor.White)
+                        {
+                            coordinatesFromMove = "c1";
+                        }
+                        else
+                        {
+                            coordinatesFromMove = "c8";
+                        }
                     }
                     if (countZerosForCastling == 3)
                     {
                         move.IsQueenCastling = true;
+                        if (pieceColor == PieceColor.White)
+                        {
+                            coordinatesFromMove = "g1";
+                        }
+                        else
+                        {
+                            coordinatesFromMove = "g8";
+                        }
                     }
-                    coordinatesFromMove = "c1";
+                
+                   
                     pieceUppercase = "K";
                 }
                 //  return move;

@@ -86,35 +86,6 @@ namespace ChessTests.Tests.PiecesTest
             Assert.Null(board.CellAt("b5").Piece);
         }
 
-        //TO DO CASTLING
-        [Fact]
-        public void Castling()
-        {
-            var board = new Board();
 
-
-            board.PlayMove("d4", PieceColor.White);
-            board.PlayMove("e6", PieceColor.Black);
-
-            board.PlayMove("Bf4", PieceColor.White);
-            board.PlayMove("g6", PieceColor.Black);
-
-            board.PlayMove("Nc3", PieceColor.White);
-            board.PlayMove("b6", PieceColor.Black);
-
-            board.PlayMove("Qd3", PieceColor.White);
-            board.PlayMove("b5", PieceColor.Black);
-
-            board.PlayMove("0-0", PieceColor.White);
-
-
-           
-            Assert.IsType<King>(board.CellAt("c1").Piece);
-            Assert.IsType<Rook>(board.CellAt("d1").Piece);
-            Assert.Null(board.CellAt("a1").Piece);
-            Assert.Null(board.CellAt("e1").Piece);
-            //Assert.Null(board.CellAt("b5").Piece);
-        }
-   
     }
 }
