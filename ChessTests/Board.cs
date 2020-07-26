@@ -7,6 +7,8 @@ namespace ChessTable
     public class Board
     {
         public Cell[,] cells;
+        internal bool BlackCheck;
+        internal bool WhiteCheck;
         //list active black pieces 
         //list active white pieces
         //has pieces
@@ -248,7 +250,15 @@ namespace ChessTable
             //TO DO verify if move makes check
             if (move.IsCheck)
             {
-                //???
+                //verify if king is actually in check
+               if (piece.pieceColor == PieceColor.Black)
+                {
+                    this.WhiteCheck = true;
+                }
+                else
+                {
+                    this.BlackCheck = true;
+                }
             }
 
             if (move.IsCheckMate)

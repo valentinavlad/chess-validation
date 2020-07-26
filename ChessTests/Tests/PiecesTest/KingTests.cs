@@ -74,7 +74,7 @@ namespace ChessTests.Tests.PiecesTest
         }
 
         [Fact]
-        public void WhiteKingCastling()
+        public void WhiteQueenCastling()
         {
             var board = new Board();
 
@@ -91,7 +91,7 @@ namespace ChessTests.Tests.PiecesTest
             board.PlayMove("Qd3", PieceColor.White);
             board.PlayMove("b5", PieceColor.Black);
 
-            board.PlayMove("0-0", PieceColor.White);
+            board.PlayMove("0-0-0", PieceColor.White);
 
             Assert.IsType<King>(board.CellAt("c1").Piece);
             Assert.IsType<Rook>(board.CellAt("d1").Piece);
@@ -100,7 +100,7 @@ namespace ChessTests.Tests.PiecesTest
         }
 
         [Fact]
-        public void WhiteQueenCastling()
+        public void WhiteKingCastling()
         {
             var board = new Board();
 
@@ -114,7 +114,7 @@ namespace ChessTests.Tests.PiecesTest
             board.PlayMove("Nh3", PieceColor.White);
             board.PlayMove("g5", PieceColor.Black);
 
-            board.PlayMove("0-0-0", PieceColor.White);
+            board.PlayMove("0-0", PieceColor.White);
             board.PlayMove("d6", PieceColor.Black);
 
 
@@ -123,8 +123,9 @@ namespace ChessTests.Tests.PiecesTest
             Assert.Null(board.CellAt("e1").Piece);
             Assert.Null(board.CellAt("h1").Piece);
         } 
+
         [Fact]
-        public void BlackKingCastling()
+        public void BlackQueenCastling()
         {
             var board = new Board();
 
@@ -142,7 +143,7 @@ namespace ChessTests.Tests.PiecesTest
             board.PlayMove("Qd7", PieceColor.Black);
 
             board.PlayMove("f3", PieceColor.White);
-            board.PlayMove("0-0", PieceColor.Black);
+            board.PlayMove("0-0-0", PieceColor.Black);
 
 
             Assert.IsType<King>(board.CellAt("c8").Piece);

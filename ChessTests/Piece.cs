@@ -1,5 +1,6 @@
 ﻿
 using ChessTable;
+using System;
 
 namespace ChessTests
 {
@@ -19,6 +20,14 @@ namespace ChessTests
         public bool IsOnInitialPosition()
         {
             return InitialPosition == CurrentPosition;
+        }
+
+        protected static void CheckDestinationCellAvailability(PieceColor playerColor, Cell destinationCell)
+        {
+            if (destinationCell.HasPiece() && destinationCell.Piece.pieceColor == playerColor)
+            {
+                throw new InvalidOperationException("Invalid Move");
+            }
         }
 
 

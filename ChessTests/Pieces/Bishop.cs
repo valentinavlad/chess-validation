@@ -16,21 +16,32 @@ namespace ChessTests
         public static Piece ValidateMovementAndReturnPiece(Board board, Move move, PieceColor playerColor)
         {
             var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);
-            if (destinationCell.HasPiece() && destinationCell.Piece.pieceColor == playerColor)
-            {
-                throw new InvalidOperationException("Invalid Move");
-            }
-            var orientations = new List<Orientation>()
-            {
-                Orientation.UpLeft, Orientation.DownLeft,
-                Orientation.UpRight, Orientation.DownRight,
-              
-            };
 
+            Piece.CheckDestinationCellAvailability(playerColor, destinationCell);
+
+            List<Orientation> orientations = BishopOrientation();
+
+            List<Piece> findBishops = FindPieces(playerColor, destinationCell, orientations);
+
+            if (findBishops.Count == 1)
+            {
+                return findBishops.First();
+            }
+
+            else if (findBishops.Count > 1)
+            {
+                return findBishops.Find(q => q.CurrentPosition.Y == move.Y);
+            }
+
+            return null;
+        }
+
+        private static List<Piece> FindPieces(PieceColor playerColor, Cell destinationCell, List<Orientation> orientations)
+        {
             var findBishops = new List<Piece>();
+
             foreach (var orientation in orientations)
             {
-                //var loop = true;
                 var currentCell = destinationCell;
                 while (true)
                 {
@@ -53,17 +64,16 @@ namespace ChessTests
                 }
             }
 
-            if (findBishops.Count == 1)
-            {
-                return findBishops.First();
-            }
+            return findBishops;
+        }
 
-            else if (findBishops.Count > 1)
+        private static List<Orientation> BishopOrientation()
+        {
+            return new List<Orientation>()
             {
-                return findBishops.Find(q => q.CurrentPosition.Y == move.Y);
-            }
-
-            return null;
+                Orientation.UpLeft, Orientation.DownLeft,
+                Orientation.UpRight, Orientation.DownRight,
+            };
         }
     }
 }
