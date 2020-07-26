@@ -47,23 +47,26 @@ namespace ChessTests.Tests.PiecesTest
 
             //pe celula destinatie dupa mutarea pionului pe d1, ar trebui sa fie regina neagra
 
-            //caut piesa 
-            //am gasit piesa
-            //****
-            var piece = board.FindPieceWhoNeedsToBeMoved(moveAN, pieceColor);
+            ////caut piesa 
+            ////am gasit piesa
+            ////****
+            //var piece = board.FindPieceWhoNeedsToBeMoved(moveAN, pieceColor);
 
-            //determin celula destinatie
+            ////determin celula destinatie
+            //var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, pieceColor);
+            //var cellDestination = board.TransformCoordonatesIntoCell(move.Coordinate);
+
+            ////fac mutarea pe celula destinatie
+            //board.Move(piece, cellDestination);
+
+            ////fac promovarea pionului la regina
+            ////resetez pozitia curenta a pionului
+            ////adaug o noua regina
+            //var newQueen = board.PromotePawn(move, piece);
+            ////***extract into a method in board
+           
             var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, pieceColor);
-            var cellDestination = board.TransformCoordonatesIntoCell(move.Coordinate);
-
-            //fac mutarea pe celula destinatie
-            board.Move(piece, cellDestination);
-
-            //fac promovarea pionului la regina
-            //resetez pozitia curenta a pionului
-            //adaug o noua regina
-            var newQueen = board.PromotePawn(move, piece);
-            //***extract into a method in board
+            var pawn = board.PlayMove(moveAN, pieceColor);
             Assert.Null(pawnBlack.CurrentPosition);
             Assert.IsType<Queen>(board.CellAt(move.Coordinate).Piece);
 

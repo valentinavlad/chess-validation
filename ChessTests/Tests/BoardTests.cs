@@ -110,5 +110,41 @@ namespace ChessTests
             Action exception = () => board.FindPieceWhoNeedsToBeMoved(move, PieceColor.White);
             Assert.Throws<InvalidOperationException>(exception);
         }
+
+        [Fact]
+        public void Tset()
+        {
+            var board = new Board();
+
+
+            board.PlayMove("e4", PieceColor.White);
+            board.PlayMove("e5", PieceColor.Black);
+
+            board.PlayMove("Nf3", PieceColor.White);
+            board.PlayMove("Nc6", PieceColor.Black);
+
+            board.PlayMove("Bb5", PieceColor.White);
+            board.PlayMove("Nf6", PieceColor.Black);
+
+            board.PlayMove("Nc3", PieceColor.White);
+            board.PlayMove("Bc5", PieceColor.Black);
+
+            board.PlayMove("0-0", PieceColor.White);
+            board.PlayMove("d5", PieceColor.Black);
+
+            //board.PlayMove("exd5", PieceColor.White);
+            //board.PlayMove("Nxd5", PieceColor.Black);
+
+            //board.PlayMove("Nxd5", PieceColor.White);
+            //board.PlayMove("Qxd5", PieceColor.Black);
+
+            //board.PlayMove("Bxc6+", PieceColor.White);
+            //board.PlayMove("bxc6", PieceColor.Black);
+
+            Assert.IsType<King>(board.CellAt("c1").Piece);
+            Assert.IsType<Rook>(board.CellAt("d1").Piece);
+            Assert.Null(board.CellAt("a1").Piece);
+            Assert.Null(board.CellAt("e1").Piece);
+        }
     }
 }

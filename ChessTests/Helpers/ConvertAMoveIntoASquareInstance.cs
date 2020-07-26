@@ -1,9 +1,6 @@
 ﻿using ChessTests.Pieces;
 using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace ChessTests
@@ -151,11 +148,11 @@ namespace ChessTests
                         move.IsKingCastling = true;
                         if (pieceColor == PieceColor.White)
                         {
-                            coordinatesFromMove = "c1";
+                            coordinatesFromMove = "g1";
                         }
                         else
                         {
-                            coordinatesFromMove = "c8";
+                            coordinatesFromMove = "g8";
                         }
                     }
                     if (countZerosForCastling == 3)
@@ -163,11 +160,11 @@ namespace ChessTests
                         move.IsQueenCastling = true;
                         if (pieceColor == PieceColor.White)
                         {
-                            coordinatesFromMove = "g1";
+                            coordinatesFromMove = "c1";
                         }
                         else
                         {
-                            coordinatesFromMove = "g8";
+                            coordinatesFromMove = "c8";
                         }
                     }
                 

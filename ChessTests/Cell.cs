@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ChessTests
+﻿namespace ChessTests
 {
     public class Cell
     {

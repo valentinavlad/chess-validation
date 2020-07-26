@@ -1,7 +1,6 @@
 ﻿using ChessTests;
 using System;
 using ChessTests.Pieces;
-using System.Collections.Generic;
 
 namespace ChessTable
 {
@@ -27,20 +26,11 @@ namespace ChessTable
             }
         }
 
-
         public void Move(Piece piece, Cell destinationCell)
         {
-            //make a move if move is valid
-
-            //resets the previous cell, after the piece is moved
-           
-            //if (piece.Name == PieceName.Pawn)
-            //{
-                var previousPosition = piece.CurrentPosition;
-                destinationCell.Piece = piece;
-                previousPosition.Piece = null;
-           // }
-
+            var previousPosition = piece.CurrentPosition;
+            destinationCell.Piece = piece;
+            previousPosition.Piece = null;
             piece.CurrentPosition = destinationCell;
         }
 
@@ -248,17 +238,31 @@ namespace ChessTable
             }
 
             Move(piece, destinationCell);
+
             //TO DO promote pawn if necessary
+            if (move.Promotion != null)
+            {
+                PromotePawn(move, piece);
+            }
+
             //TO DO verify if move makes check
+            if (move.IsCheck)
+            {
+                //???
+            }
+
+            if (move.IsCheckMate)
+            {
+                //end of game
+            }
             //TO DO verify if move makes check mate
             
             return piece;
         }
 
-        private void KingCastling(Piece king, PieceColor currentPlayer, Cell destinationCell)
+        private void QueenCastling(Piece king, PieceColor currentPlayer, Cell destinationCell)
         {
             var currentCell = destinationCell.Look(Orientation.Right);
-            //check if all the squares till last(where is Rook) are free
             if (currentCell.Piece == null)
             {
                 for (int i = currentCell.Y - 1; i >= 0; i--)
@@ -281,35 +285,9 @@ namespace ChessTable
             {
                 throw new InvalidOperationException("Invalid state!");
             }
-           
-
         }
 
-        private void QueenCastling2(Piece king, PieceColor currentPlayer, Cell destinationCell)
-        {
-            var currentCell = destinationCell;
-            for (int i = currentCell.Y + 1; i <= 7; i++)
-            {
-                currentCell = currentCell.Look(Orientation.Right);
-                //if (currentCell.Piece == null) continue;
-                if (currentCell.Piece.Name != PieceName.Rook) throw new InvalidOperationException("Invalid move!");
-                if (currentCell.Piece.Name == PieceName.Rook && currentPlayer == currentCell.Piece.pieceColor && king.IsOnInitialPosition())
-                {
-                    var rook = currentCell.Piece;
-                    if (rook.IsOnInitialPosition())
-                    {
-                        Move(king, destinationCell);
-                        Move(rook, destinationCell.Look(Orientation.Left));
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException("Rook is invalid state!");
-                    }
-                }
-            }
-        }
-
-        private void QueenCastling(Piece king, PieceColor currentPlayer, Cell destinationCell)
+        private void KingCastling(Piece king, PieceColor currentPlayer, Cell destinationCell)
         {
             var currentCell = destinationCell;
             if (currentCell.Piece != null) throw new InvalidOperationException("Invalid state!");
@@ -328,7 +306,55 @@ namespace ChessTable
                     throw new InvalidOperationException("Rook is invalid state!");
                 }
             }
-                   
+
         }
+        //private void KingCastling(Piece king, PieceColor currentPlayer, Cell destinationCell)
+        //{
+        //    var currentCell = destinationCell.Look(Orientation.Right);
+        //    if (currentCell.Piece == null)
+        //    {
+        //        for (int i = currentCell.Y - 1; i >= 0; i--)
+        //        {
+        //            currentCell = currentCell.Look(Orientation.Left);
+        //            if (currentCell == null) break;
+        //            if (currentCell.Piece != null && currentCell.Y != 0) throw new InvalidOperationException("Invalid state!");
+        //            if (currentCell.Y == 0)
+        //            {
+        //                if (currentCell.Piece.Name == PieceName.Rook && currentPlayer == currentCell.Piece.pieceColor && king.IsOnInitialPosition())
+        //                {
+        //                    var rook = currentCell.Piece;
+        //                    Move(king, destinationCell);
+        //                    Move(rook, destinationCell.Look(Orientation.Right));
+        //                }
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        throw new InvalidOperationException("Invalid state!");
+        //    }
+        //}
+
+        //private void QueenCastling(Piece king, PieceColor currentPlayer, Cell destinationCell)
+        //{
+        //    var currentCell = destinationCell;
+        //    if (currentCell.Piece != null) throw new InvalidOperationException("Invalid state!");
+
+        //    currentCell = currentCell.Look(Orientation.Right);
+        //    if (currentCell.Piece.Name == PieceName.Rook && currentPlayer == currentCell.Piece.pieceColor && king.IsOnInitialPosition())
+        //    {
+        //        var rook = currentCell.Piece;
+        //        if (rook.IsOnInitialPosition())
+        //        {
+        //            Move(king, destinationCell);
+        //            Move(rook, destinationCell.Look(Orientation.Left));
+        //        }
+        //        else
+        //        {
+        //            throw new InvalidOperationException("Rook is invalid state!");
+        //        }
+        //    }
+
+        //}
     }
 }

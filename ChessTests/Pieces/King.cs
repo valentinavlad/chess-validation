@@ -29,16 +29,14 @@ namespace ChessTests.Pieces
                 Orientation.Right, Orientation.UpRight
 
             };
-
-
-            if (move.IsKingCastling)
+            if (move.IsQueenCastling)
             {
                 var currentCell = destinationCell;
                 for (int i = currentCell.Y + 1; i <= 4; i++)
                 {
                     currentCell = currentCell.Look(Orientation.Right);
-                    if (currentCell.Piece != null && currentCell.Y != 4) throw new InvalidOperationException("Invalid move!"); 
-                    if (currentCell.Y == 4 &&  currentCell.Piece.Name == PieceName.King && playerColor == currentCell.Piece.pieceColor)
+                    if (currentCell.Piece != null && currentCell.Y != 4) throw new InvalidOperationException("Invalid move!");
+                    if (currentCell.Y == 4 && currentCell.Piece.Name == PieceName.King && playerColor == currentCell.Piece.pieceColor)
                     {
                         return currentCell.Piece;
                     }
@@ -46,7 +44,7 @@ namespace ChessTests.Pieces
 
             }
 
-            if (move.IsQueenCastling)
+            if (move.IsKingCastling)
             {
                 var currentCell = destinationCell;
                 for (int i = currentCell.Y - 1; i >= 4; i--)
@@ -61,6 +59,37 @@ namespace ChessTests.Pieces
                 }
 
             }
+
+            //if (move.IsKingCastling)
+            //{
+            //    var currentCell = destinationCell;
+            //    for (int i = currentCell.Y + 1; i <= 4; i++)
+            //    {
+            //        currentCell = currentCell.Look(Orientation.Right);
+            //        if (currentCell.Piece != null && currentCell.Y != 4) throw new InvalidOperationException("Invalid move!"); 
+            //        if (currentCell.Y == 4 &&  currentCell.Piece.Name == PieceName.King && playerColor == currentCell.Piece.pieceColor)
+            //        {
+            //            return currentCell.Piece;
+            //        }
+            //    }
+
+            //}
+
+            //if (move.IsQueenCastling)
+            //{
+            //    var currentCell = destinationCell;
+            //    for (int i = currentCell.Y - 1; i >= 4; i--)
+            //    {
+            //        //TO DO if king is in other square error
+            //        currentCell = currentCell.Look(Orientation.Left);
+            //        if (currentCell.Piece != null && currentCell.Y != 4) throw new InvalidOperationException("Invalid move!");
+            //        if (currentCell.Y == 4 && currentCell.Piece.Name == PieceName.King && playerColor == currentCell.Piece.pieceColor)
+            //        {
+            //            return currentCell.Piece;
+            //        }
+            //    }
+
+            //}
 
             foreach (var orientation in orientations)
             {
