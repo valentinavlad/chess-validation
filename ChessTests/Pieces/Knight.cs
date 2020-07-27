@@ -17,17 +17,58 @@ namespace ChessTests
         public static Piece ValidateMovementAndReturnPiece(Board board, Move move, PieceColor playerColor)
         {
             var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);
-            if (destinationCell.HasPiece() && destinationCell.Piece.pieceColor == playerColor)
-            {
-                throw new InvalidOperationException("Invalid Move");
-            }
-            var orientations = new List<KnightOrientation>()
-            {
-                KnightOrientation.DownLeftDown, KnightOrientation.DownLeftUp, KnightOrientation.DownRightDown,
-                KnightOrientation.DownRightUp, KnightOrientation.UpLeftDown, KnightOrientation.UpLeftUp,
-                KnightOrientation.UpRightDown, KnightOrientation.UpRightUp
-            };
 
+            CheckDestinationCellAvailability(playerColor, destinationCell);
+
+            List<KnightOrientation> orientations = KnightOrientation();
+
+            List<Piece> findKnights = FindPieces(playerColor, destinationCell, orientations);
+            //TO DO... finded just one knight, not 2!!!
+
+            if (findKnights.Count == 1)
+            {
+                return findKnights.First();
+            }
+
+            else if (findKnights.Count > 1)
+            {
+                return findKnights.Find(q => q.CurrentPosition.Y == move.Y);
+            }
+
+            return null;
+        }
+        public bool CheckForOpponentKingOnSpecificRoutes(Cell currentPosition, PieceColor playerColor)
+        {
+            List<KnightOrientation> orientations = KnightOrientation();
+            foreach (var orientation in orientations)
+            {
+                var currentCell = currentPosition;
+                while (true)
+                {
+                    //there is no piece on the cells
+                    currentCell = currentCell.LookLShape(orientation);
+
+                    //Search looks out of board
+                    if (currentCell == null) break;
+
+                    if (currentCell.Piece == null) continue;
+
+                    if (currentCell.Piece.Name == PieceName.King && playerColor != currentCell.Piece.pieceColor)
+                    {
+                        //we find the king, which is in check
+                        return true;
+                    }
+
+                    //there is an obstacle in the way, must throw exception or return
+                    break;
+                }
+
+            }
+            return false;
+        }
+
+        private static List<Piece> FindPieces(PieceColor playerColor, Cell destinationCell, List<KnightOrientation> orientations)
+        {
             var findKnight = new List<Piece>();
 
             foreach (var orientation in orientations)
@@ -54,19 +95,18 @@ namespace ChessTests
                     break;
                 }
             }
-            //TO DO... finded just one knight, not 2!!!
 
-            if (findKnight.Count == 1)
+            return findKnight;
+        }
+
+        private static List<KnightOrientation> KnightOrientation()
+        {
+            return new List<KnightOrientation>()
             {
-                return findKnight.First();
-            }
-
-            else if (findKnight.Count > 1)
-            {
-                return findKnight.Find(q => q.CurrentPosition.Y == move.Y);
-            }
-
-            return null;
+                ChessTests.KnightOrientation.DownLeftDown, ChessTests.KnightOrientation.DownLeftUp, ChessTests.KnightOrientation.DownRightDown,
+                ChessTests.KnightOrientation.DownRightUp, ChessTests.KnightOrientation.UpLeftDown, ChessTests.KnightOrientation.UpLeftUp,
+                ChessTests.KnightOrientation.UpRightDown, ChessTests.KnightOrientation.UpRightUp
+            };
         }
     }
 }

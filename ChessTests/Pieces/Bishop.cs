@@ -17,7 +17,7 @@ namespace ChessTests
         {
             var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);
 
-            Piece.CheckDestinationCellAvailability(playerColor, destinationCell);
+            CheckDestinationCellAvailability(playerColor, destinationCell);
 
             List<Orientation> orientations = BishopOrientation();
 
@@ -74,6 +74,36 @@ namespace ChessTests
                 Orientation.UpLeft, Orientation.DownLeft,
                 Orientation.UpRight, Orientation.DownRight,
             };
+        }
+
+        public bool CheckForOpponentKingOnSpecificRoutes(Cell currentPosition, PieceColor playerColor)
+        {
+            List<Orientation> orientations = BishopOrientation();
+            foreach (var orientation in orientations)
+            {
+                var currentCell = currentPosition;
+                while (true)
+                {
+                    //there is no piece on the cells
+                    currentCell = currentCell.Look(orientation);
+
+                    //Search looks out of board
+                    if (currentCell == null) break;
+
+                    if (currentCell.Piece == null) continue;
+
+                    if (currentCell.Piece.Name == PieceName.King && playerColor != currentCell.Piece.pieceColor)
+                    {
+                        //we find the king, which is in check
+                        return true;
+                    }
+
+                    //there is an obstacle in the way, must throw exception or return
+                    break;
+                }
+
+            }
+            return false;
         }
     }
 }

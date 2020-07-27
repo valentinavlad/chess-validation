@@ -60,36 +60,7 @@ namespace ChessTests.Pieces
 
             }
 
-            //if (move.IsKingCastling)
-            //{
-            //    var currentCell = destinationCell;
-            //    for (int i = currentCell.Y + 1; i <= 4; i++)
-            //    {
-            //        currentCell = currentCell.Look(Orientation.Right);
-            //        if (currentCell.Piece != null && currentCell.Y != 4) throw new InvalidOperationException("Invalid move!"); 
-            //        if (currentCell.Y == 4 &&  currentCell.Piece.Name == PieceName.King && playerColor == currentCell.Piece.pieceColor)
-            //        {
-            //            return currentCell.Piece;
-            //        }
-            //    }
-
-            //}
-
-            //if (move.IsQueenCastling)
-            //{
-            //    var currentCell = destinationCell;
-            //    for (int i = currentCell.Y - 1; i >= 4; i--)
-            //    {
-            //        //TO DO if king is in other square error
-            //        currentCell = currentCell.Look(Orientation.Left);
-            //        if (currentCell.Piece != null && currentCell.Y != 4) throw new InvalidOperationException("Invalid move!");
-            //        if (currentCell.Y == 4 && currentCell.Piece.Name == PieceName.King && playerColor == currentCell.Piece.pieceColor)
-            //        {
-            //            return currentCell.Piece;
-            //        }
-            //    }
-
-            //}
+      
 
             foreach (var orientation in orientations)
             {
@@ -115,6 +86,49 @@ namespace ChessTests.Pieces
             }
 
             return null;
+        }
+
+
+     
+        public bool Test(Cell currentPosition, PieceColor currentPlayer)
+        {
+            List<Orientation> orientations = KingOrientation();
+            foreach (var orientation in orientations)
+            {
+                var currentCell = currentPosition;
+                while (true)
+                {
+                    //there is no piece on the cells
+                    currentCell = currentCell.Look(orientation);
+
+                    //Search looks out of board
+                    if (currentCell == null) break;
+
+                    if (currentCell.Piece == null) continue;
+
+                    if (currentCell.Piece.Name == PieceName.King && currentPlayer != currentCell.Piece.pieceColor)
+                    {
+                        //we find the king, which is in check
+                        return true;
+                    }
+
+                    //there is an obstacle in the way, must throw exception or return
+                    break;
+                }
+
+            }
+            return false;
+
+        }
+        private static List<Orientation> KingOrientation()
+        {
+            return new List<Orientation>()
+            {
+                Orientation.Up,  Orientation.DownLeft, Orientation.UpRight,
+                Orientation.Right, Orientation.DownRight,
+                Orientation.Down,
+                Orientation.Left,  Orientation.UpLeft
+            };
         }
     }
 }

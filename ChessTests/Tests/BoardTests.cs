@@ -111,40 +111,112 @@ namespace ChessTests
             Assert.Throws<InvalidOperationException>(exception);
         }
 
+        //[Fact]
+        //public void Tset()
+        //{
+        //    var board = new Board();
+
+
+        //    board.PlayMove("e4", PieceColor.White);
+        //    board.PlayMove("e5", PieceColor.Black);
+
+        //    board.PlayMove("Nf3", PieceColor.White);
+        //    board.PlayMove("Nc6", PieceColor.Black);
+
+        //    board.PlayMove("Bb5", PieceColor.White);
+        //    board.PlayMove("Nf6", PieceColor.Black);
+
+        //    board.PlayMove("Nc3", PieceColor.White);
+        //    board.PlayMove("Bc5", PieceColor.Black);
+
+        //    board.PlayMove("0-0", PieceColor.White);
+        //    board.PlayMove("d5", PieceColor.Black);
+
+        //    board.PlayMove("exd5", PieceColor.White);
+        //    board.PlayMove("Nxd5", PieceColor.Black);//xx
+
+        //    board.PlayMove("Nxd5", PieceColor.White);
+        //    board.PlayMove("Qxd5", PieceColor.Black);
+
+        //    board.PlayMove("Bxc6+", PieceColor.White);
+        //    board.PlayMove("bxc6", PieceColor.Black);
+
+        //    board.PlayMove("c3", PieceColor.White);
+        //    board.PlayMove("0-0", PieceColor.Black);
+
+        //    board.PlayMove("Ng5", PieceColor.White);
+        //    board.PlayMove("e4", PieceColor.Black);
+
+        //    board.PlayMove("d4", PieceColor.White);
+        //    board.PlayMove("exd3", PieceColor.Black);
+
+        //    board.PlayMove("Qf3", PieceColor.White);
+        //    board.PlayMove("d2", PieceColor.Black);
+
+        //    board.PlayMove("Qxd5", PieceColor.White);
+        //    board.PlayMove("dxc1Q", PieceColor.Black);
+
+        //    board.PlayMove("Raxc1", PieceColor.White);
+        //    board.PlayMove("cxd5", PieceColor.Black);
+
+        //    board.PlayMove("Kh1", PieceColor.White);
+        //    board.PlayMove("Bb7", PieceColor.Black);
+
+        //    board.PlayMove("f4", PieceColor.White);
+        //    board.PlayMove("Rfe8", PieceColor.Black);
+
+        //    board.PlayMove("Nh3", PieceColor.White);
+        //    board.PlayMove("Rad8", PieceColor.Black);
+
+        //    board.PlayMove("g3", PieceColor.White);
+        //    board.PlayMove("Be3", PieceColor.Black);
+
+        //    board.PlayMove("Rcd1", PieceColor.White);
+        //    board.PlayMove("f6", PieceColor.Black);
+
+        //    board.PlayMove("Rfe1", PieceColor.White);
+        //    board.PlayMove("d4++", PieceColor.Black);
+
+
+        //    //Assert.IsType<King>(board.CellAt("c1").Piece);
+        //    //Assert.IsType<Rook>(board.CellAt("d1").Piece);
+        //    //Assert.Null(board.CellAt("a1").Piece);
+        //    //Assert.Null(board.CellAt("e1").Piece);
+        //}
+
         [Fact]
-        public void Tset()
+        public void WhitePawnPutsKingInCheck()
         {
-            var board = new Board();
+            var board = new Board(false);
+
+            board.AddPiece("e6", new Pawn(PieceColor.White));
+            board.AddPiece("d7", new Pawn(PieceColor.Black));
+            board.AddPiece("e8", new King(PieceColor.Black));
+
+            board.PlayMove("exd7+", PieceColor.White);
+            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation("exd7+", PieceColor.White);
+            Assert.True(move.IsCheck);
+
+        }
 
 
-            board.PlayMove("e4", PieceColor.White);
-            board.PlayMove("e5", PieceColor.Black);
+        [Fact]
+        public void BlackKingCheckMate()
+        {
+            var board = new Board(false);
 
-            board.PlayMove("Nf3", PieceColor.White);
-            board.PlayMove("Nc6", PieceColor.Black);
+            board.AddPiece("d1", new Rook(PieceColor.White));
+            board.AddPiece("g5", new Bishop(PieceColor.White));
 
-            board.PlayMove("Bb5", PieceColor.White);
-            board.PlayMove("Nf6", PieceColor.Black);
+            board.AddPiece("f8", new Bishop(PieceColor.Black));
+            board.AddPiece("f7", new Pawn(PieceColor.Black));
+            board.AddPiece("e6", new Queen(PieceColor.Black));
+            board.AddPiece("e8", new King(PieceColor.Black));
 
-            board.PlayMove("Nc3", PieceColor.White);
-            board.PlayMove("Bc5", PieceColor.Black);
+            board.PlayMove("Rd8++", PieceColor.White);
+            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation("exd7+", PieceColor.White);
+            Assert.True(move.IsCheckMate);
 
-            board.PlayMove("0-0", PieceColor.White);
-            board.PlayMove("d5", PieceColor.Black);
-
-            board.PlayMove("exd5", PieceColor.White);
-            board.PlayMove("Nxd5", PieceColor.Black);//xx
-
-            board.PlayMove("Nxd5", PieceColor.White);
-            board.PlayMove("Qxd5", PieceColor.Black);
-
-            board.PlayMove("Bxc6+", PieceColor.White);
-            board.PlayMove("bxc6", PieceColor.Black);
-
-            //Assert.IsType<King>(board.CellAt("c1").Piece);
-            //Assert.IsType<Rook>(board.CellAt("d1").Piece);
-            //Assert.Null(board.CellAt("a1").Piece);
-            //Assert.Null(board.CellAt("e1").Piece);
         }
     }
 }

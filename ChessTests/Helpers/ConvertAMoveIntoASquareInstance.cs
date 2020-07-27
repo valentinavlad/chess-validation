@@ -90,8 +90,7 @@ namespace ChessTests
                         if (file != "")
                         {
                             move.Y = ConvertChessCoordinateFileToArrayIndex(file);
-                        }
-                        
+                        }                 
                     }
                     else
                     {

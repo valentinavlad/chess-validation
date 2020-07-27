@@ -4,13 +4,13 @@
     {
         private Piece piece;
         private Cell[,] cells;
-        public void SetCells(Cell[,] cells) 
-        {
-            this.cells = cells;
-        }
-        //make readonly
-        public int X { get; set; }
-        public int Y { get; set; }
+        //public void SetCells(Cell[,] cells) 
+        //{
+        //    this.cells = cells;
+        //}
+        // readonly
+        public int X { get;}
+        public int Y { get; }
 
         public Cell(Piece piece)
         {
@@ -30,6 +30,7 @@
             this.cells = cells;
         }
 
+        //needed for Initialize board with no pieces
         public Cell(int x, int y, Cell[,] cells = null)
         {
             X = x;
@@ -222,8 +223,6 @@
             }
             return null;
         }
-
-    
 
         public bool HasPawn()
         {

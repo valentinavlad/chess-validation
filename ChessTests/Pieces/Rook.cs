@@ -17,16 +17,58 @@ namespace ChessTests.Pieces
         public static Piece ValidateMovementAndReturnPiece(Board board, Move move, PieceColor playerColor)
         {
             var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);
-            if (destinationCell.HasPiece() && destinationCell.Piece.pieceColor == playerColor)
-            {
-                throw new InvalidOperationException("Invalid Move");
-            }
-            var orientations = new List<Orientation>()
-            {
-                Orientation.Up,    Orientation.Down,
-                Orientation.Right,   Orientation.Left
-            };
 
+            CheckDestinationCellAvailability(playerColor, destinationCell);
+
+            List<Orientation> orientations = RookOrientation();
+
+            List<Piece> findRooks = FindPieces(playerColor, destinationCell, orientations);
+
+            if (findRooks.Count == 1)
+            {
+                return findRooks.First();
+            }
+
+            else if (findRooks.Count > 1)
+            {
+                return findRooks.Find(q => q.CurrentPosition.Y == move.Y);
+            }
+
+            return null;
+        }
+
+        public bool CheckForOpponentKingOnSpecificRoutes(Cell currentPosition, PieceColor playerColor)
+        {
+            List<Orientation> orientations = RookOrientation();
+            foreach (var orientation in orientations)
+            {
+                var currentCell = currentPosition;
+                while (true)
+                {
+                    //there is no piece on the cells
+                    currentCell = currentCell.Look(orientation);
+
+                    //Search looks out of board
+                    if (currentCell == null) break;
+
+                    if (currentCell.Piece == null) continue;
+
+                    if (currentCell.Piece.Name == PieceName.King && playerColor != currentCell.Piece.pieceColor)
+                    {
+                        //we find the king, which is in check
+                        return true;
+                    }
+
+                    //there is an obstacle in the way, must throw exception or return
+                    break;
+                }
+
+            }
+            return false;
+        }
+
+        private static List<Piece> FindPieces(PieceColor playerColor, Cell destinationCell, List<Orientation> orientations)
+        {
             var findRooks = new List<Piece>();
             foreach (var orientation in orientations)
             {
@@ -53,18 +95,17 @@ namespace ChessTests.Pieces
                 }
             }
 
-
-            if (findRooks.Count == 1)
-            {
-                return findRooks.First();
-            }
-
-            else if (findRooks.Count > 1)
-            {
-                return findRooks.Find(q => q.CurrentPosition.Y == move.Y);
-            }
-
-            return null;
+            return findRooks;
         }
+        private static List<Orientation> RookOrientation()
+        {
+            return new List<Orientation>()
+            {
+                Orientation.Up,    Orientation.Down,
+                Orientation.Right,   Orientation.Left
+            };
+        }
+
+
     }
 }
