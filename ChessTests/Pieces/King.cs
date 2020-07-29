@@ -21,14 +21,8 @@ namespace ChessTests.Pieces
                 throw new InvalidOperationException("Invalid Move");
             }
 
-            var orientations = new List<Orientation>()
-            {
-                Orientation.Up, Orientation.UpLeft, Orientation.Left,  
-                Orientation.DownLeft,  Orientation.Down, Orientation.DownRight,
-                
-                Orientation.Right, Orientation.UpRight
+            List<Orientation> orientations = KingOrientation();
 
-            };
             if (move.IsQueenCastling)
             {
                 var currentCell = destinationCell;
@@ -60,75 +54,46 @@ namespace ChessTests.Pieces
 
             }
 
-      
+
 
             foreach (var orientation in orientations)
             {
                 var currentCell = destinationCell;
-    
-                    //there is no piece on the cells
-                    currentCell = currentCell.Look(orientation);
 
-                    //Search looks out of board
-                    if (currentCell == null) continue;
+                //there is no piece on the cells
+                currentCell = currentCell.Look(orientation);
 
-                    if (currentCell.Piece == null) continue;
+                //Search looks out of board
+                if (currentCell == null) continue;
+
+                if (currentCell.Piece == null) continue;
 
 
-                    if (currentCell.Piece.Name == PieceName.King && playerColor == currentCell.Piece.pieceColor)
-                    {
-                        return currentCell.Piece;
-                    }
+                if (currentCell.Piece.Name == PieceName.King && playerColor == currentCell.Piece.pieceColor)
+                {
+                    return currentCell.Piece;
+                }
 
-                    //there is an obstacle in the way, must throw exception or return
-                    break;
-                
+                //there is an obstacle in the way, must throw exception or return
+                break;
+
             }
 
             return null;
         }
 
-
-     
-        public bool Test(Cell currentPosition, PieceColor currentPlayer)
-        {
-            List<Orientation> orientations = KingOrientation();
-            foreach (var orientation in orientations)
-            {
-                var currentCell = currentPosition;
-                while (true)
-                {
-                    //there is no piece on the cells
-                    currentCell = currentCell.Look(orientation);
-
-                    //Search looks out of board
-                    if (currentCell == null) break;
-
-                    if (currentCell.Piece == null) continue;
-
-                    if (currentCell.Piece.Name == PieceName.King && currentPlayer != currentCell.Piece.pieceColor)
-                    {
-                        //we find the king, which is in check
-                        return true;
-                    }
-
-                    //there is an obstacle in the way, must throw exception or return
-                    break;
-                }
-
-            }
-            return false;
-
-        }
-        private static List<Orientation> KingOrientation()
+        public static List<Orientation> KingOrientation()
         {
             return new List<Orientation>()
             {
-                Orientation.Up,  Orientation.DownLeft, Orientation.UpRight,
-                Orientation.Right, Orientation.DownRight,
-                Orientation.Down,
-                Orientation.Left,  Orientation.UpLeft
+                Orientation.Up, Orientation.UpLeft, Orientation.Left,
+                Orientation.DownLeft,  Orientation.Down, Orientation.DownRight,
+
+                Orientation.Right, Orientation.UpRight
+
             };
         }
+
+
     }
 }

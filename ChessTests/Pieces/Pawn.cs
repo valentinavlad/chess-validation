@@ -1,4 +1,5 @@
-﻿using ChessTable;
+﻿
+using ChessTable;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -9,20 +10,20 @@ namespace ChessTests
     public class Pawn : Piece
     {
 
-     
+
         public Pawn(PieceColor pieceColor) : base(pieceColor)
         {
             Name = PieceName.Pawn;
         }
 
-        public static Piece ValidateMovementAndReturnPiece (Board board, Move move, PieceColor playerColor)
+        public static Piece ValidateMovementAndReturnPiece(Board board, Move move, PieceColor playerColor)
         {
             var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);
 
 
             if (playerColor == PieceColor.White && !move.IsCapture)
             {
-                 return FindPawn(destinationCell, Orientation.Down, playerColor);
+                return FindPawn(destinationCell, Orientation.Down, playerColor);
             }
 
             if (playerColor == PieceColor.Black && !move.IsCapture)
@@ -45,16 +46,25 @@ namespace ChessTests
 
         private static Piece FindPawnWhoCaptures(Cell destinationCell, Orientation orientation, PieceColor playerColor, Move move)
         {
-            var cell = destinationCell.Look(orientation, move.Y);
-            if(cell.HasPiece() && cell.HasPiece() && cell.BelongsTo(playerColor))
+            try
             {
-                return cell.Piece;
+                var cell = destinationCell.Look(orientation, move.Y);
+                if (cell.HasPiece() && cell.HasPiece() && cell.BelongsTo(playerColor))
+                {
+                    return cell.Piece;
+                }
+
             }
-            
-            throw new InvalidOperationException("Illegal move!");
+            catch (Exception)
+            {
+                throw new InvalidOperationException("Illegal move!");
+            }
+
+            return null;
+           
         }
 
-        private static Piece FindPawn(Cell destinationCell,Orientation orientation, PieceColor playerColor)
+        private static Piece FindPawn(Cell destinationCell, Orientation orientation, PieceColor playerColor)
         {
             CheckDestinationCellHasPiece(destinationCell);
 
@@ -93,8 +103,8 @@ namespace ChessTests
         public bool CheckForOpponentKingOnSpecificRoutes(Cell currentPosition, PieceColor playerColor, Move move)
         {
 
-            Cell currentCell = null;
-            if (playerColor == PieceColor.White && move.IsCapture) 
+            Cell currentCell;
+            if (playerColor == PieceColor.White && move.IsCapture)
             {
                 List<Orientation> orientations = WhitePawnOrientation();
                 foreach (var orientation in orientations)
@@ -103,6 +113,8 @@ namespace ChessTests
                     while (true)
                     {
                         currentCell = currentCell.Look(orientation);
+                        if (currentCell == null) break;
+                        if (currentCell.Piece == null) continue;
                         if (currentCell.Piece.Name == PieceName.King && playerColor != currentCell.Piece.pieceColor)
                         {
                             //we find the king, which is in check
@@ -122,6 +134,8 @@ namespace ChessTests
                     while (true)
                     {
                         currentCell = currentCell.Look(orientation);
+                        if (currentCell == null) break;
+                        if (currentCell.Piece == null) continue;
                         if (currentCell.Piece.Name == PieceName.King && playerColor != currentCell.Piece.pieceColor)
                         {
                             //we find the king, which is in check

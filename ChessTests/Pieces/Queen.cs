@@ -97,7 +97,7 @@ namespace ChessTests
             return findQueens;
         }
 
-        private static List<Orientation> QueenOrientation()
+        public static List<Orientation> QueenOrientation()
         {
             return new List<Orientation>()
             {

@@ -2,6 +2,7 @@
 using System;
 using ChessTests.Pieces;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ChessTable
 {
@@ -9,13 +10,14 @@ namespace ChessTable
     {
         public Cell[,] cells;
         private bool BlackCheck;
-        private bool WhiteCheck;
-        private Cell checkPosition;
         private Cell checkMatePosition;
-
-
+        private Cell checkPosition;
+        private bool WhiteCheck;
+        private List<Piece> whitePieces = new List<Piece>();
+        private bool win;
         public Board(bool withPieces = true)
         {
+            win = false;    
             cells = new Cell[8,8];
             if (withPieces)
             {
@@ -25,6 +27,7 @@ namespace ChessTable
             {
                 InitializeBoardWithoutPieces();
             }
+            PopulateWhiteListPiece();
         }
 
         public void CapturePiece(Piece attacker, Cell cellDestination)
@@ -34,11 +37,52 @@ namespace ChessTable
                 var opponent = cellDestination.Piece;
                 opponent.CurrentPosition = null;
                 cellDestination.Piece = null;
+
+                whitePieces.Remove(opponent);
             }
             else
             {
                 throw new InvalidOperationException("Invalid move!");
             }
+        }
+
+        public King FindKing(Cell checkMatePosition, PieceColor playerColor)
+        {
+            //var currentCell = checkMatePosition;
+            //starting from this position, search 180 degree for opponent king
+            List<Orientation> orientations = new List<Orientation>
+            {
+                Orientation.Up,  Orientation.DownLeft,
+                Orientation.UpRight, Orientation.Right,
+                Orientation.DownRight, Orientation.Down,
+                Orientation.Left,  Orientation.UpLeft
+            };
+            foreach (var orientation in orientations)
+            {
+                //var loop = true;
+                var currentCell = checkMatePosition;
+                while (true)
+                {
+                    //there is no piece on the cells
+                    currentCell = currentCell.Look(orientation);
+
+                    //Search looks out of board
+                    if (currentCell == null) break;
+
+                    if (currentCell.Piece == null) continue;
+
+
+                    if (currentCell.Piece.Name == PieceName.King && playerColor != currentCell.Piece.pieceColor)
+                    {
+                        return (King)currentCell.Piece;
+                    }
+
+                    //there is an obstacle in the way, must throw exception or return
+                    break;
+                }
+            }
+
+            return null;
         }
 
         public Piece FindPieceWhoNeedsToBeMoved(string moveAN, PieceColor playerColor)
@@ -56,27 +100,6 @@ namespace ChessTable
             return GetPiece(move, playerColor, pieceName);
         }
 
-        private Piece GetPiece(Move move, PieceColor playerColor, PieceName pieceName)
-        {
-            switch (pieceName)
-            {
-                case PieceName.Pawn:
-                    return Pawn.ValidateMovementAndReturnPiece(this, move, playerColor);
-                case PieceName.Queen:
-                    return Queen.ValidateMovementAndReturnPiece(this, move, playerColor);
-                case PieceName.Bishop:
-                    return Bishop.ValidateMovementAndReturnPiece(this, move, playerColor);
-                case PieceName.Rook:
-                    return Rook.ValidateMovementAndReturnPiece(this, move, playerColor);
-                case PieceName.King:
-                    return King.ValidateMovementAndReturnPiece(this, move, playerColor);
-                case PieceName.Knight:
-                    return Knight.ValidateMovementAndReturnPiece(this, move, playerColor);
-                default:
-                    return null;
-            }
-        }
-
         public void Move(Piece piece, Cell destinationCell)
         {
             var previousPosition = piece.CurrentPosition;
@@ -84,6 +107,7 @@ namespace ChessTable
             previousPosition.Piece = null;
             piece.CurrentPosition = destinationCell;
         }
+
         public Piece PlayMove(string moveAN, PieceColor currentPlayer)
         {
             //interpretarea mutarii
@@ -96,9 +120,9 @@ namespace ChessTable
 
             var piece = FindPieceWhoNeedsToBeMoved(move, currentPlayer);
 
-            PieceExists(piece);
+            CheckIfPieceExists(piece);
 
-            if (move.IsKingCastling)
+            if (move.IsKingCastling && !move.IsCheck)
             {
                 if (piece.IsOnInitialPosition())
                 {
@@ -111,7 +135,7 @@ namespace ChessTable
                 }
             }
 
-            if (move.IsQueenCastling)
+            if (move.IsQueenCastling && !move.IsCheck)
             {
                 if (piece.IsOnInitialPosition())
                 {
@@ -171,61 +195,20 @@ namespace ChessTable
                 //find king
                 King king = FindKing(checkMatePosition, currentPlayer);
                 //verify if is in check mate
-
+                move.IsCheck = true;
                 if (CheckIfKingIsInCheckMate(king, currentPlayer, move))
                 {
+                    //game over
+                    win = true;
                     checkMatePosition = piece.CurrentPosition;
                 }
             }
 
             return piece;
         }
-
-        private static void PieceExists(Piece piece)
+        public bool GetWin()
         {
-            if (piece == null)
-            {
-                throw new InvalidOperationException("Invalid move!");
-            }
-        }
-
-        public King FindKing(Cell checkMatePosition, PieceColor playerColor)
-        {
-            //var currentCell = checkMatePosition;
-            //starting from this position, search 180 degree for opponent king
-            List<Orientation> orientations = new List<Orientation>
-            {
-                Orientation.Up,  Orientation.DownLeft,
-                Orientation.UpRight, Orientation.Right,
-                Orientation.DownRight, Orientation.Down,
-                Orientation.Left,  Orientation.UpLeft
-            };
-            foreach (var orientation in orientations)
-            {
-                //var loop = true;
-                var currentCell = checkMatePosition;
-                while (true)
-                {
-                    //there is no piece on the cells
-                    currentCell = currentCell.Look(orientation);
-
-                    //Search looks out of board
-                    if (currentCell == null) break;
-
-                    if (currentCell.Piece == null) continue;
-
-
-                    if (currentCell.Piece.Name == PieceName.King && playerColor != currentCell.Piece.pieceColor)
-                    {
-                        return (King)currentCell.Piece;
-                    }
-
-                    //there is an obstacle in the way, must throw exception or return
-                    break;
-                }
-            }
-
-            return null;
+            return win;
         }
         public Piece PromotePawn(Move move, Piece pawn)
         {
@@ -233,6 +216,7 @@ namespace ChessTable
             var pawnPromovatesTo = AddPiece(move.Coordinate, move.Promotion);
             return pawnPromovatesTo;
         }
+
         public Cell TransformCoordonatesIntoCell(Coordinate coordinate)
         {
 
@@ -244,16 +228,44 @@ namespace ChessTable
             return cells[coordinate.X, coordinate.Y];
         }
 
-
-        private bool CheckIfKingIsInCheckMate(Piece piece, PieceColor currentPlayer, Move move)
+        internal Piece AddPiece(string coordsAN, Piece piece)
         {
-            //if (piece.Name == PieceName.King)
-            //{
-            //    return Test(piece.CurrentPosition, currentPlayer);
-            //}
-            return false;
+            var coordinates = ConvertAMoveIntoACellInstance.ConvertChessCoordinatesToArrayIndexes(coordsAN);
+            return AddPiece(coordinates, piece);
         }
 
+        internal Piece AddPiece(Coordinate coordinates, Piece piece)
+        {
+            var cell = CellAt(coordinates);
+            cell.Piece = piece;
+            return cell.Piece;
+        }
+
+        internal Cell CellAt(string coordsAN)
+        {
+            var result = ConvertAMoveIntoACellInstance.ConvertChessCoordinatesToArrayIndexes(coordsAN);
+            return TransformCoordonatesIntoCell(result);
+        }
+
+        internal Cell CellAt(Coordinate coordinates)
+        {
+            return TransformCoordonatesIntoCell(coordinates);
+        }
+
+        private static void CheckIfPieceExists(Piece piece)
+        {
+            if (piece == null)
+            {
+                throw new InvalidOperationException("Invalid move!");
+            }
+        }
+
+        private bool CellHasOpponentPiece(Piece attacker, Cell cellDestination)
+        {
+            //cauta daca exista pion pe celula destinatie
+            var opponent = cellDestination.Piece;
+            return opponent != null && opponent.pieceColor != attacker.pieceColor;
+        }
 
         private bool CheckIfKingIsInCheck(Piece pieceWhoMakesCheck, PieceColor currentPlayer, Move move)
         {
@@ -287,37 +299,159 @@ namespace ChessTable
             return result;
         }
 
-        internal Piece AddPiece(string coordsAN, Piece piece)
+        private bool CheckIfKingIsInCheckMate(King king, PieceColor playerColor, Move move)
         {
-            var coordinates = ConvertAMoveIntoACellInstance.ConvertChessCoordinatesToArrayIndexes(coordsAN);
-            return AddPiece(coordinates, piece);
+            var boardState = this;
+            var cellsWhereKingCanMove = new List<Cell>();
+          
+            var orientations = King.KingOrientation();
+            var isCheck = new List<bool>();
+            cellsWhereKingCanMove.Add(king.CurrentPosition);
+            if (king.Name == PieceName.King)
+            {
+                Cell currentCell = null;
+                //return Test(piece.CurrentPosition, currentPlayer);
+                //look around the king
+                _ = AvailableCellsAroundKing(king, cellsWhereKingCanMove, orientations, currentCell);
+              
+                if (cellsWhereKingCanMove.Count > 0)
+                {
+                    //TO DO if a move takes off the king mate
+                    for (int i = 0; i < cellsWhereKingCanMove.Count; i++)
+                    {
+                        currentCell = cellsWhereKingCanMove[i];
+
+                        if (i >= 1)
+                        {
+                            bool result;
+                            var kingCoords = king.CurrentPosition;
+                            if (currentCell.Piece != null)
+                            {
+                                var piece = currentCell.Piece;
+
+                                boardState.CapturePiece(king, currentCell);
+
+                                boardState.Move(king, currentCell);
+
+                                //means that capture puts king in check
+                                result = VerifyIfKingIsInCheck(playerColor, currentCell);
+                                if (result)
+                                {
+                                    var moveOne = TransformIntoMoveInstance(piece, currentCell);
+                                    boardState.AddPiece(moveOne.Coordinate, piece);
+
+                                    var moveTwo = TransformIntoMoveInstance(king, kingCoords);
+                                    boardState.AddPiece(moveTwo.Coordinate, king);
+
+                                    whitePieces.Add(piece);
+                                }
+                            }
+                            else
+                            {
+                                boardState.Move(king, currentCell);
+                                result = VerifyIfKingIsInCheck(playerColor, currentCell);
+                                if (result)
+                                {         
+                                    boardState.Move(king, kingCoords);
+                                }
+                            }
+
+                            isCheck.Add(result);
+                            continue;
+                        }
+
+                        //verify if is in check
+                        isCheck.Add(VerifyIfKingIsInCheck(playerColor, currentCell));
+                        //moved king in empty cell
+
+                        //check if is in check from this position
+                        //iterate from current position of King on all routes to see if there is opponent piece who can attack king
+
+                    }
+                }
+            }
+            
+                return isCheck.All(i => i == true);
+            
+          
         }
 
-        internal Piece AddPiece(Coordinate coordinates, Piece piece)
+     
+
+        private bool VerifyIfKingIsInCheck(PieceColor playerColor, Cell currentCell)
         {
-            var cell = CellAt(coordinates);
-            cell.Piece = piece;
-            return cell.Piece;
+            foreach (var item in whitePieces)
+            {
+                Move move2 = TransformIntoMoveInstance(item, currentCell);
+
+                if (item.Name == PieceName.Pawn)
+                {
+                    move2.IsCapture = true;
+                }
+                var piece = FindPieceWhoNeedsToBeMoved(move2, playerColor);
+                if (piece != null)
+                {
+                    return true;
+                }
+
+
+            }
+            return false;
         }
 
-        internal Cell CellAt(string coordsAN)
+        private static Move TransformIntoMoveInstance(Piece item, Cell currentCell)
         {
-            var result = ConvertAMoveIntoACellInstance.ConvertChessCoordinatesToArrayIndexes(coordsAN);
-            return TransformCoordonatesIntoCell(result);
+            Move move2 = new Move();
+            var coords = ConvertAMoveIntoACellInstance.ConvertChessCoordinatesToArrayIndexes(currentCell.X, currentCell.Y);
+            move2.Coordinate = coords;
+            move2.PieceName = item.Name;
+            move2.Color = item.pieceColor;
+            return move2;
         }
 
-        internal Cell CellAt(Coordinate coordinates)
+        private static Cell AvailableCellsAroundKing(King king, List<Cell> cellsWhereKingCanMove, List<Orientation> orientations, Cell currentCell)
         {
-            return TransformCoordonatesIntoCell(coordinates);
+            foreach (var orientation in orientations)
+            {
+                currentCell = king.CurrentPosition;
+
+                //there is no piece on the cells
+                currentCell = currentCell.Look(orientation);
+
+                //Search looks out of board
+                if (currentCell == null) continue;
+
+                if (currentCell.Piece == null || currentCell.Piece.pieceColor != king.pieceColor)
+                {
+                    cellsWhereKingCanMove.Add(currentCell);
+                    continue;
+                }
+
+            }
+
+            return currentCell;
         }
 
-        private bool CellHasOpponentPiece(Piece attacker, Cell cellDestination)
+        private Piece GetPiece(Move move, PieceColor playerColor, PieceName pieceName)
         {
-            //cauta daca exista pion pe celula destinatie
-            var opponent = cellDestination.Piece;
-            return opponent != null && opponent.pieceColor != attacker.pieceColor;        
+            switch (pieceName)
+            {
+                case PieceName.Pawn:
+                    return Pawn.ValidateMovementAndReturnPiece(this, move, playerColor);
+                case PieceName.Queen:
+                    return Queen.ValidateMovementAndReturnPiece(this, move, playerColor);
+                case PieceName.Bishop:
+                    return Bishop.ValidateMovementAndReturnPiece(this, move, playerColor);
+                case PieceName.Rook:
+                    return Rook.ValidateMovementAndReturnPiece(this, move, playerColor);
+                case PieceName.King:
+                    return King.ValidateMovementAndReturnPiece(this, move, playerColor);
+                case PieceName.Knight:
+                    return Knight.ValidateMovementAndReturnPiece(this, move, playerColor);
+                default:
+                    return null;
+            }
         }
-       
         private void InitializeBoard()
         {
 
@@ -360,7 +494,7 @@ namespace ChessTable
 
             //initialize white pieces
             cells[7, 0] = new Cell(7, 0, new Rook(PieceColor.White), cells);
-            cells[7, 1] = new Cell(7, 1,  new Knight(PieceColor.White), cells);
+            cells[7, 1] = new Cell(7, 1, new Knight(PieceColor.White), cells);
             cells[7, 2] = new Cell(7, 2, new Bishop(PieceColor.White), cells);
             cells[7, 3] = new Cell(7, 3, new Queen( PieceColor.White), cells);
             cells[7, 4] = new Cell(7, 4, new King(PieceColor.White), cells);
@@ -368,7 +502,16 @@ namespace ChessTable
             cells[7, 6] = new Cell(7, 6, new Knight(PieceColor.White), cells);
             cells[7, 7] = new Cell(7, 7, new Rook(PieceColor.White), cells);
         }
-
+        private void PopulateWhiteListPiece()
+        {
+            for (int i = 7; i >= 6; i--)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    whitePieces.Add(cells[i, j].Piece);
+                }
+            }
+        }
         private void InitializeBoardWithoutPieces()
         {
             for (int i = 0; i < 8; i++)

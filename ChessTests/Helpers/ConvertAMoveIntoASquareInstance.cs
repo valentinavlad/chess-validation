@@ -20,7 +20,15 @@ namespace ChessTests
 
             return coordinate;
         }
+        public static Coordinate ConvertChessCoordinatesToArrayIndexes(int x, int y)
+        {
+            Coordinate coordinate = new Coordinate();
 
+            coordinate.X = x;
+            coordinate.Y = y;
+
+            return coordinate;
+        }
         public static int ConvertChessCoordinateFileToArrayIndex(string coordsAN)
         {
             string files = "abcdefgh"; //refers to columns => x
