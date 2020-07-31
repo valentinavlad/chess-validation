@@ -1,4 +1,5 @@
 ﻿using ChessTable;
+using ChessTests.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,80 +22,15 @@ namespace ChessTests
 
             List<Orientation> orientations = QueenOrientation();
 
-            List<Piece> findQueens = FindPieces(playerColor, destinationCell, orientations);
+            List<Piece> findQueens = BoardAction.FindPieces(playerColor, destinationCell, orientations, PieceName.Queen);
 
-            if (findQueens.Count == 1)
-            {
-                return findQueens.First();
-            }
-
-            else if (findQueens.Count > 1)
-            {
-                return findQueens.Find(q => q.CurrentPosition.Y == move.Y);
-            }
-
-            return null;
+            return BoardAction.FoundedPiece(move, findQueens);
         }
-
+      
         public bool CheckForOpponentKingOnSpecificRoutes(Cell currentPosition, PieceColor playerColor)
         {
             List<Orientation> orientations = QueenOrientation();
-            foreach (var orientation in orientations)
-            {
-                var currentCell = currentPosition;
-                while (true)
-                {
-                    //there is no piece on the cells
-                    currentCell = currentCell.Look(orientation);
-
-                    //Search looks out of board
-                    if (currentCell == null) break;
-
-                    if (currentCell.Piece == null) continue;
-
-                    if (currentCell.Piece.Name == PieceName.King && playerColor != currentCell.Piece.pieceColor)
-                    {
-                        //we find the king, which is in check
-                        return true;
-                    }
-
-                    //there is an obstacle in the way, must throw exception or return
-                    break;
-                }
-
-            }
-            return false;
-        }
-
-        private static List<Piece> FindPieces(PieceColor playerColor, Cell destinationCell, List<Orientation> orientations)
-        {
-            var findQueens = new List<Piece>();
-            foreach (var orientation in orientations)
-            {
-                //var loop = true;
-                var currentCell = destinationCell;
-                while (true)
-                {
-                    //there is no piece on the cells
-                    currentCell = currentCell.Look(orientation);
-
-                    //Search looks out of board
-                    if (currentCell == null) break;
-
-                    if (currentCell.Piece == null) continue;
-
-
-                    if (currentCell.Piece.Name == PieceName.Queen && playerColor == currentCell.Piece.pieceColor)
-                    {
-                        findQueens.Add(currentCell.Piece);
-                    }
-
-                    //there is an obstacle in the way, must throw exception or return
-                    break;
-                }
-            }
-
-            return findQueens;
+            return BoardAction.CheckForOpponentKingOnSpecificRoutes(currentPosition, playerColor, orientations);
         }
 
         public static List<Orientation> QueenOrientation()

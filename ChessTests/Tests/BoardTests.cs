@@ -49,7 +49,6 @@ namespace ChessTests
             Assert.Throws<IndexOutOfRangeException>(exception);
         }
 
-
         [Fact]
         public void CoordonatYsOutOfBoundShouldThrowError()
         {
@@ -70,7 +69,8 @@ namespace ChessTests
 
             //to do move
             var cell = board.CellAt("a4");
-            board.Move(pawn, cell);
+            var move = MoveNotationConverter.ParseMoveNotation("a4", PieceColor.White);
+            move.MovePiece(pawn, cell);
             Assert.False(pawn.IsOnInitialPosition());
         }
 
@@ -80,8 +80,9 @@ namespace ChessTests
             var board = new Board();
             var pawn = board.cells[6, 4].Piece;
             var cell = board.CellAt("e4");
-            board.Move(pawn, cell);
-
+            var move = MoveNotationConverter.ParseMoveNotation("a4", PieceColor.White);
+            move.MovePiece(pawn, cell);
+          
             Assert.Equal(pawn, cell.Piece);
             Assert.Null(board.cells[6, 4].Piece);
         }
@@ -92,8 +93,9 @@ namespace ChessTests
             var board = new Board();
             var pawn = board.CellAt("e2").Piece;
             var cell = board.CellAt("e3");
+            var move = MoveNotationConverter.ParseMoveNotation("a4", PieceColor.White);
+            move.MovePiece(pawn, cell);
 
-            board.Move(pawn, cell);
             Action exception = () => board.FindPieceWhoNeedsToBeMoved("e5", PieceColor.White);
             Assert.Throws<InvalidOperationException>(exception);
         }
@@ -105,7 +107,7 @@ namespace ChessTests
             board.AddPiece("c3", new Knight(PieceColor.Black));
             board.AddPiece("c2", new Pawn(PieceColor.White));
             var moveAN = "c3";
-            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, PieceColor.White);
+            var move = MoveNotationConverter.ParseMoveNotation(moveAN, PieceColor.White);
 
             Action exception = () => board.FindPieceWhoNeedsToBeMoved(move, PieceColor.White);
             Assert.Throws<InvalidOperationException>(exception);
@@ -167,13 +169,9 @@ namespace ChessTests
 
            board.PlayMove("Rd8++", PieceColor.White);
             
-
-
-            //    //Assert.IsType<King>(board.CellAt("c1").Piece);
-            //    //Assert.IsType<Rook>(board.CellAt("d1").Piece);
-            //    //Assert.Null(board.CellAt("a1").Piece);
-            //    //Assert.Null(board.CellAt("e1").Piece);
+            Assert.True(board.GetWin);
         }
+ 
 
         [Fact]
         public void WhitePawnPutsKingInCheck()
@@ -185,31 +183,31 @@ namespace ChessTests
             board.AddPiece("e8", new King(PieceColor.Black));
 
             board.PlayMove("exd7+", PieceColor.White);
-            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation("exd7+", PieceColor.White);
+            var move = MoveNotationConverter.ParseMoveNotation("exd7+", PieceColor.White);
             Assert.True(move.IsCheck);
 
         }
 
 
-        [Fact]
-        public void BlackKingCheckMate()
-        {
-            var board = new Board(false);
+        //[Fact]
+        //public void BlackKingCheckMate()
+        //{
+        //    var board = new Board(false);
 
-            board.AddPiece("d1", new Rook(PieceColor.White));
-            board.AddPiece("g5", new Bishop(PieceColor.White));
-            board.AddPiece("a2", new Pawn(PieceColor.White));
-            board.AddPiece("b2", new Pawn(PieceColor.White));
+        //    board.AddPiece("d1", new Rook(PieceColor.White));
+        //    board.AddPiece("g5", new Bishop(PieceColor.White));
+        //    board.AddPiece("a2", new Pawn(PieceColor.White));
+        //    board.AddPiece("b2", new Pawn(PieceColor.White));
 
-            board.AddPiece("f8", new Bishop(PieceColor.Black));
-            board.AddPiece("f7", new Pawn(PieceColor.Black));
-            board.AddPiece("e6", new Queen(PieceColor.Black));
-            board.AddPiece("e8", new King(PieceColor.Black));
+        //    board.AddPiece("f8", new Bishop(PieceColor.Black));
+        //    board.AddPiece("f7", new Pawn(PieceColor.Black));
+        //    board.AddPiece("e6", new Queen(PieceColor.Black));
+        //    board.AddPiece("e8", new King(PieceColor.Black));
 
-            board.PlayMove("Rd8++", PieceColor.White);
-            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation("exd7++", PieceColor.White);
-            Assert.True(move.IsCheckMate);
+        //    board.PlayMove("Rd8++", PieceColor.White);
+        //    var move = MoveNotationConverter.ParseMoveNotation("exd7++", PieceColor.White);
+        //    Assert.True(move.IsCheckMate);
 
-        }
+        //}
     }
 }

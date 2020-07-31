@@ -19,8 +19,7 @@ namespace ChessTests.Tests.PiecesTest
             board.AddPiece(bishopCoords, new Bishop(currentPlayer));
 
             //Act
-            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, currentPlayer);
-            var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);
+            var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
 
             var bishop = board.PlayMove(moveAN, currentPlayer);
 
@@ -40,7 +39,7 @@ namespace ChessTests.Tests.PiecesTest
             board.AddPiece(obstacleCoords, new Pawn(PieceColor.White));
 
 
-            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, currentPlayer);
+            var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
 
             var bishop = board.FindPieceWhoNeedsToBeMoved(move, currentPlayer);
 
@@ -61,8 +60,7 @@ namespace ChessTests.Tests.PiecesTest
             board.AddPiece("d6", new Pawn(PieceColor.Black));
 
             //Act
-            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, currentPlayer);
-            var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);
+            var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
 
             var bishop = board.PlayMove(moveAN, currentPlayer);
 
@@ -82,11 +80,6 @@ namespace ChessTests.Tests.PiecesTest
             board.AddPiece(bishopCoords, new Bishop(currentPlayer));
             board.AddPiece(obstacleCoords, new Bishop(PieceColor.White));
 
-
-            //Act
-            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, currentPlayer);
-            //var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);
-
             var bishop = board.FindPieceWhoNeedsToBeMoved(moveAN, currentPlayer);
 
             //Assert
@@ -103,7 +96,6 @@ namespace ChessTests.Tests.PiecesTest
             board.AddPiece("d6", new Bishop(PieceColor.Black));
 
             var moveAN = "Bdb8";
-            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, PieceColor.White);
 
             Piece bishop = board.PlayMove(moveAN, PieceColor.Black);
 

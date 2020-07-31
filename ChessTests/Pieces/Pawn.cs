@@ -1,16 +1,13 @@
 ﻿
 using ChessTable;
+using ChessTests.Helpers;
 using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
-using System.Text;
 
 namespace ChessTests
 {
     public class Pawn : Piece
     {
-
-
         public Pawn(PieceColor pieceColor) : base(pieceColor)
         {
             Name = PieceName.Pawn;
@@ -20,25 +17,16 @@ namespace ChessTests
         {
             var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);
 
-
-            if (playerColor == PieceColor.White && !move.IsCapture)
+            if (playerColor == PieceColor.White)
             {
-                return FindPawn(destinationCell, Orientation.Down, playerColor);
+                return !move.IsCapture ? FindPawn(destinationCell, Orientation.Down, playerColor)
+                    : FindPawnWhoCaptures(destinationCell, Orientation.Down, playerColor, move);
             }
 
-            if (playerColor == PieceColor.Black && !move.IsCapture)
+            if (playerColor == PieceColor.Black)
             {
-                return FindPawn(destinationCell, Orientation.Up, playerColor);
-            }
-
-            if (playerColor == PieceColor.White && move.IsCapture)
-            {
-                return FindPawnWhoCaptures(destinationCell, Orientation.Down, playerColor, move);
-            }
-
-            if (playerColor == PieceColor.Black && move.IsCapture)
-            {
-                return FindPawnWhoCaptures(destinationCell, Orientation.Up, playerColor, move);
+                return !move.IsCapture ? FindPawn(destinationCell, Orientation.Up, playerColor)
+                    : FindPawnWhoCaptures(destinationCell, Orientation.Up, playerColor, move);
             }
 
             throw new InvalidOperationException("Illegal move!");
@@ -53,7 +41,6 @@ namespace ChessTests
                 {
                     return cell.Piece;
                 }
-
             }
             catch (Exception)
             {
@@ -61,13 +48,11 @@ namespace ChessTests
             }
 
             return null;
-           
         }
 
         private static Piece FindPawn(Cell destinationCell, Orientation orientation, PieceColor playerColor)
         {
             CheckDestinationCellHasPiece(destinationCell);
-
             var cell = destinationCell.Look(orientation);
 
             if (cell.HasPawn() && cell.BelongsTo(playerColor))
@@ -76,9 +61,9 @@ namespace ChessTests
             }
 
             CheckDestinationCellHasPiece(cell);
-
             //check for two cell movements
             cell = cell.Look(orientation);
+
             if (cell.HasPawn() && cell.BelongsTo(playerColor))
             {
                 var piece = cell.Piece;
@@ -92,62 +77,10 @@ namespace ChessTests
             throw new InvalidOperationException("Pawn is in an invalid state!");
         }
 
-        private static void CheckDestinationCellHasPiece(Cell destinationCell)
-        {
-            if (destinationCell.HasPiece())
-            {
-                throw new InvalidOperationException("Invalid Move");
-            }
-        }
-
         public bool CheckForOpponentKingOnSpecificRoutes(Cell currentPosition, PieceColor playerColor, Move move)
         {
-
-            Cell currentCell;
-            if (playerColor == PieceColor.White && move.IsCapture)
-            {
-                List<Orientation> orientations = WhitePawnOrientation();
-                foreach (var orientation in orientations)
-                {
-                    currentCell = currentPosition;
-                    while (true)
-                    {
-                        currentCell = currentCell.Look(orientation);
-                        if (currentCell == null) break;
-                        if (currentCell.Piece == null) continue;
-                        if (currentCell.Piece.Name == PieceName.King && playerColor != currentCell.Piece.pieceColor)
-                        {
-                            //we find the king, which is in check
-                            return true;
-                        }
-                        break;
-                    }
-                }
-
-            }
-            if (playerColor == PieceColor.Black && move.IsCapture)
-            {
-                List<Orientation> orientations = BlackPawnOrientation();
-                foreach (var orientation in orientations)
-                {
-                    currentCell = currentPosition;
-                    while (true)
-                    {
-                        currentCell = currentCell.Look(orientation);
-                        if (currentCell == null) break;
-                        if (currentCell.Piece == null) continue;
-                        if (currentCell.Piece.Name == PieceName.King && playerColor != currentCell.Piece.pieceColor)
-                        {
-                            //we find the king, which is in check
-                            return true;
-                        }
-                        break;
-                    }
-                }
-
-            }
-
-            return false;
+            var orientations = playerColor == PieceColor.White ? WhitePawnOrientation() : BlackPawnOrientation();
+            return move.IsCapture ? BoardAction.CheckForOpponentKingOnSpecificRoutes(currentPosition, playerColor, orientations) : false;
         }
 
         private static List<Orientation> WhitePawnOrientation()

@@ -16,10 +16,8 @@ namespace ChessTests.Pieces
         public static Piece ValidateMovementAndReturnPiece(Board board, Move move, PieceColor playerColor)
         {
             var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);
-            if (destinationCell.HasPiece() && destinationCell.Piece.pieceColor == playerColor)
-            {
-                throw new InvalidOperationException("Invalid Move");
-            }
+
+            CheckDestinationCellAvailability(playerColor, destinationCell);
 
             List<Orientation> orientations = KingOrientation();
 

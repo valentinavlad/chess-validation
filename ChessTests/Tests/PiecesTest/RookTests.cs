@@ -21,7 +21,7 @@ namespace ChessTests.Tests.PiecesTest
            // board.AddPiece("d6", new Pawn(PieceColor.Black));
 
             //Act
-            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, currentPlayer);
+            var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
    
             var rook = board.PlayMove(moveAN, currentPlayer);
 
@@ -41,7 +41,7 @@ namespace ChessTests.Tests.PiecesTest
             board.AddPiece(obstacleCoords, new Pawn(PieceColor.Black));
 
 
-            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, currentPlayer);
+            var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
 
             var rook = board.FindPieceWhoNeedsToBeMoved(move, currentPlayer);
 
@@ -60,7 +60,7 @@ namespace ChessTests.Tests.PiecesTest
             board.AddPiece("d5", new Pawn(PieceColor.White));
 
             //Act
-            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, currentPlayer);
+            var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
            
 
             var rook = board.PlayMove(moveAN, currentPlayer);

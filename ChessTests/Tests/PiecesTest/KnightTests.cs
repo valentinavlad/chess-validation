@@ -20,7 +20,7 @@ namespace ChessTests.Tests.PiecesTest
         
 
             //Act
-            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, currentPlayer);
+            var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
 
             var knight = board.PlayMove(moveAN, currentPlayer);
 
@@ -42,7 +42,7 @@ namespace ChessTests.Tests.PiecesTest
             board.AddPiece(obstacleCoords, new Bishop(currentPlayer));
 
             //Act
-            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, currentPlayer);
+            var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
 
             //Assert
             Action exception = () => board.FindPieceWhoNeedsToBeMoved(moveAN, currentPlayer);
@@ -101,7 +101,7 @@ namespace ChessTests.Tests.PiecesTest
             var knight1 = board.AddPiece(knightCoords2, new Knight(currentPlayer));
             board.AddPiece("b4", new Rook(PieceColor.White));
 
-            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, currentPlayer);
+            var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
             //Assert
             Assert.Equal(knight1.CurrentPosition.Y, move.Y);
 

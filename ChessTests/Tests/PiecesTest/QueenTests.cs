@@ -40,7 +40,7 @@ namespace ChessTests.Tests.PiecesTest
             board.AddPiece(queenCoords, new Queen(currentPlayer));
 
             //find queen on diagonal right-down
-            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, currentPlayer);
+            var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
 
             var queen = board.FindPieceWhoNeedsToBeMoved(move, PieceColor.White);
 
@@ -80,7 +80,7 @@ namespace ChessTests.Tests.PiecesTest
             board.AddPiece(obstacleCoords, new Pawn(currentPlayer));
 
 
-            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, currentPlayer);
+            var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
 
             var queen = board.FindPieceWhoNeedsToBeMoved(move, currentPlayer);
 
@@ -99,7 +99,7 @@ namespace ChessTests.Tests.PiecesTest
             board.AddPiece(queenCoords, new Queen(currentPlayer));
 
             //find queen on diagonal right-down
-            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, currentPlayer);
+            var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
             var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);
 
             var queen = board.PlayMove(moveAN, currentPlayer);
@@ -134,7 +134,7 @@ namespace ChessTests.Tests.PiecesTest
             board.AddPiece("c6", new Queen(PieceColor.White));
             board.AddPiece("d3", new Pawn(PieceColor.White));
             var moveAN = "Qce4";
-            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, PieceColor.White);
+            var move = MoveNotationConverter.ParseMoveNotation(moveAN, PieceColor.White);
 
             Piece queen = board.PlayMove(moveAN, PieceColor.White);
 

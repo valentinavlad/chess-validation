@@ -1,14 +1,11 @@
 ﻿using ChessTable;
-using System;
+using ChessTests.Helpers;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ChessTests.Pieces
 {
     public class Rook : Piece
     {
-
         public Rook(PieceColor pieceColor) : base(pieceColor)
         {
             Name = PieceName.Rook;
@@ -22,81 +19,17 @@ namespace ChessTests.Pieces
 
             List<Orientation> orientations = RookOrientation();
 
-            List<Piece> findRooks = FindPieces(playerColor, destinationCell, orientations);
+            List<Piece> findRooks = BoardAction.FindPieces(playerColor, destinationCell, orientations, PieceName.Rook);
 
-            if (findRooks.Count == 1)
-            {
-                return findRooks.First();
-            }
-
-            else if (findRooks.Count > 1)
-            {
-                return findRooks.Find(q => q.CurrentPosition.Y == move.Y);
-            }
-
-            return null;
+            return BoardAction.FoundedPiece(move, findRooks);
         }
 
         public bool CheckForOpponentKingOnSpecificRoutes(Cell currentPosition, PieceColor playerColor)
         {
             List<Orientation> orientations = RookOrientation();
-            foreach (var orientation in orientations)
-            {
-                var currentCell = currentPosition;
-                while (true)
-                {
-                    //there is no piece on the cells
-                    currentCell = currentCell.Look(orientation);
-
-                    //Search looks out of board
-                    if (currentCell == null) break;
-
-                    if (currentCell.Piece == null) continue;
-
-                    if (currentCell.Piece.Name == PieceName.King && playerColor != currentCell.Piece.pieceColor)
-                    {
-                        //we find the king, which is in check
-                        return true;
-                    }
-
-                    //there is an obstacle in the way, must throw exception or return
-                    break;
-                }
-
-            }
-            return false;
+            return BoardAction.CheckForOpponentKingOnSpecificRoutes(currentPosition, playerColor, orientations);
         }
 
-        private static List<Piece> FindPieces(PieceColor playerColor, Cell destinationCell, List<Orientation> orientations)
-        {
-            var findRooks = new List<Piece>();
-            foreach (var orientation in orientations)
-            {
-                //var loop = true;
-                var currentCell = destinationCell;
-                while (true)
-                {
-                    //there is no piece on the cells
-                    currentCell = currentCell.Look(orientation);
-
-                    //Search looks out of board
-                    if (currentCell == null) break;
-
-                    if (currentCell.Piece == null) continue;
-
-
-                    if (currentCell.Piece.Name == PieceName.Rook && playerColor == currentCell.Piece.pieceColor)
-                    {
-                        findRooks.Add(currentCell.Piece);
-                    }
-
-                    //there is an obstacle in the way, must throw exception or return
-                    break;
-                }
-            }
-
-            return findRooks;
-        }
         private static List<Orientation> RookOrientation()
         {
             return new List<Orientation>()

@@ -29,9 +29,9 @@ namespace ChessTests.Tests
             string move3 = listOfMoves[2];
             string move4 = listOfMoves[4];
 
-            var pieceTypeKnight = ConvertAMoveIntoACellInstance.ConvertPieceInitialFromMoveToPieceName(move3);
-            var pieceTypePawn = ConvertAMoveIntoACellInstance.ConvertPieceInitialFromMoveToPieceName(move1);
-            var pieceTypeBishop = ConvertAMoveIntoACellInstance.ConvertPieceInitialFromMoveToPieceName(move4);
+            var pieceTypeKnight = MoveNotationConverter.ConvertPieceInitialFromMoveToPieceName(move3);
+            var pieceTypePawn = MoveNotationConverter.ConvertPieceInitialFromMoveToPieceName(move1);
+            var pieceTypeBishop = MoveNotationConverter.ConvertPieceInitialFromMoveToPieceName(move4);
 
             Assert.Equal(PieceName.Bishop, pieceTypeBishop);
             Assert.Equal(PieceName.Pawn, pieceTypePawn);
@@ -43,7 +43,7 @@ namespace ChessTests.Tests
         {
             var notation = "0-0";
             var color = PieceColor.White;
-            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(notation, color);
+            var move = MoveNotationConverter.ParseMoveNotation(notation, color);
 
 
             Assert.True(move.IsKingCastling);
@@ -54,7 +54,7 @@ namespace ChessTests.Tests
         {
             var notation = "e8Q++";
             var color = PieceColor.White;
-            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(notation, color);
+            var move = MoveNotationConverter.ParseMoveNotation(notation, color);
 
             Assert.NotNull(move.Coordinate);
             Assert.NotNull(move.Promotion);
@@ -69,7 +69,7 @@ namespace ChessTests.Tests
         {
             var notation = "Be5+";
             var color = PieceColor.White;
-            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(notation, color);
+            var move = MoveNotationConverter.ParseMoveNotation(notation, color);
 
             Assert.NotNull(move.Coordinate);
             Assert.Null(move.Promotion);
@@ -85,7 +85,7 @@ namespace ChessTests.Tests
         {
             var notation = "Bxe5";
             var color = PieceColor.White;
-            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(notation, color);
+            var move = MoveNotationConverter.ParseMoveNotation(notation, color);
 
             Assert.NotNull(move.Coordinate);
             Assert.Null(move.Promotion);
@@ -102,7 +102,7 @@ namespace ChessTests.Tests
         {
             var notation = "exd8Q+";
             var color = PieceColor.White;
-            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(notation, color);
+            var move = MoveNotationConverter.ParseMoveNotation(notation, color);
 
             Assert.NotNull(move.Coordinate);
             Assert.NotNull(move.Promotion);

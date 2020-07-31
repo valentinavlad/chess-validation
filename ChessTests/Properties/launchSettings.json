@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ChessTests": {
+      "commandName": "Project",
+      "commandLineArgs": "chess-moves2.txt"
+    }
+  }
+}

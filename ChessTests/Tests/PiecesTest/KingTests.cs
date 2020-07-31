@@ -20,7 +20,7 @@ namespace ChessTests.Tests.PiecesTest
             board.AddPiece(kingCoords, new King(currentPlayer));
             
             //Act
-            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, currentPlayer);
+            var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
 
             var king = board.PlayMove(moveAN, currentPlayer);
 
@@ -41,7 +41,7 @@ namespace ChessTests.Tests.PiecesTest
             board.AddPiece(obstacleCoords, new Pawn(PieceColor.Black));
 
 
-            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, currentPlayer);
+            var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
 
           
             Action exception = () => board.FindPieceWhoNeedsToBeMoved(move, currentPlayer);
@@ -61,8 +61,7 @@ namespace ChessTests.Tests.PiecesTest
             board.AddPiece("d5", new Pawn(PieceColor.White));
 
             //Act
-            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation(moveAN, currentPlayer);
-
+            var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
 
             var king = board.PlayMove(moveAN, currentPlayer);
 
@@ -77,7 +76,6 @@ namespace ChessTests.Tests.PiecesTest
         public void WhiteQueenCastling()
         {
             var board = new Board();
-
 
             board.PlayMove("d4", PieceColor.White);
             board.PlayMove("e6", PieceColor.Black);
@@ -129,7 +127,6 @@ namespace ChessTests.Tests.PiecesTest
         {
             var board = new Board();
 
-
             board.PlayMove("c4", PieceColor.White);
             board.PlayMove("d6", PieceColor.Black);
 
@@ -160,7 +157,7 @@ namespace ChessTests.Tests.PiecesTest
             board.AddPiece("a1", new Rook(PieceColor.White));
             board.AddPiece("e1", new King(PieceColor.White));
 
-            var move = ConvertAMoveIntoACellInstance.ParseMoveNotation("0-0", PieceColor.White);
+            var move = MoveNotationConverter.ParseMoveNotation("0-0", PieceColor.White);
 
           
             Action exception = () => board.PlayMove("0-0", PieceColor.White);

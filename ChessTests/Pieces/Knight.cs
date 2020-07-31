@@ -1,4 +1,5 @@
 ﻿using ChessTable;
+using ChessTests.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +8,6 @@ namespace ChessTests
 {
     public class Knight : Piece
     {
-   
-
         public Knight(PieceColor pieceColor) : base(pieceColor)
         {
             Name = PieceName.Knight;
@@ -23,20 +22,10 @@ namespace ChessTests
             List<KnightOrientation> orientations = KnightOrientation();
 
             List<Piece> findKnights = FindPieces(playerColor, destinationCell, orientations);
-            //TO DO... finded just one knight, not 2!!!
 
-            if (findKnights.Count == 1)
-            {
-                return findKnights.First();
-            }
-
-            else if (findKnights.Count > 1)
-            {
-                return findKnights.Find(q => q.CurrentPosition.Y == move.Y);
-            }
-
-            return null;
+            return BoardAction.FoundedPiece(move, findKnights);
         }
+
         public bool CheckForOpponentKingOnSpecificRoutes(Cell currentPosition, PieceColor playerColor)
         {
             List<KnightOrientation> orientations = KnightOrientation();

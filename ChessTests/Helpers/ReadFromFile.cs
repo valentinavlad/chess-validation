@@ -15,7 +15,7 @@ namespace ChessTests
                 File.ReadAllLines(path)
                 .Skip(1)
                 .Where(line => line.Length > 1)
-                .ParseLinesToMoves()
+                .ParseLinesToMoves().Where(p => p != "")
                 .ToList();
         }
 

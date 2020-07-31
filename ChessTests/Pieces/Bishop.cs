@@ -1,4 +1,5 @@
 ﻿using ChessTable;
+using ChessTests.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,50 +22,16 @@ namespace ChessTests
 
             List<Orientation> orientations = BishopOrientation();
 
-            List<Piece> findBishops = FindPieces(playerColor, destinationCell, orientations);
+            List<Piece> findBishops = BoardAction.FindPieces(playerColor, destinationCell, orientations, PieceName.Bishop);
 
-            if (findBishops.Count == 1)
-            {
-                return findBishops.First();
-            }
-
-            else if (findBishops.Count > 1)
-            {
-                return findBishops.Find(q => q.CurrentPosition.Y == move.Y);
-            }
-
-            return null;
+            return BoardAction.FoundedPiece(move, findBishops);
         }
 
-        private static List<Piece> FindPieces(PieceColor playerColor, Cell destinationCell, List<Orientation> orientations)
+
+        public bool CheckForOpponentKingOnSpecificRoutes(Cell currentPosition, PieceColor playerColor)
         {
-            var findBishops = new List<Piece>();
-
-            foreach (var orientation in orientations)
-            {
-                var currentCell = destinationCell;
-                while (true)
-                {
-                    //there is no piece on the cells
-                    currentCell = currentCell.Look(orientation);
-
-                    //Search looks out of board
-                    if (currentCell == null) break;
-
-                    if (currentCell.Piece == null) continue;
-
-
-                    if (currentCell.Piece.Name == PieceName.Bishop && playerColor == currentCell.Piece.pieceColor)
-                    {
-                        findBishops.Add(currentCell.Piece);
-                    }
-
-                    //there is an obstacle in the way, must throw exception or return
-                    break;
-                }
-            }
-
-            return findBishops;
+            List<Orientation> orientations = BishopOrientation();
+            return BoardAction.CheckForOpponentKingOnSpecificRoutes(currentPosition, playerColor, orientations);
         }
 
         private static List<Orientation> BishopOrientation()
@@ -74,36 +41,6 @@ namespace ChessTests
                 Orientation.UpLeft, Orientation.DownLeft,
                 Orientation.UpRight, Orientation.DownRight,
             };
-        }
-
-        public bool CheckForOpponentKingOnSpecificRoutes(Cell currentPosition, PieceColor playerColor)
-        {
-            List<Orientation> orientations = BishopOrientation();
-            foreach (var orientation in orientations)
-            {
-                var currentCell = currentPosition;
-                while (true)
-                {
-                    //there is no piece on the cells
-                    currentCell = currentCell.Look(orientation);
-
-                    //Search looks out of board
-                    if (currentCell == null) break;
-
-                    if (currentCell.Piece == null) continue;
-
-                    if (currentCell.Piece.Name == PieceName.King && playerColor != currentCell.Piece.pieceColor)
-                    {
-                        //we find the king, which is in check
-                        return true;
-                    }
-
-                    //there is an obstacle in the way, must throw exception or return
-                    break;
-                }
-
-            }
-            return false;
         }
     }
 }
