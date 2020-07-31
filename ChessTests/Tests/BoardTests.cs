@@ -187,27 +187,46 @@ namespace ChessTests
             Assert.True(move.IsCheck);
 
         }
+        [Fact]
+        public void ChessMovesTXT3()
+        {
+            var board = new Board();
 
 
-        //[Fact]
-        //public void BlackKingCheckMate()
-        //{
-        //    var board = new Board(false);
+            board.PlayMove("e4", PieceColor.White);
+            board.PlayMove("e5", PieceColor.Black);
 
-        //    board.AddPiece("d1", new Rook(PieceColor.White));
-        //    board.AddPiece("g5", new Bishop(PieceColor.White));
-        //    board.AddPiece("a2", new Pawn(PieceColor.White));
-        //    board.AddPiece("b2", new Pawn(PieceColor.White));
+            board.PlayMove("c4", PieceColor.White);
+            board.PlayMove("d5", PieceColor.Black);
 
-        //    board.AddPiece("f8", new Bishop(PieceColor.Black));
-        //    board.AddPiece("f7", new Pawn(PieceColor.Black));
-        //    board.AddPiece("e6", new Queen(PieceColor.Black));
-        //    board.AddPiece("e8", new King(PieceColor.Black));
+            board.PlayMove("exd5", PieceColor.White);
+            board.PlayMove("Bb4", PieceColor.Black);
 
-        //    board.PlayMove("Rd8++", PieceColor.White);
-        //    var move = MoveNotationConverter.ParseMoveNotation("exd7++", PieceColor.White);
-        //    Assert.True(move.IsCheckMate);
+            board.PlayMove("Bd3", PieceColor.White);
+            board.PlayMove("c5", PieceColor.Black);
 
-        //}
+            board.PlayMove("d6", PieceColor.White);
+            board.PlayMove("Qh4", PieceColor.Black);
+
+            board.PlayMove("Nf3", PieceColor.White);
+            board.PlayMove("Bxd2+", PieceColor.Black);
+
+            board.PlayMove("Qxd2", PieceColor.White);
+            board.PlayMove("a6", PieceColor.Black);
+
+            board.PlayMove("Nxh4", PieceColor.White);
+            board.PlayMove("Nf6", PieceColor.Black);
+
+            board.PlayMove("d7+", PieceColor.White);
+            board.PlayMove("0-0", PieceColor.Black);
+
+            board.PlayMove("d8Q", PieceColor.White);
+            board.PlayMove("a5", PieceColor.Black);
+
+            board.PlayMove("Qxf8++", PieceColor.White);
+    
+            Assert.False(board.GetWin);
+        }
+
     }
 }

@@ -92,7 +92,7 @@ namespace ChessTable
                 }
                 else
                 {
-                    throw new InvalidOperationException("Illegal move, king is not in checkmate!");
+                    throw new InvalidOperationException("Illegal win, king is not in checkmate!");
                 }
             }
 
