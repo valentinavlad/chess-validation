@@ -22,7 +22,7 @@ namespace ChessTests
                 Console.WriteLine(e.Message);
             }
           
-            Console.ReadLine();
+    
         }
     }
 }

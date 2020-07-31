@@ -2,7 +2,7 @@
   "profiles": {
     "ChessTests": {
       "commandName": "Project",
-      "commandLineArgs": "chess-moves2.txt"
+      "commandLineArgs": "chess-moves.txt"
     }
   }
 }

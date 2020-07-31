@@ -114,7 +114,7 @@ namespace ChessTests
         }
 
         [Fact]
-        public void Tset()
+        public void ChessMovesTXT2()
         {
             var board = new Board();
 

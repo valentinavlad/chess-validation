@@ -165,5 +165,15 @@ namespace ChessTests
             return null;
         }
 
+        internal static Move TransformIntoMoveInstance(Piece item, Cell currentCell)
+        {
+            Move move = new Move();
+            var coords = MoveNotationCoordinatesConverter.ConvertChessCoordinatesToArrayIndexes(currentCell.X, currentCell.Y);
+            move.Coordinate = coords;
+            move.PieceName = item.Name;
+            move.Color = item.pieceColor;
+            return move;
+        }
+
     }
 }

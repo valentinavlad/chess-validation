@@ -41,28 +41,7 @@ namespace ChessTests.Helpers
             return result;
         }
 
-        internal static Cell AvailableCellsAroundKing(King king, List<Cell> cellsWhereKingCanMove, List<Orientation> orientations, Cell currentCell)
-        {
-            foreach (var orientation in orientations)
-            {
-                currentCell = king.CurrentPosition;
 
-                //there is no piece on the cells
-                currentCell = currentCell.Look(orientation);
-
-                //Search looks out of board
-                if (currentCell == null) continue;
-
-                if (currentCell.Piece == null || currentCell.Piece.pieceColor != king.pieceColor)
-                {
-                    cellsWhereKingCanMove.Add(currentCell);
-                    continue;
-                }
-
-            }
-
-            return currentCell;
-        }
 
 
     }

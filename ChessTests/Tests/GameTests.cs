@@ -47,8 +47,5 @@ namespace ChessTests.Tests
             //assert cu cine a castigat
             Assert.Equal(PieceColor.White, game.Winner);
         }
-        //aici de testat daca jocul jucat se finalizeaza cum trebuie
-        //sah, sah mat
-        //next turn sa reflecte state-ul jocului
     }
 }
