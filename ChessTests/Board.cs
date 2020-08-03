@@ -11,12 +11,11 @@ namespace ChessTable
 {
     public class Board
     {
-        public Cell[,] cells;
-        private Cell checkMatePosition;
-        private readonly InitializeBoard initialize;
+        private Cell[,] cells;
         internal readonly List<Piece> whitePieces = new List<Piece>();
+        private readonly InitializeBoard initialize;
         readonly KingValidation kingValidation;
-        public bool GetWin { get; set; }
+        private Cell checkMatePosition;
         public Board(bool withPieces = true)
         {
             cells = new Cell[8, 8];
@@ -33,6 +32,7 @@ namespace ChessTable
             PopulateWhiteListPiece();
         }
 
+        public bool GetWin { get; set; }
         public Piece FindPieceWhoNeedsToBeMoved(string moveAN, PieceColor playerColor)
         {
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, playerColor);
@@ -61,7 +61,7 @@ namespace ChessTable
             if (move.IsCapture)
             {
                 whitePieces.Remove(destinationCell.Piece);
-                Console.WriteLine(currentPlayer + " capture " + destinationCell.Piece + " at " + move.Coordinates);
+               // Console.WriteLine(currentPlayer + " capture " + destinationCell.Piece + " at " + move.Coordinates);
                 move.CapturePiece(piece, destinationCell);
             }
 
@@ -70,7 +70,7 @@ namespace ChessTable
             if (move.Promotion != null)
             {
                 var promotedTo = PromotePawn(move, piece);
-                Console.WriteLine(currentPlayer + " pawn promoted to " + promotedTo);
+                //Console.WriteLine(currentPlayer + " pawn promoted to " + promotedTo);
             }
 
             if (move.IsCheck)
@@ -80,7 +80,7 @@ namespace ChessTable
                 {
                     move.IsCapture = false;
                 }
-                Console.WriteLine(currentPlayer + " puts opponent king in check!");
+               // Console.WriteLine(currentPlayer + " puts opponent king in check!");
             }
 
             if (move.IsCheckMate)
@@ -88,7 +88,7 @@ namespace ChessTable
                 GetWin = IsCheckMate(currentPlayer, move, piece);
                 if (GetWin)
                 {
-                    Console.WriteLine(currentPlayer + " puts opponent king in checkmate!");
+                    //Console.WriteLine(currentPlayer + " puts opponent king in checkmate!");
                 }
                 else
                 {
@@ -99,14 +99,11 @@ namespace ChessTable
             return piece;
         }
 
-        private bool IsCheckMate(PieceColor currentPlayer, Move move, Piece piece)
+        public Piece PromotePawn(Move move, Piece pawn)
         {
-            checkMatePosition = piece.CurrentPosition;
-            //find king
-            var king = (King)BoardAction.FindKing(checkMatePosition, currentPlayer);
-            //verify if is in check mate
-
-            return kingValidation.CheckIfKingIsInCheckMate(king, currentPlayer, move);
+            pawn.CurrentPosition = null;
+            var pawnPromovatesTo = AddPiece(move.Coordinate, move.Promotion);
+            return pawnPromovatesTo;
         }
 
         public Cell TransformCoordonatesIntoCell(Coordinate coordinate)
@@ -163,6 +160,15 @@ namespace ChessTable
             }
         }
 
+        private bool IsCheckMate(PieceColor currentPlayer, Move move, Piece piece)
+        {
+            checkMatePosition = piece.CurrentPosition;
+            //find king
+            var king = (King)BoardAction.FindKing(checkMatePosition, currentPlayer);
+            //verify if is in check mate
+
+            return kingValidation.CheckIfKingIsInCheckMate(king, currentPlayer, move);
+        }
         private void PopulateWhiteListPiece()
         {
             for (int i = 7; i >= 6; i--)
@@ -172,13 +178,6 @@ namespace ChessTable
                     whitePieces.Add(cells[i, j].Piece);
                 }
             }
-        }
-
-        public Piece PromotePawn(Move move, Piece pawn)
-        {
-            pawn.CurrentPosition = null;
-            var pawnPromovatesTo = AddPiece(move.Coordinate, move.Promotion);
-            return pawnPromovatesTo;
         }
     }
 }

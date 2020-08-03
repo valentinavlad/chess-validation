@@ -17,7 +17,6 @@ namespace ChessTests.Tests
 
             Assert.Equal("e4", move1);
             Assert.Equal("e5", move2);
-            Assert.Equal("Nf3", move3);
         }
 
         [Fact]
@@ -26,16 +25,13 @@ namespace ChessTests.Tests
             var listOfMoves = ReadFromFile.ProcessFile("chess-moves.txt");
 
             string move1 = listOfMoves[0];
-            string move3 = listOfMoves[2];
-            string move4 = listOfMoves[4];
+            string move3 = listOfMoves[2];     
 
-            var pieceTypeKnight = MoveNotationConverter.ConvertPieceInitialFromMoveToPieceName(move3);
+            var pieceTypePawn2 = MoveNotationConverter.ConvertPieceInitialFromMoveToPieceName(move3);
             var pieceTypePawn = MoveNotationConverter.ConvertPieceInitialFromMoveToPieceName(move1);
-            var pieceTypeBishop = MoveNotationConverter.ConvertPieceInitialFromMoveToPieceName(move4);
 
-            Assert.Equal(PieceName.Bishop, pieceTypeBishop);
             Assert.Equal(PieceName.Pawn, pieceTypePawn);
-            Assert.Equal(PieceName.Knight, pieceTypeKnight);
+            Assert.Equal(PieceName.Pawn, pieceTypePawn2);
         }
 
         [Fact]

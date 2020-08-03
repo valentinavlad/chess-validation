@@ -15,11 +15,10 @@ namespace ChessTests
             this.pieceColor = pieceColor;
         }
 
+        public static List<Orientation> Orientations { get; set; }
         public Cell CurrentPosition { get; set; }
         public Cell InitialPosition { get; set; }
         public PieceName Name { get; set; }
-        public static List<Orientation> Orientations { get; set; }
-
         public bool IsOnInitialPosition()
         {
             return InitialPosition == CurrentPosition;

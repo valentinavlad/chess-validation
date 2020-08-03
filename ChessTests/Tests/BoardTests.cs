@@ -14,13 +14,14 @@ namespace ChessTests
         public void InitialBoardShouldHavePiecesOnPLace()
         {
             var board = new Board();
-            var rook = board.cells[0, 0].Piece;
+            //var rook = board.cells[0, 0].Piece;
+            var rook = board.CellAt("a8").Piece;
 
             Assert.NotNull(rook);
             Assert.IsType<Rook>(rook);
             Assert.Equal(PieceColor.Black, rook.pieceColor);
 
-            var rookWhite = board.cells[7, 7].Piece;
+            var rookWhite = board.CellAt("h1").Piece;
 
             Assert.NotNull(rookWhite);
             Assert.IsType<Rook>(rookWhite);
@@ -63,7 +64,7 @@ namespace ChessTests
         {
             var board = new Board();
 
-            var pawn = board.cells[6, 0].Piece;
+            var pawn = board.CellAt("a2").Piece;
           
             Assert.True(pawn.IsOnInitialPosition());
 
@@ -78,13 +79,13 @@ namespace ChessTests
         public void Move()
         {
             var board = new Board();
-            var pawn = board.cells[6, 4].Piece;
+            var pawn = board.CellAt("c2").Piece;
             var cell = board.CellAt("e4");
             var move = MoveNotationConverter.ParseMoveNotation("a4", PieceColor.White);
             move.MovePiece(pawn, cell);
           
             Assert.Equal(pawn, cell.Piece);
-            Assert.Null(board.cells[6, 4].Piece);
+            Assert.Null(board.CellAt("c2").Piece);
         }
 
         [Fact]
@@ -223,9 +224,9 @@ namespace ChessTests
             board.PlayMove("d8Q", PieceColor.White);
             board.PlayMove("a5", PieceColor.Black);
 
-            board.PlayMove("Qxf8++", PieceColor.White);
-    
-            Assert.False(board.GetWin);
+
+            void exception() => board.PlayMove("Qxf8++", PieceColor.White);
+            Assert.Throws<InvalidOperationException>(exception);
         }
 
     }

@@ -22,16 +22,16 @@ namespace ChessTests
             foreach (var moveAN in listOfMoves)
             {
                 var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
-                Console.WriteLine(currentPlayer + " player " + move.PieceName + " moves to " + move.Coordinates);
+                //Console.WriteLine(currentPlayer + " player " + move.PieceName + " moves to " + move.Coordinates);
                 NextTurn(currentPlayer, moveAN);
        
-                Console.ReadLine();
+                //Console.ReadLine();
                 IsGameOver = board.GetWin;
                 //TO DO daca mutarea sah mad invalida-> mesaj
                 MovesCounter++;
                 if (IsGameOver)
                 {
-                    Console.WriteLine("game over");
+                    //Console.WriteLine("game over");
                     break;
                 }
             } 
@@ -44,7 +44,7 @@ namespace ChessTests
             if (move.IsCheckMate)
             {
                 Winner = move.Color;
-                Console.WriteLine(Winner + " won!");
+               // Console.WriteLine(Winner + " won!");
             }
             
             if (currentPlayer == PieceColor.White)
