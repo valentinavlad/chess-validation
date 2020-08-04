@@ -1,8 +1,9 @@
 ﻿using ChessTable;
+using System;
 
 namespace ChessTests
 {
-    public abstract class Piece 
+    public abstract class Piece
     {
         public PieceColor pieceColor;
         public Piece(PieceColor pieceColor)
@@ -17,5 +18,14 @@ namespace ChessTests
             return InitialPosition == CurrentPosition;
         }
         public abstract bool ValidateMovementAndReturnPiece(Board board, Move move, PieceColor playerColor, out Piece piece);
+
+        internal void CheckDestinationCellAvailability(PieceColor playerColor, Cell destinationCell)
+        {
+            if (destinationCell.BelongsTo(playerColor))
+            {
+                throw new InvalidOperationException("Invalid Move");
+            }
+        }
+
     }
 }

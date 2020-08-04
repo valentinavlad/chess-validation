@@ -2,57 +2,35 @@
 using ChessTests.Helpers;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ChessTests
 {
     public class Bishop : Piece
     {
+        private readonly List<Orientation> BishopOrientation = new List<Orientation>()
+        {
+            Orientation.UpLeft, Orientation.DownLeft,
+            Orientation.UpRight, Orientation.DownRight,
+        };
 
         public Bishop(PieceColor pieceColor) : base(pieceColor)
         {
             Name = PieceName.Bishop;
         }
-        public static Piece ValidateMovementAndReturnPiece(Board board, Move move, PieceColor playerColor)
-        {
-            var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);
-
-            CheckDestinationCellAvailability(playerColor, destinationCell);
-
-            List<Orientation> orientations = BishopOrientation();
-
-            List<Piece> findBishops = BoardAction.FindPieces(playerColor, destinationCell, orientations, PieceName.Bishop);
-
-            return BoardAction.FoundedPiece(move, findBishops);
-        }
-
-
-        public bool CheckForOpponentKingOnSpecificRoutes(Cell currentPosition, PieceColor playerColor)
-        {
-            List<Orientation> orientations = BishopOrientation();
-            return BoardAction.CheckForOpponentKingOnSpecificRoutes(currentPosition, playerColor, orientations);
-        }
-
-        private static List<Orientation> BishopOrientation()
-        {
-            return new List<Orientation>()
-            {
-                Orientation.UpLeft, Orientation.DownLeft,
-                Orientation.UpRight, Orientation.DownRight,
-            };
-        }
-        private static void CheckDestinationCellAvailability(PieceColor playerColor, Cell destinationCell)
-        {
-            if (destinationCell.BelongsTo(playerColor))
-            {
-                throw new InvalidOperationException("Invalid Move");
-            }
-        }
 
         public override bool ValidateMovementAndReturnPiece(Board board, Move move, PieceColor playerColor, out Piece piece)
         {
-            throw new NotImplementedException();
+            var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);
+            CheckDestinationCellAvailability(playerColor, destinationCell);
+            List<Piece> findBishops = BoardAction.FindPieces(playerColor, destinationCell, BishopOrientation, PieceName.Bishop);
+
+            piece = BoardAction.FoundedPiece(move, findBishops);
+            return piece != null ? true : false;
+        }
+
+        public bool CheckForOpponentKingOnSpecificRoutes(Cell currentPosition, PieceColor playerColor)
+        {
+            return BoardAction.CheckForOpponentKingOnSpecificRoutes(currentPosition, playerColor, BishopOrientation);
         }
     }
 }

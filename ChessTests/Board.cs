@@ -137,12 +137,16 @@ namespace ChessTable
             {
                 case PieceName.Pawn:
                     Piece pawn = new Pawn(playerColor);
-                    bool result = pawn.ValidateMovementAndReturnPiece(this, move, playerColor, out pawn);
-                    return result ? pawn : null;
+                    return pawn.ValidateMovementAndReturnPiece(this, move, playerColor, out pawn) ? pawn : null;
+
                 case PieceName.Queen:
-                    return Queen.ValidateMovementAndReturnPiece(this, move, playerColor);
+                    Piece queen = new Queen(playerColor);   
+                    return queen.ValidateMovementAndReturnPiece(this, move, playerColor, out queen) ? queen : null;
+
                 case PieceName.Bishop:
-                    return Bishop.ValidateMovementAndReturnPiece(this, move, playerColor);
+                    Piece bishop = new Bishop(playerColor);
+                    return bishop.ValidateMovementAndReturnPiece(this, move, playerColor, out bishop) ? bishop : null;
+
                 case PieceName.Rook:
                     return Rook.ValidateMovementAndReturnPiece(this, move, playerColor);
                 case PieceName.King:
