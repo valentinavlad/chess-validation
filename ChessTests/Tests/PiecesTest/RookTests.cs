@@ -25,7 +25,7 @@ namespace ChessTests.Tests.PiecesTest
             var rook = board.PlayMove(moveAN, currentPlayer);
 
             //Assert
-            Assert.Equal(rook, board.CellAt(move.Coordinate).Piece);
+            Assert.Equal(rook, action.CellAt(move.Coordinate).Piece);
             Assert.IsType<Rook>(rook);
         }
 
@@ -63,8 +63,8 @@ namespace ChessTests.Tests.PiecesTest
             var rook = board.PlayMove(moveAN, currentPlayer);
 
             //Assert
-            Assert.Equal(rook, board.CellAt(move.Coordinate).Piece);
-            Assert.Null(board.CellAt("f5").Piece);
+            Assert.Equal(rook, action.CellAt(move.Coordinate).Piece);
+            Assert.Null(action.CellAt("f5").Piece);
             Assert.IsType<Rook>(rook);
         }
 
@@ -80,8 +80,8 @@ namespace ChessTests.Tests.PiecesTest
 
             Piece rook = board.PlayMove(moveAN, PieceColor.Black);
 
-            Assert.Equal(rook, board.CellAt("d5").Piece);
-            Assert.Null(board.CellAt("b5").Piece);
+            Assert.Equal(rook, action.CellAt("d5").Piece);
+            Assert.Null(action.CellAt("b5").Piece);
         }
 
 

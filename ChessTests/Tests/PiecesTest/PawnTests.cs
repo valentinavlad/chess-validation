@@ -11,8 +11,9 @@ namespace ChessTests.Tests.PiecesTest
         public void WhitePawnCannotMoveBackwords()
         {
             var board = new Board();
-            var pawn = board.CellAt("e2").Piece;
-            var cell = board.CellAt("e4");
+            var action = new Helpers.Action(board);
+            var pawn = action.CellAt("e2").Piece;
+            var cell = action.CellAt("e4");
             var move = MoveNotationConverter.ParseMoveNotation("e4", PieceColor.White);
             move.MovePiece(pawn, cell);
 
@@ -24,10 +25,11 @@ namespace ChessTests.Tests.PiecesTest
         public void MoveWhitePawnASquareForward()
         {
             var board = new Board();
-            var pawn = board.CellAt("e2").Piece;
+            var action = new Helpers.Action(board);
+            var pawn = action.CellAt("e2").Piece;
 
             var move = MoveNotationConverter.ParseMoveNotation("e4", PieceColor.White);
-            move.MovePiece(pawn, board.CellAt("e4"));
+            move.MovePiece(pawn, action.CellAt("e4"));
 
             Assert.Equal(pawn, board.FindPieceWhoNeedsToBeMoved("e5", PieceColor.White));
         }
@@ -42,13 +44,13 @@ namespace ChessTests.Tests.PiecesTest
             var board = new Board(false);
             var action = new Helpers.Action(board);
             var pawnBlack = action.AddPiece(pawnCoord, new Pawn(pieceColor));
-            var cell = board.CellAt(pawnCoord);
+            var cell = action.CellAt(pawnCoord);
             Assert.Equal(pawnBlack, cell.Piece);     
            
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, pieceColor);
             var pawn = board.PlayMove(moveAN, pieceColor);
             Assert.Null(pawnBlack.CurrentPosition);
-            Assert.IsType<Queen>(board.CellAt(move.Coordinate).Piece);
+            Assert.IsType<Queen>(action.CellAt(move.Coordinate).Piece);
 
         }
 
@@ -82,7 +84,7 @@ namespace ChessTests.Tests.PiecesTest
             board.PlayMove(moveAN, attackerColor);
 
             Assert.Null(opponent.CurrentPosition);
-            Assert.IsType<Queen>(board.CellAt(move.Coordinate).Piece);
+            Assert.IsType<Queen>(action.CellAt(move.Coordinate).Piece);
 
         }
 
@@ -102,8 +104,8 @@ namespace ChessTests.Tests.PiecesTest
             var pawnBlack = action.AddPiece(blackPawnCoordinates, new Pawn(PieceColor.Black));
             var pawnWhite = action.AddPiece(whitePawnCoordinates, new Pawn(PieceColor.White));
 
-            Assert.Equal(pawnWhite, board.CellAt(whitePawnCoordinates).Piece);
-            Assert.Equal(pawnBlack, board.CellAt(blackPawnCoordinates).Piece);
+            Assert.Equal(pawnWhite, action.CellAt(whitePawnCoordinates).Piece);
+            Assert.Equal(pawnBlack, action.CellAt(blackPawnCoordinates).Piece);
 
 
             Piece attackerPawn = null;
@@ -116,7 +118,7 @@ namespace ChessTests.Tests.PiecesTest
                 if (currentPlayer == PieceColor.White)
                 {
                     //verific pozitia pionului alb, sa fie pe celula c4
-                    Assert.Equal(attackerPawn, board.CellAt(blackPawnCoordinates).Piece);
+                    Assert.Equal(attackerPawn, action.CellAt(blackPawnCoordinates).Piece);
 
                     //verific ca pionul negru nu mai exista pe board
                     Assert.Null(pawnBlack.CurrentPosition);
@@ -124,7 +126,7 @@ namespace ChessTests.Tests.PiecesTest
                 else
                 {
                     //verific pozitia pionului alb, sa fie pe celula c4
-                    Assert.Equal(attackerPawn, board.CellAt(whitePawnCoordinates).Piece);
+                    Assert.Equal(attackerPawn, action.CellAt(whitePawnCoordinates).Piece);
 
                     //verific ca pionul alb nu mai exista pe board
                     Assert.Null(pawnWhite.CurrentPosition);

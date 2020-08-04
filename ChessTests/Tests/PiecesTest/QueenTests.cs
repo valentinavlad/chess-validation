@@ -1,7 +1,4 @@
 ﻿using ChessTable;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace ChessTests.Tests.PiecesTest
@@ -98,7 +95,7 @@ namespace ChessTests.Tests.PiecesTest
 
             var queen = board.PlayMove(moveAN, currentPlayer);
 
-            Assert.Equal(queen, board.CellAt("f3").Piece);
+            Assert.Equal(queen, action.CellAt("f3").Piece);
         }
 
         [Theory]
@@ -114,7 +111,7 @@ namespace ChessTests.Tests.PiecesTest
 
             Piece queen = board.PlayMove(moveAN, currentPlayer);
 
-            Assert.Equal(queen, board.CellAt("d5").Piece);
+            Assert.Equal(queen, action.CellAt("d5").Piece);
         }
 
         //ambiguous moves regarding the white queen
@@ -130,7 +127,7 @@ namespace ChessTests.Tests.PiecesTest
           
             Piece queen = board.PlayMove(moveAN, PieceColor.White);
 
-            Assert.Equal(queen, board.CellAt("e4").Piece);
+            Assert.Equal(queen, action.CellAt("e4").Piece);
         }
 
     }

@@ -35,6 +35,7 @@ namespace ChessTable
         }
 
         public bool GetWin { get; set; }
+
         public Piece FindPieceWhoNeedsToBeMoved(string moveAN, PieceColor playerColor)
         {
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, playerColor);
@@ -117,17 +118,6 @@ namespace ChessTable
             throw new IndexOutOfRangeException("Index out of bound");
         }
 
-        internal Cell CellAt(string coordsAN)
-        {
-            var result = MoveNotationCoordinatesConverter.ConvertChessCoordinatesToArrayIndexes(coordsAN);
-            return TransformCoordonatesIntoCell(result);
-        }
-
-        internal Cell CellAt(Coordinate coordinates)
-        {
-            return TransformCoordonatesIntoCell(coordinates);
-        }
-
         private Piece GetPiece(Move move, PieceColor playerColor, PieceName pieceName)
         {
             switch (pieceName)
@@ -153,10 +143,10 @@ namespace ChessTable
 
         private bool IsCheckMate(PieceColor currentPlayer, Move move, Piece piece)
         {
-            var king = (King)BoardAction.FindKing(piece.CurrentPosition, currentPlayer);
-      
+            var king = (King)BoardAction.FindKing(piece.CurrentPosition, currentPlayer);     
             return kingValidation.CheckIfKingIsInCheckMate(king, currentPlayer, move);
         }
+
         private void PopulateWhiteListPiece()
         {
             for (int i = 7; i >= 6; i--)

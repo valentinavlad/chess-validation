@@ -1,7 +1,4 @@
 ﻿using ChessTable;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ChessTests.Helpers
 {
@@ -22,9 +19,19 @@ namespace ChessTests.Helpers
 
         internal Piece AddPiece(Coordinate coordinates, Piece piece)
         {
-            var cell = board.CellAt(coordinates);
+            var cell = CellAt(coordinates);
             cell.Piece = piece;
             return cell.Piece;
+        }
+        internal Cell CellAt(string coordsAN)
+        {
+            var result = MoveNotationCoordinatesConverter.ConvertChessCoordinatesToArrayIndexes(coordsAN);
+            return board.TransformCoordonatesIntoCell(result);
+        }
+
+        internal Cell CellAt(Coordinate coordinates)
+        {
+            return board.TransformCoordonatesIntoCell(coordinates);
         }
 
     }

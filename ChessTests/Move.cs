@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChessTable;
+using System;
 
 namespace ChessTests
 {

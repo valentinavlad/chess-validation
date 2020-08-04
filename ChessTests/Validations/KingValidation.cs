@@ -10,11 +10,13 @@ namespace ChessTests.Validations
 {
     internal class KingValidation
     {
-        readonly Board board;
+        private readonly Board board;
+        private readonly ChessTests.Helpers.Action action;
 
         public KingValidation(Board board)
         {
             this.board = board;
+            action = new Helpers.Action(board);
         }
 
         internal bool CheckIfKingIsInCheckMate(King king, PieceColor playerColor, Move move)
@@ -75,10 +77,10 @@ namespace ChessTests.Validations
         private void UndoPlayMove(King king, Cell currentCell, Cell kingCoords, Piece piece)
         {
             var moveOne = MoveNotationConverter.TransformIntoMoveInstance(piece, currentCell);
-            board.AddPiece(moveOne.Coordinate, piece);
+            action.AddPiece(moveOne.Coordinate, piece);
 
             var moveTwo = MoveNotationConverter.TransformIntoMoveInstance(king, kingCoords);
-            board.AddPiece(moveTwo.Coordinate, king);
+            action.AddPiece(moveTwo.Coordinate, king);
 
             board.whitePieces.Add(piece);
         }
