@@ -16,8 +16,8 @@ namespace ChessTests.Tests.PiecesTest
         {
             //Arange
             var board = new Board(false);
-
-            board.AddPiece(kingCoords, new King(currentPlayer));
+            var action = new Helpers.Action(board);
+            action.AddPiece(kingCoords, new King(currentPlayer));
             
             //Act
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
@@ -36,9 +36,9 @@ namespace ChessTests.Tests.PiecesTest
         {
             //Arange
             var board = new Board(false);
-
-            board.AddPiece(kingCoords, new King(currentPlayer));
-            board.AddPiece(obstacleCoords, new Pawn(PieceColor.Black));
+            var action = new Helpers.Action(board);
+            action.AddPiece(kingCoords, new King(currentPlayer));
+            action.AddPiece(obstacleCoords, new Pawn(PieceColor.Black));
 
 
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
@@ -56,9 +56,9 @@ namespace ChessTests.Tests.PiecesTest
         {
             //Arange
             var board = new Board(false);
-
-            board.AddPiece(kingCoords, new King(currentPlayer));
-            board.AddPiece("d5", new Pawn(PieceColor.White));
+            var action = new Helpers.Action(board);
+            action.AddPiece(kingCoords, new King(currentPlayer));
+            action.AddPiece("d5", new Pawn(PieceColor.White));
 
             //Act
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
@@ -153,9 +153,9 @@ namespace ChessTests.Tests.PiecesTest
         public void WhiteKingCastlingPiecesMovedShouldThrowException()
         {
             var board = new Board(false);
-
-            board.AddPiece("a1", new Rook(PieceColor.White));
-            board.AddPiece("e1", new King(PieceColor.White));
+            var action = new Helpers.Action(board);
+            action.AddPiece("a1", new Rook(PieceColor.White));
+            action.AddPiece("e1", new King(PieceColor.White));
 
             var move = MoveNotationConverter.ParseMoveNotation("0-0", PieceColor.White);
 

@@ -42,5 +42,17 @@ namespace ChessTests
                 Orientation.UpRight, Orientation.DownRight,
             };
         }
+        private static void CheckDestinationCellAvailability(PieceColor playerColor, Cell destinationCell)
+        {
+            if (destinationCell.BelongsTo(playerColor))
+            {
+                throw new InvalidOperationException("Invalid Move");
+            }
+        }
+
+        public override bool ValidateMovementAndReturnPiece(Board board, Move move, PieceColor playerColor, out Piece piece)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

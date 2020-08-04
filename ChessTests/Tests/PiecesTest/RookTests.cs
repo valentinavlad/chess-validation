@@ -16,9 +16,8 @@ namespace ChessTests.Tests.PiecesTest
         {
             //Arange
             var board = new Board(false);
-
-            board.AddPiece(rooksCoords, new Rook(currentPlayer));
-           // board.AddPiece("d6", new Pawn(PieceColor.Black));
+            var action = new Helpers.Action(board);
+            action.AddPiece(rooksCoords, new Rook(currentPlayer));
 
             //Act
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
@@ -36,10 +35,9 @@ namespace ChessTests.Tests.PiecesTest
         {
             //Arange
             var board = new Board(false);
-
-            board.AddPiece(rookCoords, new Bishop(currentPlayer));
-            board.AddPiece(obstacleCoords, new Pawn(PieceColor.Black));
-
+            var action = new Helpers.Action(board);
+            action.AddPiece(rookCoords, new Bishop(currentPlayer));
+            action.AddPiece(obstacleCoords, new Pawn(PieceColor.Black));
 
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
 
@@ -55,14 +53,13 @@ namespace ChessTests.Tests.PiecesTest
         {
             //Arange
             var board = new Board(false);
-
-            board.AddPiece(rookCoords, new Rook(currentPlayer));
-            board.AddPiece("d5", new Pawn(PieceColor.White));
+            var action = new Helpers.Action(board);
+            action.AddPiece(rookCoords, new Rook(currentPlayer));
+            action.AddPiece("d5", new Pawn(PieceColor.White));
 
             //Act
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
            
-
             var rook = board.PlayMove(moveAN, currentPlayer);
 
             //Assert
@@ -75,8 +72,9 @@ namespace ChessTests.Tests.PiecesTest
         public void FindPieceWhoNeedsToBeMovedWithTwoBlackRooksShouldReturnTheRightRook()
         {
             var board = new Board(false);
-            board.AddPiece("b5", new Rook(PieceColor.Black));
-            board.AddPiece("f5", new Rook(PieceColor.Black));
+            var action = new Helpers.Action(board);
+            action.AddPiece("b5", new Rook(PieceColor.Black));
+            action.AddPiece("f5", new Rook(PieceColor.Black));
 
             var moveAN = "Rbd5";
 

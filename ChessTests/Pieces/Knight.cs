@@ -97,5 +97,17 @@ namespace ChessTests
                 ChessTests.KnightOrientation.UpRightDown, ChessTests.KnightOrientation.UpRightUp
             };
         }
+        private static void CheckDestinationCellAvailability(PieceColor playerColor, Cell destinationCell)
+        {
+            if (destinationCell.BelongsTo(playerColor))
+            {
+                throw new InvalidOperationException("Invalid Move");
+            }
+        }
+
+        public override bool ValidateMovementAndReturnPiece(Board board, Move move, PieceColor playerColor, out Piece piece)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

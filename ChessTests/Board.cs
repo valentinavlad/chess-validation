@@ -11,16 +11,18 @@ namespace ChessTable
 {
     public class Board
     {
-        private Cell[,] cells;
+        private readonly Cell[,] cells;
         internal readonly List<Piece> whitePieces = new List<Piece>();
         private readonly InitializeBoard initialize;
-        readonly KingValidation kingValidation;
-        private Cell checkMatePosition;
+        private readonly KingValidation kingValidation;
+        private readonly ChessTests.Helpers.Action action;
+
         public Board(bool withPieces = true)
         {
             cells = new Cell[8, 8];
             initialize = new InitializeBoard(cells);
             kingValidation = new KingValidation(this);
+            action = new ChessTests.Helpers.Action(this);
             if (withPieces)
             {
                 initialize.InitializeBoardWithPieces();
@@ -69,7 +71,7 @@ namespace ChessTable
 
             if (move.Promotion != null)
             {
-                var promotedTo = PromotePawn(move, piece);
+                PromotePawn(move, piece);
                 //Console.WriteLine(currentPlayer + " pawn promoted to " + promotedTo);
             }
 
@@ -102,7 +104,7 @@ namespace ChessTable
         public Piece PromotePawn(Move move, Piece pawn)
         {
             pawn.CurrentPosition = null;
-            var pawnPromovatesTo = AddPiece(move.Coordinate, move.Promotion);
+            var pawnPromovatesTo = action.AddPiece(move.Coordinate, move.Promotion);
             return pawnPromovatesTo;
         }
 
@@ -113,19 +115,6 @@ namespace ChessTable
                 return cells[coordinate.X, coordinate.Y];
             }
             throw new IndexOutOfRangeException("Index out of bound");
-        }
-
-        internal Piece AddPiece(string coordsAN, Piece piece)
-        {
-            var coordinates = MoveNotationCoordinatesConverter.ConvertChessCoordinatesToArrayIndexes(coordsAN);
-            return AddPiece(coordinates, piece);
-        }
-
-        internal Piece AddPiece(Coordinate coordinates, Piece piece)
-        {
-            var cell = CellAt(coordinates);
-            cell.Piece = piece;
-            return cell.Piece;
         }
 
         internal Cell CellAt(string coordsAN)
@@ -144,7 +133,9 @@ namespace ChessTable
             switch (pieceName)
             {
                 case PieceName.Pawn:
-                    return Pawn.ValidateMovementAndReturnPiece(this, move, playerColor);
+                    Piece pawn = new Pawn(playerColor);
+                    bool result = pawn.ValidateMovementAndReturnPiece(this, move, playerColor, out pawn);
+                    return result ? pawn : null;
                 case PieceName.Queen:
                     return Queen.ValidateMovementAndReturnPiece(this, move, playerColor);
                 case PieceName.Bishop:
@@ -162,11 +153,8 @@ namespace ChessTable
 
         private bool IsCheckMate(PieceColor currentPlayer, Move move, Piece piece)
         {
-            checkMatePosition = piece.CurrentPosition;
-            //find king
-            var king = (King)BoardAction.FindKing(checkMatePosition, currentPlayer);
-            //verify if is in check mate
-
+            var king = (King)BoardAction.FindKing(piece.CurrentPosition, currentPlayer);
+      
             return kingValidation.CheckIfKingIsInCheckMate(king, currentPlayer, move);
         }
         private void PopulateWhiteListPiece()

@@ -4,19 +4,18 @@ namespace ChessTests
 {
     public class Move
     {
+        public PieceColor Color { get; set; }
         public Coordinate Coordinate { get; set; }
         public string Coordinates { get; set; }
-        public Piece Promotion { get; set; }
-        public PieceName PieceName { get; set; }
-        public PieceColor Color { get; set; }
-        //the file(a-h) from which the piece departed
-        public int Y { get; set; } = -1;
+        public bool IsCapture { get; set; }
         public bool IsCheck { get; set; }
         public bool IsCheckMate { get; set; }
-        public bool IsCapture { get; set; }
         public bool IsKingCastling { get; set; }
         public bool IsQueenCastling { get; set; }
-
+        public PieceName PieceName { get; set; }
+        public Piece Promotion { get; set; }
+        //the file(a-h) from which the piece departed
+        public int Y { get; set; } = -1;
         public void CapturePiece(Piece attacker, Cell cellDestination)
         {
             if (!CellHasOpponentPiece(attacker, cellDestination))

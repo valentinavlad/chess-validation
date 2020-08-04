@@ -1,9 +1,6 @@
 using ChessTable;
 using ChessTests.Pieces;
-using NuGet.Frameworks;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
 namespace ChessTests
@@ -13,8 +10,7 @@ namespace ChessTests
         [Fact]
         public void InitialBoardShouldHavePiecesOnPLace()
         {
-            var board = new Board();
-            //var rook = board.cells[0, 0].Piece;
+            var board = new Board();     
             var rook = board.CellAt("a8").Piece;
 
             Assert.NotNull(rook);
@@ -26,7 +22,7 @@ namespace ChessTests
             Assert.NotNull(rookWhite);
             Assert.IsType<Rook>(rookWhite);
             Assert.Equal(PieceColor.White, rookWhite.pieceColor);
-        } 
+        }
 
         [Fact]
         public void InitializeBoardShoudReturnPiecesInInitialPosition()
@@ -36,7 +32,7 @@ namespace ChessTests
             var cell = board.CellAt("e4");
 
             var pawnOnInitialPos = board.CellAt("e2");
-            
+
             Assert.Null(cell.Piece);
             Assert.NotNull(pawnOnInitialPos.Piece);
         }
@@ -65,7 +61,7 @@ namespace ChessTests
             var board = new Board();
 
             var pawn = board.CellAt("a2").Piece;
-          
+
             Assert.True(pawn.IsOnInitialPosition());
 
             //to do move
@@ -83,7 +79,7 @@ namespace ChessTests
             var cell = board.CellAt("e4");
             var move = MoveNotationConverter.ParseMoveNotation("a4", PieceColor.White);
             move.MovePiece(pawn, cell);
-          
+
             Assert.Equal(pawn, cell.Piece);
             Assert.Null(board.CellAt("c2").Piece);
         }
@@ -105,8 +101,9 @@ namespace ChessTests
         public void Test()
         {
             var board = new Board(false);
-            board.AddPiece("c3", new Knight(PieceColor.Black));
-            board.AddPiece("c2", new Pawn(PieceColor.White));
+            var action = new Helpers.Action(board);
+            action.AddPiece("c3", new Knight(PieceColor.Black));
+            action.AddPiece("c2", new Pawn(PieceColor.White));
             var moveAN = "c3";
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, PieceColor.White);
 
@@ -168,20 +165,20 @@ namespace ChessTests
             board.PlayMove("Qb8+", PieceColor.White);
             board.PlayMove("Nxb8", PieceColor.Black);
 
-           board.PlayMove("Rd8++", PieceColor.White);
-            
+            board.PlayMove("Rd8++", PieceColor.White);
+
             Assert.True(board.GetWin);
         }
- 
+
 
         [Fact]
         public void WhitePawnPutsKingInCheck()
         {
             var board = new Board(false);
-
-            board.AddPiece("e6", new Pawn(PieceColor.White));
-            board.AddPiece("d7", new Pawn(PieceColor.Black));
-            board.AddPiece("e8", new King(PieceColor.Black));
+            var action = new Helpers.Action(board);
+            action.AddPiece("e6", new Pawn(PieceColor.White));
+            action.AddPiece("d7", new Pawn(PieceColor.Black));
+            action.AddPiece("e8", new King(PieceColor.Black));
 
             board.PlayMove("exd7+", PieceColor.White);
             var move = MoveNotationConverter.ParseMoveNotation("exd7+", PieceColor.White);

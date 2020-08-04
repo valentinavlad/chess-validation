@@ -13,33 +13,35 @@ namespace ChessTests
             Name = PieceName.Pawn;
         }
 
-        public static Piece ValidateMovementAndReturnPiece(Board board, Move move, PieceColor playerColor)
+        public override bool ValidateMovementAndReturnPiece(Board board, Move move, PieceColor playerColor, out Piece piece)
         {
             var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);
 
             if (playerColor == PieceColor.White)
             {
-                return !move.IsCapture ? FindPawn(destinationCell, Orientation.Down, playerColor)
+                piece = !move.IsCapture ? FindPawn(destinationCell, Orientation.Down, playerColor)
                     : FindPawnWhoCaptures(destinationCell, Orientation.Down, playerColor, move);
+                return true;
             }
 
             if (playerColor == PieceColor.Black)
             {
-                return !move.IsCapture ? FindPawn(destinationCell, Orientation.Up, playerColor)
+                piece = !move.IsCapture ? FindPawn(destinationCell, Orientation.Up, playerColor)
                     : FindPawnWhoCaptures(destinationCell, Orientation.Up, playerColor, move);
+                return true;
             }
 
             throw new InvalidOperationException("Illegal move!");
         }
 
-        private static Piece FindPawnWhoCaptures(Cell destinationCell, Orientation orientation, PieceColor playerColor, Move move)
+        private Pawn FindPawnWhoCaptures(Cell destinationCell, Orientation orientation, PieceColor playerColor, Move move)
         {
             try
             {
                 var cell = destinationCell.Look(orientation, move.Y);
                 if (cell.HasPiece() && cell.HasPiece() && cell.BelongsTo(playerColor))
                 {
-                    return cell.Piece;
+                    return (Pawn)cell.Piece;
                 }
             }
             catch (Exception)
@@ -50,14 +52,14 @@ namespace ChessTests
             return null;
         }
 
-        private static Piece FindPawn(Cell destinationCell, Orientation orientation, PieceColor playerColor)
+        private Pawn FindPawn(Cell destinationCell, Orientation orientation, PieceColor playerColor)
         {
             CheckDestinationCellHasPiece(destinationCell);
             var cell = destinationCell.Look(orientation);
 
             if (cell.HasPawn() && cell.BelongsTo(playerColor))
             {
-                return cell.Piece;
+                return (Pawn)cell.Piece;
             }
 
             CheckDestinationCellHasPiece(cell);
@@ -71,7 +73,7 @@ namespace ChessTests
                 {
                     throw new InvalidOperationException("Pawn is in an invalid state!");
                 }
-                return piece;
+                return (Pawn)piece;
             }
 
             throw new InvalidOperationException("Pawn is in an invalid state!");
@@ -98,5 +100,15 @@ namespace ChessTests
                 Orientation.DownLeft, Orientation.DownRight
             };
         }
+
+        private void CheckDestinationCellHasPiece(Cell destinationCell)
+        {
+            if (destinationCell.HasPiece())
+            {
+                throw new InvalidOperationException("Invalid Move");
+            }
+        }
+
+
     }
 }

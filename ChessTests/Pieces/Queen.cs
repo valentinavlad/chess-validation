@@ -1,5 +1,6 @@
 ﻿using ChessTable;
 using ChessTests.Helpers;
+using System;
 using System.Collections.Generic;
 
 namespace ChessTests
@@ -39,6 +40,19 @@ namespace ChessTests
                 Orientation.Down,
                 Orientation.Left,  Orientation.UpLeft
             };
+        }
+        private static void CheckDestinationCellAvailability(PieceColor playerColor, Cell destinationCell)
+        {
+            if (destinationCell.BelongsTo(playerColor))
+            {
+                throw new InvalidOperationException("Invalid Move");
+            }
+        }
+
+   
+        public override bool ValidateMovementAndReturnPiece(Board board, Move move, PieceColor playerColor, out Piece piece)
+        {
+            throw new NotImplementedException();
         }
     }
 }

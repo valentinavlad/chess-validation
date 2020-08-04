@@ -1,8 +1,6 @@
 ﻿using ChessTable;
 using ChessTests.Pieces;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace ChessTests.Tests.PiecesTest
@@ -42,8 +40,8 @@ namespace ChessTests.Tests.PiecesTest
         {
             //promote a pawn with no capture to Queen
             var board = new Board(false);
-
-            var pawnBlack = board.AddPiece(pawnCoord, new Pawn(pieceColor));
+            var action = new Helpers.Action(board);
+            var pawnBlack = action.AddPiece(pawnCoord, new Pawn(pieceColor));
             var cell = board.CellAt(pawnCoord);
             Assert.Equal(pawnBlack, cell.Piece);     
            
@@ -65,9 +63,9 @@ namespace ChessTests.Tests.PiecesTest
             //Arrange
             var board = new Board(false);
             var opponentColor = attackerColor == PieceColor.Black ? PieceColor.White : PieceColor.Black;
-
-            board.AddPiece(attackerCoords, new Pawn(attackerColor));
-            board.AddPiece(opponentCoords, new Rook(opponentColor));
+            var action = new Helpers.Action(board);
+            action.AddPiece(attackerCoords, new Pawn(attackerColor));
+            action.AddPiece(opponentCoords, new Rook(opponentColor));
 
             //Act
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, attackerColor);
@@ -100,8 +98,9 @@ namespace ChessTests.Tests.PiecesTest
         public void PawnCapture(string whitePawnCoordinates, string blackPawnCoordinates, string moveAN, bool expectsException, PieceColor currentPlayer)
         {
             var board = new Board(false);
-            var pawnBlack = board.AddPiece(blackPawnCoordinates, new Pawn(PieceColor.Black));
-            var pawnWhite = board.AddPiece(whitePawnCoordinates, new Pawn(PieceColor.White));
+            var action = new Helpers.Action(board);
+            var pawnBlack = action.AddPiece(blackPawnCoordinates, new Pawn(PieceColor.Black));
+            var pawnWhite = action.AddPiece(whitePawnCoordinates, new Pawn(PieceColor.White));
 
             Assert.Equal(pawnWhite, board.CellAt(whitePawnCoordinates).Piece);
             Assert.Equal(pawnBlack, board.CellAt(blackPawnCoordinates).Piece);
@@ -181,8 +180,9 @@ namespace ChessTests.Tests.PiecesTest
                    string opponentCoords, string moveAN)
         {
             var board = new Board(false);
-            board.AddPiece(attackerCoords, new Pawn(PieceColor.Black));
-            board.AddPiece(opponentCoords, new Queen(PieceColor.White));
+            var action = new Helpers.Action(board);
+            action.AddPiece(attackerCoords, new Pawn(PieceColor.Black));
+            action.AddPiece(opponentCoords, new Queen(PieceColor.White));
 
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, PieceColor.White);
 

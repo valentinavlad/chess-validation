@@ -36,8 +36,8 @@ namespace ChessTests.Tests.PiecesTest
         {
             //Arange
             var board = new Board(false);
-
-            board.AddPiece(queenCoords, new Queen(currentPlayer));
+            var action = new Helpers.Action(board);
+            action.AddPiece(queenCoords, new Queen(currentPlayer));
 
             //find queen on diagonal right-down
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
@@ -75,13 +75,11 @@ namespace ChessTests.Tests.PiecesTest
         {
             //Arange
             var board = new Board(false);
-
-            board.AddPiece(queenCoords, new Queen(currentPlayer));
-            board.AddPiece(obstacleCoords, new Pawn(currentPlayer));
-
+            var action = new Helpers.Action(board);
+            action.AddPiece(queenCoords, new Queen(currentPlayer));
+            action.AddPiece(obstacleCoords, new Pawn(currentPlayer));
 
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
-
             var queen = board.FindPieceWhoNeedsToBeMoved(move, currentPlayer);
 
             Assert.Null(queen);
@@ -95,19 +93,13 @@ namespace ChessTests.Tests.PiecesTest
         {
             //Arange
             var board = new Board(false);
-
-            board.AddPiece(queenCoords, new Queen(currentPlayer));
-
-            //find queen on diagonal right-down
-            var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
-            var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);
+            var action = new Helpers.Action(board);
+            action.AddPiece(queenCoords, new Queen(currentPlayer));
 
             var queen = board.PlayMove(moveAN, currentPlayer);
 
-
             Assert.Equal(queen, board.CellAt("f3").Piece);
         }
-        //TO DO test queen move with capture
 
         [Theory]
         //find queen on diagonal left-down, no obstacles
@@ -116,9 +108,9 @@ namespace ChessTests.Tests.PiecesTest
         {
             //Arange
             var board = new Board(false);
-
-            board.AddPiece(queenCoords, new Queen(currentPlayer));
-            board.AddPiece(opponentCoords, new Bishop(PieceColor.Black));
+            var action = new Helpers.Action(board);
+            action.AddPiece(queenCoords, new Queen(currentPlayer));
+            action.AddPiece(opponentCoords, new Bishop(PieceColor.Black));
 
             Piece queen = board.PlayMove(moveAN, currentPlayer);
 
@@ -130,12 +122,12 @@ namespace ChessTests.Tests.PiecesTest
         public void FindPieceWhoNeedsToBeMovedWithTwoWhiteQueensShouldReturnTheRightQueen()
         {
             var board = new Board(false);
-            board.AddPiece("g4", new Queen(PieceColor.White));
-            board.AddPiece("c6", new Queen(PieceColor.White));
-            board.AddPiece("d3", new Pawn(PieceColor.White));
+            var action = new Helpers.Action(board);
+            action.AddPiece("g4", new Queen(PieceColor.White));
+            action.AddPiece("c6", new Queen(PieceColor.White));
+            action.AddPiece("d3", new Pawn(PieceColor.White));
             var moveAN = "Qce4";
-            var move = MoveNotationConverter.ParseMoveNotation(moveAN, PieceColor.White);
-
+          
             Piece queen = board.PlayMove(moveAN, PieceColor.White);
 
             Assert.Equal(queen, board.CellAt("e4").Piece);
