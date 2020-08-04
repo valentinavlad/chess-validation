@@ -5,6 +5,7 @@ namespace ChessTests
 {
     public class Move
     {
+
         public PieceColor Color { get; set; }
         public Coordinate Coordinate { get; set; }
         public string Coordinates { get; set; }

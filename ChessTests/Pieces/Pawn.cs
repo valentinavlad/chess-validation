@@ -11,7 +11,10 @@ namespace ChessTests
         {
             Name = PieceName.Pawn;
         }
-
+        public bool ValiateMovement()
+        {
+            return false;
+        }
         public override bool ValidateMovementAndReturnPiece(Board board, Move move, PieceColor playerColor, out Piece piece)
         {
             var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);

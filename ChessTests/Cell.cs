@@ -1,6 +1,5 @@
 ﻿using ChessTests.Directions;
-using System.Collections.Generic;
-using System.Runtime.InteropServices.ComTypes;
+using System;
 
 namespace ChessTests
 {
@@ -109,6 +108,15 @@ namespace ChessTests
             if (KnightOrientation.UpRightDown == orientation) return knightLook.LShapeLookUpRightDown();
             if (KnightOrientation.UpRightUp == orientation) return knightLook.LShapeLookUpRightUp();
             return null;
+        }
+        public Cell TransformCoordonatesIntoCell(Coordinate coordinate)
+        {
+            if (coordinate.X >= 0 && coordinate.X <= 7 && coordinate.Y >= 0 && coordinate.Y <= 7)
+            {
+                return cells[coordinate.X, coordinate.Y];
+                //return cells[coordinate.X, coordinate.Y];
+            }
+            throw new IndexOutOfRangeException("Index out of bound");
         }
     }
 }
