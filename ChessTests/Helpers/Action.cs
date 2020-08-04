@@ -23,6 +23,7 @@ namespace ChessTests.Helpers
             cell.Piece = piece;
             return cell.Piece;
         }
+
         internal Cell CellAt(string coordsAN)
         {
             var result = MoveNotationCoordinatesConverter.ConvertChessCoordinatesToArrayIndexes(coordsAN);
@@ -33,6 +34,5 @@ namespace ChessTests.Helpers
         {
             return board.TransformCoordonatesIntoCell(coordinates);
         }
-
     }
 }

@@ -48,7 +48,7 @@ namespace ChessTests.Tests.PiecesTest
             Assert.Equal(pawnBlack, cell.Piece);     
            
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, pieceColor);
-            var pawn = board.PlayMove(moveAN, pieceColor);
+            board.PlayMove(moveAN, pieceColor);
             Assert.Null(pawnBlack.CurrentPosition);
             Assert.IsType<Queen>(action.CellAt(move.Coordinate).Piece);
 

@@ -1,4 +1,4 @@
-﻿using ChessTable;
+﻿using ChessTests.Helpers;
 using System;
 
 namespace ChessTests
@@ -26,8 +26,7 @@ namespace ChessTests
         
             var opponent = cellDestination.Piece;
             opponent.CurrentPosition = null;
-            cellDestination.Piece = null;
-            
+            cellDestination.Piece = null;   
         }
 
         public void MovePiece(Piece piece, Cell destinationCell)
@@ -37,6 +36,8 @@ namespace ChessTests
             previousPosition.Piece = null;
             piece.CurrentPosition = destinationCell;
         }
+
+
 
         private bool CellHasOpponentPiece(Piece attacker, Cell cellDestination)
         {

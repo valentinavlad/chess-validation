@@ -2,7 +2,6 @@
 using System;
 using ChessTests.Pieces;
 using System.Collections.Generic;
-using System.Linq;
 using ChessTests.Helpers;
 using ChessTests.Validations;
 using ChessTests.GameAction;
@@ -35,17 +34,6 @@ namespace ChessTable
         }
 
         public bool GetWin { get; set; }
-
-        public Piece FindPieceWhoNeedsToBeMoved(string moveAN, PieceColor playerColor)
-        {
-            var move = MoveNotationConverter.ParseMoveNotation(moveAN, playerColor);
-            return FindPieceWhoNeedsToBeMoved(move, playerColor);
-        }
-
-        public Piece FindPieceWhoNeedsToBeMoved(Move move, PieceColor playerColor)
-        {
-            return GetPiece(move, playerColor, move.PieceName);
-        }
 
         public Piece PlayMove(string moveAN, PieceColor currentPlayer)
         {
@@ -101,7 +89,16 @@ namespace ChessTable
 
             return piece;
         }
+        public Piece FindPieceWhoNeedsToBeMoved(string moveAN, PieceColor playerColor)
+        {
+            var move = MoveNotationConverter.ParseMoveNotation(moveAN, playerColor);
+            return FindPieceWhoNeedsToBeMoved(move, playerColor);
+        }
 
+        public Piece FindPieceWhoNeedsToBeMoved(Move move, PieceColor playerColor)
+        {
+            return GetPiece(move, playerColor, move.PieceName);
+        }
         public Piece PromotePawn(Move move, Piece pawn)
         {
             pawn.CurrentPosition = null;
@@ -118,6 +115,22 @@ namespace ChessTable
             throw new IndexOutOfRangeException("Index out of bound");
         }
 
+        private bool IsCheckMate(PieceColor currentPlayer, Move move, Piece piece)
+        {
+            var king = (King)BoardAction.FindKing(piece.CurrentPosition, currentPlayer);     
+            return kingValidation.CheckIfKingIsInCheckMate(king, currentPlayer, move);
+        }
+
+        private void PopulateWhiteListPiece()
+        {
+            for (int i = 7; i >= 6; i--)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    whitePieces.Add(cells[i, j].Piece);
+                }
+            }
+        }
         private Piece GetPiece(Move move, PieceColor playerColor, PieceName pieceName)
         {
             switch (pieceName)
@@ -138,23 +151,6 @@ namespace ChessTable
                     return Knight.ValidateMovementAndReturnPiece(this, move, playerColor);
                 default:
                     return null;
-            }
-        }
-
-        private bool IsCheckMate(PieceColor currentPlayer, Move move, Piece piece)
-        {
-            var king = (King)BoardAction.FindKing(piece.CurrentPosition, currentPlayer);     
-            return kingValidation.CheckIfKingIsInCheckMate(king, currentPlayer, move);
-        }
-
-        private void PopulateWhiteListPiece()
-        {
-            for (int i = 7; i >= 6; i--)
-            {
-                for (int j = 0; j < 8; j++)
-                {
-                    whitePieces.Add(cells[i, j].Piece);
-                }
             }
         }
     }
