@@ -1,4 +1,5 @@
 ﻿using ChessTable;
+using ChessTests.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -27,30 +28,42 @@ namespace ChessTests
        
                 //Console.ReadLine();
                 IsGameOver = board.GetWin;
-                //TO DO daca mutarea sah mad invalida-> mesaj
+                
                 MovesCounter++;
                 if (IsGameOver)
                 {
+         
                     //Console.WriteLine("game over");
                     break;
                 }
+                
             } 
         }
-
+        
         private void NextTurn(PieceColor player, string moveAN)
         {
-            board.PlayMove(moveAN, player);
+            var piece = board.PlayMove(moveAN, player);
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, player);
+
+            if (move.IsCheck)
+            {
+                //verify if king is actually in check
+                if (!GameValidation.CheckIfKingIsInCheck(piece, currentPlayer, move))
+                {
+                    move.IsCapture = false;
+                }
+                 //Console.WriteLine(currentPlayer + " puts opponent king in check!");
+            }
             if (move.IsCheckMate)
             {
                 Winner = move.Color;
-               // Console.WriteLine(Winner + " won!");
+               //Console.WriteLine(Winner + " won!");
             }
-            
+
+
             if (currentPlayer == PieceColor.White)
             {
-                //TO DO override la tostring for move
-               
+   
                 currentPlayer = PieceColor.Black;
             }
             else

@@ -43,7 +43,7 @@ namespace ChessTests.Tests.PiecesTest
 
             var rook = board.FindPieceWhoNeedsToBeMoved(move, currentPlayer);
 
-            Assert.Null(rook);
+            Assert.False(rook);
 
         }
 

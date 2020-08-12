@@ -1,17 +1,15 @@
 ﻿using ChessTable;
-using ChessTests.Helpers;
 using ChessTests.Pieces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace ChessTests.Validations
 {
     internal class KingValidation
     {
         private readonly Board board;
-        private readonly ChessTests.Helpers.Action action;
+        private readonly Helpers.Action action;
 
         public KingValidation(Board board)
         {
@@ -46,7 +44,6 @@ namespace ChessTests.Validations
                     {
                         throw new InvalidOperationException("Illegal move, King is not in checkmate!");
                     }
-                    //else means that king is not in checkmate??
                 }
                 else
                 {
@@ -64,7 +61,7 @@ namespace ChessTests.Validations
             return isCheck.All(i => i == true);
         }
 
-        private static Piece KingMovesCapture(King king, Move move, Cell currentCell)
+        private Piece KingMovesCapture(King king, Move move, Cell currentCell)
         {
             var piece = currentCell.Piece;
 
@@ -85,9 +82,9 @@ namespace ChessTests.Validations
             board.whitePieces.Add(piece);
         }
 
-        internal static Cell AvailableCellsAroundKing(King king, List<Cell> cellsWhereKingCanMove, Cell currentCell)
+        internal Cell AvailableCellsAroundKing(King king, List<Cell> cellsWhereKingCanMove, Cell currentCell)
         {
-            var orientations = King.KingOrientation();
+            var orientations = king.KingOrientation;
             foreach (var orientation in orientations)
             {
                 currentCell = king.CurrentPosition;
@@ -103,7 +100,6 @@ namespace ChessTests.Validations
                     cellsWhereKingCanMove.Add(currentCell);
                     continue;
                 }
-
             }
 
             return currentCell;
@@ -111,6 +107,7 @@ namespace ChessTests.Validations
 
         internal bool VerifyIfKingIsInCheck(PieceColor playerColor, Cell currentCell)
         {
+            var isPiece = false;
             foreach (var item in board.whitePieces)
             {
                 Move move = MoveNotationConverter.TransformIntoMoveInstance(item, currentCell);
@@ -119,13 +116,9 @@ namespace ChessTests.Validations
                 {
                     move.IsCapture = true;
                 }
-                var piece = board.FindPieceWhoNeedsToBeMoved(move, playerColor);
-                if (piece != null)
-                {
-                    return true;
-                }
+                isPiece = board.FindPieceWhoNeedsToBeMoved(move, playerColor);
             }
-            return false;
+            return isPiece;
         }
     }
 }

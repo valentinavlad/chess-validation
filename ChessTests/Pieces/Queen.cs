@@ -1,6 +1,4 @@
 ﻿using ChessTable;
-using ChessTests.Helpers;
-using System;
 using System.Collections.Generic;
 
 namespace ChessTests
@@ -21,19 +19,23 @@ namespace ChessTests
             Name = PieceName.Queen;
         }
 
-        public override bool ValidateMovementAndReturnPiece(Board board, Move move, PieceColor playerColor, out Piece piece)
+        public override bool ValidateMovement(Board board, Move move, PieceColor playerColor)
         {
             var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);
             CheckDestinationCellAvailability(playerColor, destinationCell);
-            List<Piece> findQueens = BoardAction.FindPieces(playerColor, destinationCell, QueenOrientation, PieceName.Queen);
-            piece = BoardAction.FoundedPiece(move, findQueens);
+
+            List<Piece> findQueens = boardAction.FindPieces(playerColor, destinationCell, QueenOrientation, PieceName.Queen);
+
+            var piece = boardAction.FoundedPiece(move, findQueens);
+
+            if (piece != null) move.PiecePosition = piece.CurrentPosition;
 
             return piece != null ? true : false;
         }
-      
-        public bool CheckForOpponentKingOnSpecificRoutes(Cell currentPosition, PieceColor playerColor)
+
+        public override bool CheckForOpponentKingOnSpecificRoutes(Cell currentPosition, PieceColor playerColor)
         {
-            return BoardAction.CheckForOpponentKingOnSpecificRoutes(currentPosition, playerColor, QueenOrientation);
+            return boardAction.FindKing(currentPosition, playerColor, QueenOrientation) != null ? true : false;
         }
     }
 }

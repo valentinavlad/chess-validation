@@ -1,11 +1,14 @@
-﻿using ChessTests.Helpers;
+﻿using ChessTable;
+using ChessTests.Helpers;
+using ChessTests.Pieces;
 using System;
 
 namespace ChessTests
 {
     public class Move
     {
-
+        public Cell DestinationCell { get; set; }
+        public Cell PiecePosition { get; set; }
         public PieceColor Color { get; set; }
         public Coordinate Coordinate { get; set; }
         public string Coordinates { get; set; }
@@ -18,6 +21,7 @@ namespace ChessTests
         public Piece Promotion { get; set; }
         //the file(a-h) from which the piece departed
         public int Y { get; set; } = -1;
+
         public void CapturePiece(Piece attacker, Cell cellDestination)
         {
             if (!CellHasOpponentPiece(attacker, cellDestination))
@@ -37,9 +41,7 @@ namespace ChessTests
             previousPosition.Piece = null;
             piece.CurrentPosition = destinationCell;
         }
-
-
-
+ 
         private bool CellHasOpponentPiece(Piece attacker, Cell cellDestination)
         {
             var opponent = cellDestination.Piece;

@@ -6,7 +6,7 @@ namespace ChessTests.GameAction
 {
     internal class Castling
     {
-        internal static void KingCastling(Piece king, PieceColor currentPlayer, Cell destinationCell, Move move)
+        internal void KingCastling(Piece king, PieceColor currentPlayer, Cell destinationCell, Move move)
         {
             var currentCell = destinationCell;
             if (currentCell.Piece != null) throw new InvalidOperationException("Invalid state!");
@@ -27,7 +27,7 @@ namespace ChessTests.GameAction
             }
 
         }
-        internal static void QueenCastling(Piece king, PieceColor currentPlayer, Cell destinationCell, Move move)
+        internal void QueenCastling(Piece king, PieceColor currentPlayer, Cell destinationCell, Move move)
         {
             var currentCell = destinationCell.Look(Orientation.Right);
             if (currentCell.Piece == null)

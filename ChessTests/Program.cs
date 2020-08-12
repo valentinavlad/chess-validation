@@ -11,7 +11,7 @@ namespace ChessTests
         {
             string path = args[0];
             List<string> listOfMoves = ReadFromFile.ProcessFile(path);
-            
+
             //var game = new Game();
             //try
             //{
@@ -21,8 +21,8 @@ namespace ChessTests
             //{
             //    Console.WriteLine(e.Message);
             //}
-          
-    
+
+
         }
     }
 }

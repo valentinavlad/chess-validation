@@ -1,14 +1,10 @@
 ﻿using ChessTable;
 using ChessTests.Pieces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ChessTests.Helpers
 {
     internal class GameValidation
     {
-
         internal static bool CheckIfKingIsInCheck(Piece pieceWhoMakesCheck, PieceColor currentPlayer, Move move)
         {
             bool result = false;
@@ -35,9 +31,12 @@ namespace ChessTests.Helpers
             if (pieceWhoMakesCheck.Name == PieceName.Pawn)
             {
                 Pawn pieceWhoMakesCheckp = (Pawn)pieceWhoMakesCheck;
-                result = pieceWhoMakesCheckp.CheckForOpponentKingOnSpecificRoutes(pieceWhoMakesCheck.CurrentPosition, currentPlayer, move);
+                if (move.IsCapture)
+                {
+                    result = pieceWhoMakesCheckp.CheckForOpponentKingOnSpecificRoutes(pieceWhoMakesCheck.CurrentPosition, currentPlayer);
+                }
+               
             }
-            //TO DO for all other pieces
             return result;
         }
 

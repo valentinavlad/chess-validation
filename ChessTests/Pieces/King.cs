@@ -7,54 +7,31 @@ namespace ChessTests.Pieces
 {
     public class King : Piece
     {
+        public List<Orientation> KingOrientation = new List<Orientation>()
+        {
+            Orientation.Up, Orientation.UpLeft, Orientation.Left,
+            Orientation.DownLeft,  Orientation.Down, Orientation.DownRight,
 
+            Orientation.Right, Orientation.UpRight
+
+        };
+        
         public King(PieceColor pieceColor) : base(pieceColor)
         {
             Name = PieceName.King;
         }
 
-        public static Piece ValidateMovementAndReturnPiece(Board board, Move move, PieceColor playerColor)
+        public override bool ValidateMovement(Board board, Move move, PieceColor playerColor)
         {
             var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);
 
             CheckDestinationCellAvailability(playerColor, destinationCell);
 
-            List<Orientation> orientations = KingOrientation();
+            if (move.IsQueenCastling) return IsQueenCastling(destinationCell, playerColor, move);
 
-            if (move.IsQueenCastling)
-            {
-                var currentCell = destinationCell;
-                for (int i = currentCell.Y + 1; i <= 4; i++)
-                {
-                    currentCell = currentCell.Look(Orientation.Right);
-                    if (currentCell.Piece != null && currentCell.Y != 4) throw new InvalidOperationException("Invalid move!");
-                    if (currentCell.Y == 4 && currentCell.Piece.Name == PieceName.King && playerColor == currentCell.Piece.pieceColor)
-                    {
-                        return currentCell.Piece;
-                    }
-                }
+            if (move.IsKingCastling) return IsKingCastling(destinationCell, playerColor, move);
 
-            }
-
-            if (move.IsKingCastling)
-            {
-                var currentCell = destinationCell;
-                for (int i = currentCell.Y - 1; i >= 4; i--)
-                {
-                    //TO DO if king is in other square error
-                    currentCell = currentCell.Look(Orientation.Left);
-                    if (currentCell.Piece != null && currentCell.Y != 4) throw new InvalidOperationException("Invalid move!");
-                    if (currentCell.Y == 4 && currentCell.Piece.Name == PieceName.King && playerColor == currentCell.Piece.pieceColor)
-                    {
-                        return currentCell.Piece;
-                    }
-                }
-
-            }
-
-
-
-            foreach (var orientation in orientations)
+            foreach (var orientation in KingOrientation)
             {
                 var currentCell = destinationCell;
 
@@ -66,41 +43,50 @@ namespace ChessTests.Pieces
 
                 if (currentCell.Piece == null) continue;
 
-
                 if (currentCell.Piece.Name == PieceName.King && playerColor == currentCell.Piece.pieceColor)
                 {
-                    return currentCell.Piece;
+                    move.PiecePosition = currentCell.Piece.CurrentPosition;
+                    return true;
                 }
 
-                //there is an obstacle in the way, must throw exception or return
                 break;
-
             }
 
-            return null;
+            return false;
         }
 
-        public static List<Orientation> KingOrientation()
+        private bool IsQueenCastling(Cell destinationCell, PieceColor playerColor, Move move)
         {
-            return new List<Orientation>()
+            var currentCell = destinationCell;
+            for (int i = currentCell.Y + 1; i <= 4; i++)
             {
-                Orientation.Up, Orientation.UpLeft, Orientation.Left,
-                Orientation.DownLeft,  Orientation.Down, Orientation.DownRight,
-
-                Orientation.Right, Orientation.UpRight
-
-            };
-        }
-
-        private static void CheckDestinationCellAvailability(PieceColor playerColor, Cell destinationCell)
-        {
-            if (destinationCell.BelongsTo(playerColor))
-            {
-                throw new InvalidOperationException("Invalid Move");
+                currentCell = currentCell.Look(Orientation.Right);
+                if (currentCell.Piece != null && currentCell.Y != 4) throw new InvalidOperationException("Invalid move!");
+                if (currentCell.Y == 4 && currentCell.Piece.Name == PieceName.King && playerColor == currentCell.Piece.pieceColor)
+                {
+                    move.PiecePosition = currentCell.Piece.CurrentPosition;
+                    return true;
+                }
             }
+            return false;
         }
-
-        public override bool ValidateMovementAndReturnPiece(Board board, Move move, PieceColor playerColor, out Piece piece)
+        private bool IsKingCastling(Cell destinationCell, PieceColor playerColor, Move move)
+        {
+            var currentCell = destinationCell;
+            for (int i = currentCell.Y - 1; i >= 4; i--)
+            {
+                currentCell = currentCell.Look(Orientation.Left);
+                if (currentCell.Piece != null && currentCell.Y != 4) throw new InvalidOperationException("Invalid move!");
+                if (currentCell.Y == 4 && currentCell.Piece.Name == PieceName.King && playerColor == currentCell.Piece.pieceColor)
+                {
+                    move.PiecePosition = currentCell.Piece.CurrentPosition;
+                    return true;
+                    //return currentCell.Piece;
+                }
+            }
+            return false;
+        }
+        public override bool CheckForOpponentKingOnSpecificRoutes(Cell currentPosition, PieceColor playerColor)
         {
             throw new NotImplementedException();
         }

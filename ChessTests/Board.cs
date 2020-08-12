@@ -10,12 +10,13 @@ namespace ChessTable
 {
     public class Board
     {
-        private readonly Cell[,] cells;
-        internal readonly List<Piece> whitePieces = new List<Piece>();
+        private readonly Cell[,] cells;   
         private readonly InitializeBoard initialize;
         private readonly KingValidation kingValidation;
         private readonly ChessTests.Helpers.Action action;
-
+        internal BoardAction boardAction = new BoardAction();
+        internal readonly List<Piece> whitePieces = new List<Piece>();
+        CastlingHelpers castling = new CastlingHelpers();
         public Board(bool withPieces = true)
         {
             cells = new Cell[8, 8];
@@ -39,66 +40,63 @@ namespace ChessTable
         {
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
 
-            var destinationCell = TransformCoordonatesIntoCell(move.Coordinate);
+             move.DestinationCell = TransformCoordonatesIntoCell(move.Coordinate);
 
-            var piece = FindPieceWhoNeedsToBeMoved(move, currentPlayer);
+            var isPiece = FindPieceWhoNeedsToBeMoved(move, currentPlayer);
+            Piece piece = null;
+            if (isPiece) piece = move.PiecePosition.Piece;
 
-            if (piece == null) throw new InvalidOperationException("Invalid move!");       
+            if (piece == null) throw new InvalidOperationException("Invalid move!");
 
-            if (move.IsKingCastling && !move.IsCheck) return CastlingHelpers.TryKingCastling(currentPlayer, move, destinationCell, piece);
+            if (move.IsKingCastling && !move.IsCheck) return castling.TryKingCastling(currentPlayer, move, move.DestinationCell, piece);
 
-            if (move.IsQueenCastling && !move.IsCheck) return CastlingHelpers.TryQueenCastling(currentPlayer, move, destinationCell, piece);
-           
+            if (move.IsQueenCastling && !move.IsCheck) return castling.TryQueenCastling(currentPlayer, move, move.DestinationCell, piece);
+
             if (move.IsCapture)
             {
-                whitePieces.Remove(destinationCell.Piece);
-               // Console.WriteLine(currentPlayer + " capture " + destinationCell.Piece + " at " + move.Coordinates);
-                move.CapturePiece(piece, destinationCell);
+                whitePieces.Remove(move.DestinationCell.Piece);
+                // Console.WriteLine(currentPlayer + " capture " + destinationCell.Piece + " at " + move.Coordinates);
+                move.CapturePiece(piece, move.DestinationCell);
             }
 
-            move.MovePiece(piece, destinationCell);
+            move.MovePiece(piece, move.DestinationCell);
 
+            PawnPromotion(move, piece);
+            
+            IsKingInCheckMate(currentPlayer, move, piece);
+
+            return piece;
+        }
+
+        private void IsKingInCheckMate(PieceColor currentPlayer, Move move, Piece piece)
+        {
+            if (move.IsCheckMate)
+            {
+                GetWin = IsCheckMate(currentPlayer, move, piece);
+                if (!GetWin)  throw new InvalidOperationException("Illegal win, king is not in checkmate!");   
+            }
+        }
+
+        private void PawnPromotion(Move move, Piece piece)
+        {
             if (move.Promotion != null)
             {
                 PromotePawn(move, piece);
                 //Console.WriteLine(currentPlayer + " pawn promoted to " + promotedTo);
             }
-
-            if (move.IsCheck)
-            {
-                //verify if king is actually in check
-                if (!GameValidation.CheckIfKingIsInCheck(piece, currentPlayer, move))
-                {
-                    move.IsCapture = false;
-                }
-               // Console.WriteLine(currentPlayer + " puts opponent king in check!");
-            }
-
-            if (move.IsCheckMate)
-            {
-                GetWin = IsCheckMate(currentPlayer, move, piece);
-                if (GetWin)
-                {
-                    //Console.WriteLine(currentPlayer + " puts opponent king in checkmate!");
-                }
-                else
-                {
-                    throw new InvalidOperationException("Illegal win, king is not in checkmate!");
-                }
-            }
-
-            return piece;
         }
-        public Piece FindPieceWhoNeedsToBeMoved(string moveAN, PieceColor playerColor)
+
+        public bool FindPieceWhoNeedsToBeMoved(string moveAN, PieceColor playerColor)
         {
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, playerColor);
             return FindPieceWhoNeedsToBeMoved(move, playerColor);
         }
 
-        public Piece FindPieceWhoNeedsToBeMoved(Move move, PieceColor playerColor)
+        public bool FindPieceWhoNeedsToBeMoved(Move move, PieceColor playerColor)
         {
-            return GetPiece(move, playerColor, move.PieceName);
+            return IsPiece(move, playerColor, move.PieceName);
         }
+
         public Piece PromotePawn(Move move, Piece pawn)
         {
             pawn.CurrentPosition = null;
@@ -117,7 +115,7 @@ namespace ChessTable
 
         private bool IsCheckMate(PieceColor currentPlayer, Move move, Piece piece)
         {
-            var king = (King)BoardAction.FindKing(piece.CurrentPosition, currentPlayer);     
+            var king = (King)boardAction.FindKing(piece.CurrentPosition, currentPlayer);     
             return kingValidation.CheckIfKingIsInCheckMate(king, currentPlayer, move);
         }
 
@@ -131,30 +129,37 @@ namespace ChessTable
                 }
             }
         }
-        private Piece GetPiece(Move move, PieceColor playerColor, PieceName pieceName)
+
+        private bool IsPiece(Move move, PieceColor playerColor, PieceName pieceName)
         {
             switch (pieceName)
             {
                 case PieceName.Pawn:
                     Piece pawn = new Pawn(playerColor);
-                    return pawn.ValidateMovementAndReturnPiece(this, move, playerColor, out pawn) ? pawn : null;
+                    return pawn.ValidateMovement(this, move, playerColor);
 
                 case PieceName.Queen:
-                    Piece queen = new Queen(playerColor);   
-                    return queen.ValidateMovementAndReturnPiece(this, move, playerColor, out queen) ? queen : null;
+                    Piece queen = new Queen(playerColor);
+                    return queen.ValidateMovement(this, move, playerColor);
 
                 case PieceName.Bishop:
                     Piece bishop = new Bishop(playerColor);
-                    return bishop.ValidateMovementAndReturnPiece(this, move, playerColor, out bishop) ? bishop : null;
+                    return bishop.ValidateMovement(this, move, playerColor);
 
                 case PieceName.Rook:
-                    return Rook.ValidateMovementAndReturnPiece(this, move, playerColor);
+                    Piece rook = new Rook(playerColor);
+                    return rook.ValidateMovement(this, move, playerColor);
+
                 case PieceName.King:
-                    return King.ValidateMovementAndReturnPiece(this, move, playerColor);
+                    Piece king = new King(playerColor);
+                    return king.ValidateMovement(this, move, playerColor);
+
                 case PieceName.Knight:
-                    return Knight.ValidateMovementAndReturnPiece(this, move, playerColor);
+                    Piece knight = new Knight(playerColor);
+                    return knight.ValidateMovement(this, move, playerColor);
+
                 default:
-                    return null;
+                    return false;
             }
         }
     }

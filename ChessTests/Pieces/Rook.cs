@@ -1,55 +1,34 @@
 ﻿using ChessTable;
-using ChessTests.Helpers;
-using System;
 using System.Collections.Generic;
 
 namespace ChessTests.Pieces
 {
     public class Rook : Piece
     {
+        private List<Orientation> RookOrientation = new List<Orientation>()
+        {
+            Orientation.Up,    Orientation.Down,
+            Orientation.Right,   Orientation.Left
+        };
         public Rook(PieceColor pieceColor) : base(pieceColor)
         {
             Name = PieceName.Rook;
         }
 
-        public static Piece ValidateMovementAndReturnPiece(Board board, Move move, PieceColor playerColor)
+        public override bool ValidateMovement(Board board, Move move, PieceColor playerColor)
         {
             var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);
-
             CheckDestinationCellAvailability(playerColor, destinationCell);
-
-            List<Orientation> orientations = RookOrientation();
-
-            List<Piece> findRooks = BoardAction.FindPieces(playerColor, destinationCell, orientations, PieceName.Rook);
-
-            return BoardAction.FoundedPiece(move, findRooks);
+            List<Piece> findRooks = boardAction.FindPieces(playerColor, destinationCell, RookOrientation, PieceName.Rook);
+            
+            var piece = boardAction.FoundedPiece(move, findRooks);
+            if (piece != null) move.PiecePosition = piece.CurrentPosition;
+            return piece != null ? true : false;
         }
 
-        public bool CheckForOpponentKingOnSpecificRoutes(Cell currentPosition, PieceColor playerColor)
+        public override bool CheckForOpponentKingOnSpecificRoutes(Cell currentPosition, PieceColor playerColor)
         {
-            List<Orientation> orientations = RookOrientation();
-            return BoardAction.CheckForOpponentKingOnSpecificRoutes(currentPosition, playerColor, orientations);
-        }
-
-        private static List<Orientation> RookOrientation()
-        {
-            return new List<Orientation>()
-            {
-                Orientation.Up,    Orientation.Down,
-                Orientation.Right,   Orientation.Left
-            };
-        }
-        private static void CheckDestinationCellAvailability(PieceColor playerColor, Cell destinationCell)
-        {
-            if (destinationCell.BelongsTo(playerColor))
-            {
-                throw new InvalidOperationException("Invalid Move");
-            }
-        }
-
-        public override bool ValidateMovementAndReturnPiece(Board board, Move move, PieceColor playerColor, out Piece piece)
-        {
-            throw new NotImplementedException();
+            return boardAction.FindKing(currentPosition, playerColor, RookOrientation) != null ? true : false;
         }
     }
 }

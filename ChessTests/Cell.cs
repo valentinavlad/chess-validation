@@ -22,6 +22,7 @@ namespace ChessTests
             this.cells = cells;
         }
 
+ 
         //needed for Initialize board with no pieces
         public Cell(int x, int y, Cell[,] cells = null)
         {

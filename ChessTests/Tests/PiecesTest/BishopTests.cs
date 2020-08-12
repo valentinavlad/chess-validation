@@ -43,7 +43,7 @@ namespace ChessTests.Tests.PiecesTest
 
             var bishop = board.FindPieceWhoNeedsToBeMoved(move, currentPlayer);
 
-            Assert.Null(bishop);
+            Assert.False(bishop);
 
         }
 
@@ -83,7 +83,7 @@ namespace ChessTests.Tests.PiecesTest
             var bishop = board.FindPieceWhoNeedsToBeMoved(moveAN, currentPlayer);
 
             //Assert
-            Assert.Null(bishop);
+            Assert.False(bishop);
 
         }
 

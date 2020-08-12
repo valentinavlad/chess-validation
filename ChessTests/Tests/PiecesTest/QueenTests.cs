@@ -39,7 +39,8 @@ namespace ChessTests.Tests.PiecesTest
             //find queen on diagonal right-down
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
 
-            var queen = board.FindPieceWhoNeedsToBeMoved(move, PieceColor.White);
+            //var queen = board.FindPieceWhoNeedsToBeMoved(move, PieceColor.White);
+            var queen = board.PlayMove(moveAN, PieceColor.White);
 
             Assert.IsType<Queen>(queen);
         }
@@ -79,7 +80,7 @@ namespace ChessTests.Tests.PiecesTest
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
             var queen = board.FindPieceWhoNeedsToBeMoved(move, currentPlayer);
 
-            Assert.Null(queen);
+            Assert.False(queen);
 
         }
 

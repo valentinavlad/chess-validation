@@ -8,28 +8,36 @@ namespace ChessTests
 {
     public class Knight : Piece
     {
+        private List<KnightOrientation> KnightOrientation =  new List<KnightOrientation>()
+        {
+            ChessTests.KnightOrientation.DownLeftDown, ChessTests.KnightOrientation.DownLeftUp, ChessTests.KnightOrientation.DownRightDown,
+            ChessTests.KnightOrientation.DownRightUp, ChessTests.KnightOrientation.UpLeftDown, ChessTests.KnightOrientation.UpLeftUp,
+            ChessTests.KnightOrientation.UpRightDown, ChessTests.KnightOrientation.UpRightUp
+        };
+        
         public Knight(PieceColor pieceColor) : base(pieceColor)
         {
             Name = PieceName.Knight;
         }
 
-        public static Piece ValidateMovementAndReturnPiece(Board board, Move move, PieceColor playerColor)
+
+        public override bool ValidateMovement(Board board, Move move, PieceColor playerColor)
         {
             var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);
 
             CheckDestinationCellAvailability(playerColor, destinationCell);
 
-            List<KnightOrientation> orientations = KnightOrientation();
+            List<Piece> findKnights = FindPieces(playerColor, destinationCell);
 
-            List<Piece> findKnights = FindPieces(playerColor, destinationCell, orientations);
-
-            return BoardAction.FoundedPiece(move, findKnights);
+            var piece = boardAction.FoundedPiece(move, findKnights);
+            if (piece != null) move.PiecePosition = piece.CurrentPosition;
+            return piece != null ? true : false;
         }
 
-        public bool CheckForOpponentKingOnSpecificRoutes(Cell currentPosition, PieceColor playerColor)
+
+        public override bool CheckForOpponentKingOnSpecificRoutes(Cell currentPosition, PieceColor playerColor)
         {
-            List<KnightOrientation> orientations = KnightOrientation();
-            foreach (var orientation in orientations)
+            foreach (var orientation in KnightOrientation)
             {
                 var currentCell = currentPosition;
                 while (true)
@@ -56,58 +64,24 @@ namespace ChessTests
             return false;
         }
 
-        private static List<Piece> FindPieces(PieceColor playerColor, Cell destinationCell, List<KnightOrientation> orientations)
+        private List<Piece> FindPieces(PieceColor playerColor, Cell destinationCell)
         {
             var findKnight = new List<Piece>();
 
-            foreach (var orientation in orientations)
+            foreach (var orientation in KnightOrientation)
             {
-                //var loop = true;
                 var currentCell = destinationCell;
-                while (true)
+
+                currentCell = currentCell.LookLShape(orientation);
+                if (currentCell == null || currentCell.Piece == null) continue;
+
+                if (currentCell.Piece.Name == PieceName.Knight && playerColor == currentCell.Piece.pieceColor)
                 {
-                    //there is no piece on the cells
-                    currentCell = currentCell.LookLShape(orientation);
-
-                    //Search looks out of board
-                    if (currentCell == null || currentCell.Piece == null) break;
-
-                    //if (currentCell.Piece == null) continue;
-
-
-                    if (currentCell.Piece.Name == PieceName.Knight && playerColor == currentCell.Piece.pieceColor)
-                    {
-                        findKnight.Add(currentCell.Piece);
-                    }
-
-                    //there is an obstacle in the way, must throw exception or return
-                    break;
+                    findKnight.Add(currentCell.Piece);
                 }
             }
 
             return findKnight;
-        }
-
-        private static List<KnightOrientation> KnightOrientation()
-        {
-            return new List<KnightOrientation>()
-            {
-                ChessTests.KnightOrientation.DownLeftDown, ChessTests.KnightOrientation.DownLeftUp, ChessTests.KnightOrientation.DownRightDown,
-                ChessTests.KnightOrientation.DownRightUp, ChessTests.KnightOrientation.UpLeftDown, ChessTests.KnightOrientation.UpLeftUp,
-                ChessTests.KnightOrientation.UpRightDown, ChessTests.KnightOrientation.UpRightUp
-            };
-        }
-        private static void CheckDestinationCellAvailability(PieceColor playerColor, Cell destinationCell)
-        {
-            if (destinationCell.BelongsTo(playerColor))
-            {
-                throw new InvalidOperationException("Invalid Move");
-            }
-        }
-
-        public override bool ValidateMovementAndReturnPiece(Board board, Move move, PieceColor playerColor, out Piece piece)
-        {
-            throw new NotImplementedException();
         }
     }
 }

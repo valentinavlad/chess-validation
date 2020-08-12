@@ -168,9 +168,11 @@ namespace ChessTests
             board.PlayMove("Qb8+", PieceColor.White);
             board.PlayMove("Nxb8", PieceColor.Black);
 
-            board.PlayMove("Rd8++", PieceColor.White);
 
-            Assert.True(board.GetWin);
+
+            // Assert.False(board.GetWin);
+            Action exception = () => board.PlayMove("Rd8++", PieceColor.White);
+            Assert.Throws<InvalidOperationException>(exception);
         }
 
 
@@ -209,7 +211,7 @@ namespace ChessTests
             board.PlayMove("d6", PieceColor.White);
             board.PlayMove("Qh4", PieceColor.Black);
 
-            board.PlayMove("Nf3", PieceColor.White);
+            var x = board.PlayMove("Nf3", PieceColor.White);
             board.PlayMove("Bxd2+", PieceColor.Black);
 
             board.PlayMove("Qxd2", PieceColor.White);

@@ -1,11 +1,14 @@
 ﻿using ChessTable;
+using ChessTests.Helpers;
 using System;
 
 namespace ChessTests
 {
     public abstract class Piece
     {
+        internal BoardAction boardAction = new BoardAction();
         public PieceColor pieceColor;
+
         public Piece(PieceColor pieceColor)
         {
             this.pieceColor = pieceColor;
@@ -17,8 +20,12 @@ namespace ChessTests
         {
             return InitialPosition == CurrentPosition;
         }
-        public abstract bool ValidateMovementAndReturnPiece(Board board, Move move, PieceColor playerColor, out Piece piece);
 
+        public abstract bool ValidateMovement(Board board, Move move, PieceColor playerColor);
+  
+       
+        public abstract bool CheckForOpponentKingOnSpecificRoutes(Cell currentPosition, PieceColor playerColor);
+        
         internal void CheckDestinationCellAvailability(PieceColor playerColor, Cell destinationCell)
         {
             if (destinationCell.BelongsTo(playerColor))
@@ -26,6 +33,7 @@ namespace ChessTests
                 throw new InvalidOperationException("Invalid Move");
             }
         }
+
 
     }
 }

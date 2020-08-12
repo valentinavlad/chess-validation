@@ -6,7 +6,7 @@ namespace ChessTests.Helpers
     internal class Action
     {
         private readonly Board board;
-        private Cell cell;
+
         public Action(Board board)
         {
             this.board = board;
@@ -36,14 +36,5 @@ namespace ChessTests.Helpers
             return board.TransformCoordonatesIntoCell(coordinates);
         }
 
-        //public Cell TransformCoordonatesIntoCell(Coordinate coordinate)
-        //{
-        //    if (coordinate.X >= 0 && coordinate.X <= 7 && coordinate.Y >= 0 && coordinate.Y <= 7)
-        //    {
-        //        return cell.cells[coordinate.X, coordinate.Y];
-        //        //return cells[coordinate.X, coordinate.Y];
-        //    }
-        //    throw new IndexOutOfRangeException("Index out of bound");
-        //}
     }
 }
