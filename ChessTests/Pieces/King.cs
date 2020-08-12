@@ -23,7 +23,7 @@ namespace ChessTests.Pieces
 
         public override bool ValidateMovement(Move move)
         {
-            CheckDestinationCellAvailability(move.Color, move.DestinationCell);
+            move.DestinationCell.CheckDestinationCellAvailability(move.Color);
 
             if (move.IsQueenCastling) return IsQueenCastling(move.DestinationCell, move.Color, move);
 

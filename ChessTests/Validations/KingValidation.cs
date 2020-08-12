@@ -1,4 +1,5 @@
 ﻿using ChessTable;
+using ChessTests.Helpers;
 using ChessTests.Pieces;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ namespace ChessTests.Validations
     {
         private readonly Board board;
         private readonly Helpers.Action action;
+        internal BoardAction boardAction = new BoardAction();
 
         public KingValidation(Board board)
         {
@@ -119,6 +121,12 @@ namespace ChessTests.Validations
                 isPiece = board.FindPieceWhoNeedsToBeMoved(move);
             }
             return isPiece;
+        }
+
+        internal bool IsCheckMate(PieceColor currentPlayer, Move move, Piece piece)
+        {
+            var king = (King)boardAction.FindKing(piece.CurrentPosition, currentPlayer);
+            return CheckIfKingIsInCheckMate(king, currentPlayer, move);
         }
     }
 }

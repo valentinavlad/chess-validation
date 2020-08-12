@@ -12,12 +12,13 @@ namespace ChessTests.Helpers
             Orientation.DownRight, Orientation.Down,
             Orientation.Left,  Orientation.UpLeft
         };
-        internal List<Piece> FindPieces(PieceColor playerColor, Cell destinationCell, List<Orientation> orientations, PieceName pieceName)
+        internal List<Piece> FindPieces(Move move, List<Orientation> orientations, PieceName pieceName)
         {
+  
             var findPieces = new List<Piece>();
             foreach (var orientation in orientations)
             {
-                var currentCell = destinationCell;
+                var currentCell = move.DestinationCell;
                 while (true)
                 {
                     //there is no piece on the cells
@@ -28,7 +29,7 @@ namespace ChessTests.Helpers
 
                     if (currentCell.Piece == null) continue;
 
-                    if (currentCell.Piece.Name == pieceName && playerColor == currentCell.Piece.pieceColor)
+                    if (currentCell.Piece.Name == pieceName && move.Color == currentCell.Piece.pieceColor)
                     {
                         findPieces.Add(currentCell.Piece);
                     }

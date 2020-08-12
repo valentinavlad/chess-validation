@@ -1,5 +1,4 @@
-﻿using ChessTable;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace ChessTests.Pieces
 {
@@ -7,8 +6,8 @@ namespace ChessTests.Pieces
     {
         private List<Orientation> RookOrientation = new List<Orientation>()
         {
-            Orientation.Up,    Orientation.Down,
-            Orientation.Right,   Orientation.Left
+            Orientation.Up, Orientation.Down,
+            Orientation.Right, Orientation.Left
         };
         public Rook(PieceColor pieceColor) : base(pieceColor)
         {
@@ -17,8 +16,8 @@ namespace ChessTests.Pieces
 
         public override bool ValidateMovement(Move move)
         {
-            CheckDestinationCellAvailability(move.Color, move.DestinationCell);
-            List<Piece> findRooks = boardAction.FindPieces(move.Color, move.DestinationCell, RookOrientation, PieceName.Rook);
+            move.DestinationCell.CheckDestinationCellAvailability(move.Color);
+            List<Piece> findRooks = boardAction.FindPieces(move, RookOrientation, PieceName.Rook);
             
             var piece = boardAction.FoundedPiece(move, findRooks);
             if (piece != null) move.PiecePosition = piece.CurrentPosition;
@@ -29,5 +28,7 @@ namespace ChessTests.Pieces
         {
             return boardAction.FindKing(currentPosition, playerColor, RookOrientation) != null ? true : false;
         }
+
+  
     }
 }

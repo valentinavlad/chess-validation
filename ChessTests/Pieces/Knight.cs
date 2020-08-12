@@ -19,7 +19,7 @@ namespace ChessTests
 
         public override bool ValidateMovement(Move move)
         {
-            CheckDestinationCellAvailability(move.Color, move.DestinationCell);
+            move.DestinationCell.CheckDestinationCellAvailability(move.Color);
 
             List<Piece> findKnights = FindPieces(move.Color, move.DestinationCell);
 

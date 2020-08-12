@@ -16,7 +16,7 @@ namespace ChessTable
         private readonly ChessTests.Helpers.Action action;
         private CastlingHelpers castling = new CastlingHelpers();
 
-        internal BoardAction boardAction = new BoardAction();
+      
         internal readonly List<Piece> whitePieces = new List<Piece>();
 
         public Board(bool withPieces = true)
@@ -40,6 +40,7 @@ namespace ChessTable
 
         public Piece PlayMove(string moveAN, PieceColor currentPlayer)
         {
+
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
 
              move.DestinationCell = TransformCoordonatesIntoCell(move.Coordinate);
@@ -74,7 +75,7 @@ namespace ChessTable
         {
             if (move.IsCheckMate)
             {
-                GetWin = IsCheckMate(currentPlayer, move, piece);
+                GetWin = kingValidation.IsCheckMate(currentPlayer, move, piece);
                 if (!GetWin)  throw new InvalidOperationException("Illegal win, king is not in checkmate!");   
             }
         }
@@ -114,12 +115,6 @@ namespace ChessTable
                 return cells[coordinate.X, coordinate.Y];
             }
             throw new IndexOutOfRangeException("Index out of bound");
-        }
-
-        private bool IsCheckMate(PieceColor currentPlayer, Move move, Piece piece)
-        {
-            var king = (King)boardAction.FindKing(piece.CurrentPosition, currentPlayer);     
-            return kingValidation.CheckIfKingIsInCheckMate(king, currentPlayer, move);
         }
 
         private void PopulateWhiteListPiece()

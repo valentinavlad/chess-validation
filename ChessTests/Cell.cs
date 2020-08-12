@@ -110,14 +110,12 @@ namespace ChessTests
             if (KnightOrientation.UpRightUp == orientation) return knightLook.LShapeLookUpRightUp();
             return null;
         }
-        public Cell TransformCoordonatesIntoCell(Coordinate coordinate)
+        internal void CheckDestinationCellAvailability(PieceColor playerColor)
         {
-            if (coordinate.X >= 0 && coordinate.X <= 7 && coordinate.Y >= 0 && coordinate.Y <= 7)
+            if (BelongsTo(playerColor))
             {
-                return cells[coordinate.X, coordinate.Y];
-                //return cells[coordinate.X, coordinate.Y];
+                throw new InvalidOperationException("Invalid Move");
             }
-            throw new IndexOutOfRangeException("Index out of bound");
         }
     }
 }

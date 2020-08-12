@@ -1,5 +1,4 @@
-﻿using ChessTable;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace ChessTests
 {
@@ -8,10 +7,8 @@ namespace ChessTests
         private readonly List<Orientation> QueenOrientation = new List<Orientation>()
         {
                 Orientation.Up,  Orientation.DownLeft, Orientation.UpRight,
-                Orientation.Right, Orientation.DownRight,
-                Orientation.Down,
+                Orientation.Right, Orientation.DownRight, Orientation.Down,
                 Orientation.Left,  Orientation.UpLeft
-
         };
 
         public Queen(PieceColor pieceColor) : base(pieceColor)
@@ -21,9 +18,9 @@ namespace ChessTests
 
         public override bool ValidateMovement(Move move)
         {
-            CheckDestinationCellAvailability(move.Color, move.DestinationCell);
+            move.DestinationCell.CheckDestinationCellAvailability(move.Color);
 
-            List<Piece> findQueens = boardAction.FindPieces(move.Color, move.DestinationCell, QueenOrientation, PieceName.Queen);
+            List<Piece> findQueens = boardAction.FindPieces(move, QueenOrientation, PieceName.Queen);
 
             var piece = boardAction.FoundedPiece(move, findQueens);
 
