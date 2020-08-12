@@ -15,10 +15,10 @@ namespace ChessTests.Pieces
             Name = PieceName.Rook;
         }
 
-        public override bool ValidateMovement(Move move, PieceColor playerColor)
+        public override bool ValidateMovement(Move move)
         {
-            CheckDestinationCellAvailability(playerColor, move.DestinationCell);
-            List<Piece> findRooks = boardAction.FindPieces(playerColor, move.DestinationCell, RookOrientation, PieceName.Rook);
+            CheckDestinationCellAvailability(move.Color, move.DestinationCell);
+            List<Piece> findRooks = boardAction.FindPieces(move.Color, move.DestinationCell, RookOrientation, PieceName.Rook);
             
             var piece = boardAction.FoundedPiece(move, findRooks);
             if (piece != null) move.PiecePosition = piece.CurrentPosition;

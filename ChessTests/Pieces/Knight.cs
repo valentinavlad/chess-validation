@@ -1,8 +1,4 @@
-﻿using ChessTable;
-using ChessTests.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 namespace ChessTests
 {
@@ -21,11 +17,11 @@ namespace ChessTests
         }
 
 
-        public override bool ValidateMovement(Move move, PieceColor playerColor)
+        public override bool ValidateMovement(Move move)
         {
-            CheckDestinationCellAvailability(playerColor, move.DestinationCell);
+            CheckDestinationCellAvailability(move.Color, move.DestinationCell);
 
-            List<Piece> findKnights = FindPieces(playerColor, move.DestinationCell);
+            List<Piece> findKnights = FindPieces(move.Color, move.DestinationCell);
 
             var piece = boardAction.FoundedPiece(move, findKnights);
             if (piece != null) move.PiecePosition = piece.CurrentPosition;

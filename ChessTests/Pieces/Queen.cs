@@ -19,11 +19,11 @@ namespace ChessTests
             Name = PieceName.Queen;
         }
 
-        public override bool ValidateMovement(Move move, PieceColor playerColor)
+        public override bool ValidateMovement(Move move)
         {
-            CheckDestinationCellAvailability(playerColor, move.DestinationCell);
+            CheckDestinationCellAvailability(move.Color, move.DestinationCell);
 
-            List<Piece> findQueens = boardAction.FindPieces(playerColor, move.DestinationCell, QueenOrientation, PieceName.Queen);
+            List<Piece> findQueens = boardAction.FindPieces(move.Color, move.DestinationCell, QueenOrientation, PieceName.Queen);
 
             var piece = boardAction.FoundedPiece(move, findQueens);
 

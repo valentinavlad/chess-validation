@@ -116,7 +116,7 @@ namespace ChessTests.Validations
                 {
                     move.IsCapture = true;
                 }
-                isPiece = board.FindPieceWhoNeedsToBeMoved(move, playerColor);
+                isPiece = board.FindPieceWhoNeedsToBeMoved(move);
             }
             return isPiece;
         }

@@ -21,13 +21,13 @@ namespace ChessTests.Pieces
             Name = PieceName.King;
         }
 
-        public override bool ValidateMovement(Move move, PieceColor playerColor)
+        public override bool ValidateMovement(Move move)
         {
-            CheckDestinationCellAvailability(playerColor, move.DestinationCell);
+            CheckDestinationCellAvailability(move.Color, move.DestinationCell);
 
-            if (move.IsQueenCastling) return IsQueenCastling(move.DestinationCell, playerColor, move);
+            if (move.IsQueenCastling) return IsQueenCastling(move.DestinationCell, move.Color, move);
 
-            if (move.IsKingCastling) return IsKingCastling(move.DestinationCell, playerColor, move);
+            if (move.IsKingCastling) return IsKingCastling(move.DestinationCell, move.Color, move);
 
             foreach (var orientation in KingOrientation)
             {
@@ -41,7 +41,7 @@ namespace ChessTests.Pieces
 
                 if (currentCell.Piece == null) continue;
 
-                if (currentCell.Piece.Name == PieceName.King && playerColor == currentCell.Piece.pieceColor)
+                if (currentCell.Piece.Name == PieceName.King && move.Color == currentCell.Piece.pieceColor)
                 {
                     move.PiecePosition = currentCell.Piece.CurrentPosition;
                     return true;

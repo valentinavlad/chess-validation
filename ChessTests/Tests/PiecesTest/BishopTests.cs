@@ -41,7 +41,7 @@ namespace ChessTests.Tests.PiecesTest
 
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
 
-            var bishop = board.FindPieceWhoNeedsToBeMoved(move, currentPlayer);
+            var bishop = board.FindPieceWhoNeedsToBeMoved(move);
 
             Assert.False(bishop);
 

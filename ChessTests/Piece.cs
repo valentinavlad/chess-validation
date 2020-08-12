@@ -20,7 +20,7 @@ namespace ChessTests
             return InitialPosition == CurrentPosition;
         }
 
-        public abstract bool ValidateMovement(Move move, PieceColor playerColor);
+        public abstract bool ValidateMovement(Move move);
   
        
         public abstract bool CheckForOpponentKingOnSpecificRoutes(Cell currentPosition, PieceColor playerColor);

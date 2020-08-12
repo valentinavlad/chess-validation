@@ -44,7 +44,7 @@ namespace ChessTests.Tests.PiecesTest
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
 
           
-            Action exception = () => board.FindPieceWhoNeedsToBeMoved(move, currentPlayer);
+            Action exception = () => board.FindPieceWhoNeedsToBeMoved(move);
 
             Assert.Throws<InvalidOperationException>(exception);
 

@@ -1,7 +1,4 @@
-﻿using ChessTable;
-using ChessTests.Helpers;
-using ChessTests.Pieces;
-using System;
+﻿using System;
 
 namespace ChessTests
 {

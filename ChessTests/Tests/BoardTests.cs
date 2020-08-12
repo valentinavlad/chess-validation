@@ -110,7 +110,7 @@ namespace ChessTests
             var moveAN = "c3";
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, PieceColor.White);
 
-            Action exception = () => board.FindPieceWhoNeedsToBeMoved(move, PieceColor.White);
+            Action exception = () => board.FindPieceWhoNeedsToBeMoved(move);
             Assert.Throws<InvalidOperationException>(exception);
         }
 

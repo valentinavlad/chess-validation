@@ -17,7 +17,7 @@ namespace ChessTests.Tests.PiecesTest
             var move = MoveNotationConverter.ParseMoveNotation("e4", PieceColor.White);
             move.MovePiece(pawn, cell);
 
-            Action exception = () => board.FindPieceWhoNeedsToBeMoved(move, PieceColor.White);
+            Action exception = () => board.FindPieceWhoNeedsToBeMoved(move);
             Assert.Throws<InvalidOperationException>(exception);
         }
 
@@ -73,7 +73,7 @@ namespace ChessTests.Tests.PiecesTest
             //Act
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, attackerColor);
             //caut piesa care face capturarea
-            board.FindPieceWhoNeedsToBeMoved(move, attackerColor);
+            board.FindPieceWhoNeedsToBeMoved(move);
 
 
             //determina celula destinatie
@@ -146,7 +146,7 @@ namespace ChessTests.Tests.PiecesTest
             var board = new Board();
             var player = PieceColor.White;
             var move = MoveNotationConverter.ParseMoveNotation("e3", player);
-            var piece = board.FindPieceWhoNeedsToBeMoved(move, player);
+            var piece = board.FindPieceWhoNeedsToBeMoved(move);
 
             Assert.True(piece);
             //Assert.IsType<Pawn>(piece);

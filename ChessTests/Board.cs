@@ -11,13 +11,14 @@ namespace ChessTable
     public class Board
     {
         private readonly Cell[,] cells;
-        private Cell destinationCell = null;
         private readonly InitializeBoard initialize;
         private readonly KingValidation kingValidation;
         private readonly ChessTests.Helpers.Action action;
+        private CastlingHelpers castling = new CastlingHelpers();
+
         internal BoardAction boardAction = new BoardAction();
         internal readonly List<Piece> whitePieces = new List<Piece>();
-        CastlingHelpers castling = new CastlingHelpers();
+
         public Board(bool withPieces = true)
         {
             cells = new Cell[8, 8];
@@ -43,7 +44,7 @@ namespace ChessTable
 
              move.DestinationCell = TransformCoordonatesIntoCell(move.Coordinate);
 
-            var isPiece = FindPieceWhoNeedsToBeMoved(move, currentPlayer);
+            var isPiece = FindPieceWhoNeedsToBeMoved(move);
             Piece piece = null;
             if (isPiece) piece = move.PiecePosition.Piece;
 
@@ -90,13 +91,13 @@ namespace ChessTable
         public bool FindPieceWhoNeedsToBeMoved(string moveAN, PieceColor playerColor)
         {
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, playerColor);
-            return FindPieceWhoNeedsToBeMoved(move, playerColor);
+            return FindPieceWhoNeedsToBeMoved(move);
         }
 
-        public bool FindPieceWhoNeedsToBeMoved(Move move, PieceColor playerColor)
+        public bool FindPieceWhoNeedsToBeMoved(Move move)
         {
             move.DestinationCell = TransformCoordonatesIntoCell(move.Coordinate);
-            return IsPiece(move, playerColor, move.PieceName);
+            return IsPiece(move);
         }
 
         public Piece PromotePawn(Move move, Piece pawn)
@@ -132,33 +133,33 @@ namespace ChessTable
             }
         }
 
-        private bool IsPiece(Move move, PieceColor playerColor, PieceName pieceName)
+        private bool IsPiece(Move move)
         {
-            switch (pieceName)
+            switch (move.PieceName)
             {
                 case PieceName.Pawn:
-                    Piece pawn = new Pawn(playerColor);
-                    return pawn.ValidateMovement(move, playerColor);
+                    Piece pawn = new Pawn(move.Color);
+                    return pawn.ValidateMovement(move);
 
                 case PieceName.Queen:
-                    Piece queen = new Queen(playerColor);
-                    return queen.ValidateMovement(move, playerColor);
+                    Piece queen = new Queen(move.Color);
+                    return queen.ValidateMovement(move);
 
                 case PieceName.Bishop:
-                    Piece bishop = new Bishop(playerColor);
-                    return bishop.ValidateMovement(move, playerColor);
+                    Piece bishop = new Bishop(move.Color);
+                    return bishop.ValidateMovement(move);
 
                 case PieceName.Rook:
-                    Piece rook = new Rook(playerColor);
-                    return rook.ValidateMovement(move, playerColor);
+                    Piece rook = new Rook(move.Color);
+                    return rook.ValidateMovement(move);
 
                 case PieceName.King:
-                    Piece king = new King(playerColor);
-                    return king.ValidateMovement(move, playerColor);
+                    Piece king = new King(move.Color);
+                    return king.ValidateMovement(move);
 
                 case PieceName.Knight:
-                    Piece knight = new Knight(playerColor);
-                    return knight.ValidateMovement(move, playerColor);
+                    Piece knight = new Knight(move.Color);
+                    return knight.ValidateMovement(move);
 
                 default:
                     return false;

@@ -17,9 +17,9 @@ namespace ChessTests
             Name = PieceName.Pawn;
         }
 
-        public override bool ValidateMovement(Move move, PieceColor playerColor)
+        public override bool ValidateMovement(Move move)
         {
-            Piece piece = GetPawn(move.DestinationCell, playerColor, move);
+            Piece piece = GetPawn(move.DestinationCell, move.Color, move);
 
             return piece != null? true : false;
         }

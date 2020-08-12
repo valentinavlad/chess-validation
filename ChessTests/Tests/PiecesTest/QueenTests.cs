@@ -78,7 +78,7 @@ namespace ChessTests.Tests.PiecesTest
             action.AddPiece(obstacleCoords, new Pawn(currentPlayer));
 
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
-            var queen = board.FindPieceWhoNeedsToBeMoved(move, currentPlayer);
+            var queen = board.FindPieceWhoNeedsToBeMoved(move);
 
             Assert.False(queen);
 

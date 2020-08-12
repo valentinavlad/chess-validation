@@ -1,8 +1,5 @@
 ﻿using ChessTable;
 using ChessTests.Pieces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace ChessTests.Tests.PiecesTest
@@ -41,7 +38,7 @@ namespace ChessTests.Tests.PiecesTest
 
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
 
-            var rook = board.FindPieceWhoNeedsToBeMoved(move, currentPlayer);
+            var rook = board.FindPieceWhoNeedsToBeMoved(move);
 
             Assert.False(rook);
 
