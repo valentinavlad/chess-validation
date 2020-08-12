@@ -24,11 +24,10 @@ namespace ChessTests
         
         } 
 
-        public override bool ValidateMovement(Board board, Move move, PieceColor playerColor)
+        public override bool ValidateMovement(Move move, PieceColor playerColor)
         {
-            var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);
-            CheckDestinationCellAvailability(playerColor, destinationCell);
-            List<Piece> findBishops = boardAction.FindPieces(playerColor, destinationCell, BishopOrientation, PieceName.Bishop);
+            CheckDestinationCellAvailability(playerColor, move.DestinationCell);
+            List<Piece> findBishops = boardAction.FindPieces(playerColor, move.DestinationCell, BishopOrientation, PieceName.Bishop);
 
             var piece = boardAction.FoundedPiece(move, findBishops);
             if (piece != null) move.PiecePosition = piece.CurrentPosition;

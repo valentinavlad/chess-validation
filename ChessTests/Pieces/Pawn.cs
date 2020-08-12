@@ -1,5 +1,4 @@
-﻿using ChessTable;
-using ChessTests.Validations;
+﻿using ChessTests.Validations;
 using System;
 using System.Collections.Generic;
 
@@ -18,10 +17,9 @@ namespace ChessTests
             Name = PieceName.Pawn;
         }
 
-        public override bool ValidateMovement(Board board, Move move, PieceColor playerColor)
+        public override bool ValidateMovement(Move move, PieceColor playerColor)
         {
-            var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);
-            Piece piece = GetPawn(destinationCell, playerColor, move);
+            Piece piece = GetPawn(move.DestinationCell, playerColor, move);
 
             return piece != null? true : false;
         }

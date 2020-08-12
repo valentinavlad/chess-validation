@@ -21,19 +21,17 @@ namespace ChessTests.Pieces
             Name = PieceName.King;
         }
 
-        public override bool ValidateMovement(Board board, Move move, PieceColor playerColor)
+        public override bool ValidateMovement(Move move, PieceColor playerColor)
         {
-            var destinationCell = board.TransformCoordonatesIntoCell(move.Coordinate);
+            CheckDestinationCellAvailability(playerColor, move.DestinationCell);
 
-            CheckDestinationCellAvailability(playerColor, destinationCell);
+            if (move.IsQueenCastling) return IsQueenCastling(move.DestinationCell, playerColor, move);
 
-            if (move.IsQueenCastling) return IsQueenCastling(destinationCell, playerColor, move);
-
-            if (move.IsKingCastling) return IsKingCastling(destinationCell, playerColor, move);
+            if (move.IsKingCastling) return IsKingCastling(move.DestinationCell, playerColor, move);
 
             foreach (var orientation in KingOrientation)
             {
-                var currentCell = destinationCell;
+                var currentCell = move.DestinationCell;
 
                 //there is no piece on the cells
                 currentCell = currentCell.Look(orientation);

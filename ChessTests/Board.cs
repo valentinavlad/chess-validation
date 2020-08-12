@@ -10,7 +10,8 @@ namespace ChessTable
 {
     public class Board
     {
-        private readonly Cell[,] cells;   
+        private readonly Cell[,] cells;
+        private Cell destinationCell = null;
         private readonly InitializeBoard initialize;
         private readonly KingValidation kingValidation;
         private readonly ChessTests.Helpers.Action action;
@@ -94,6 +95,7 @@ namespace ChessTable
 
         public bool FindPieceWhoNeedsToBeMoved(Move move, PieceColor playerColor)
         {
+            move.DestinationCell = TransformCoordonatesIntoCell(move.Coordinate);
             return IsPiece(move, playerColor, move.PieceName);
         }
 
@@ -136,27 +138,27 @@ namespace ChessTable
             {
                 case PieceName.Pawn:
                     Piece pawn = new Pawn(playerColor);
-                    return pawn.ValidateMovement(this, move, playerColor);
+                    return pawn.ValidateMovement(move, playerColor);
 
                 case PieceName.Queen:
                     Piece queen = new Queen(playerColor);
-                    return queen.ValidateMovement(this, move, playerColor);
+                    return queen.ValidateMovement(move, playerColor);
 
                 case PieceName.Bishop:
                     Piece bishop = new Bishop(playerColor);
-                    return bishop.ValidateMovement(this, move, playerColor);
+                    return bishop.ValidateMovement(move, playerColor);
 
                 case PieceName.Rook:
                     Piece rook = new Rook(playerColor);
-                    return rook.ValidateMovement(this, move, playerColor);
+                    return rook.ValidateMovement(move, playerColor);
 
                 case PieceName.King:
                     Piece king = new King(playerColor);
-                    return king.ValidateMovement(this, move, playerColor);
+                    return king.ValidateMovement(move, playerColor);
 
                 case PieceName.Knight:
                     Piece knight = new Knight(playerColor);
-                    return knight.ValidateMovement(this, move, playerColor);
+                    return knight.ValidateMovement(move, playerColor);
 
                 default:
                     return false;

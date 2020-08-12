@@ -1,5 +1,4 @@
-﻿using ChessTable;
-using ChessTests.Helpers;
+﻿using ChessTests.Helpers;
 using System;
 
 namespace ChessTests
@@ -21,7 +20,7 @@ namespace ChessTests
             return InitialPosition == CurrentPosition;
         }
 
-        public abstract bool ValidateMovement(Board board, Move move, PieceColor playerColor);
+        public abstract bool ValidateMovement(Move move, PieceColor playerColor);
   
        
         public abstract bool CheckForOpponentKingOnSpecificRoutes(Cell currentPosition, PieceColor playerColor);
