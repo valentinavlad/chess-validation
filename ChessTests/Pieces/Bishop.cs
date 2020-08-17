@@ -18,16 +18,15 @@ namespace ChessTests
             Name = PieceName.Bishop;
         }
 
-        public override bool CheckForOpponentKingOnSpecificRoutes(Cell currentPosition, PieceColor playerColor)
+        public override bool CheckForOpponentKingOnSpecificRoutes(Move move)
         {
-            return boardAction.FindKing(currentPosition, playerColor, BishopOrientation) != null ? true : false;
-        
+            return boardAction.FindPieces(move, PieceName.King, BishopOrientation).Count != 0 ? true : false;  
         } 
 
         public override bool ValidateMovement(Move move)
         {
             move.DestinationCell.CheckDestinationCellAvailability(move.Color);
-            List<Piece> findBishops = boardAction.FindPieces(move, BishopOrientation, PieceName.Bishop);
+            List<Piece> findBishops = boardAction.FindPieces(move, PieceName.Bishop, BishopOrientation);
 
             var piece = boardAction.FoundedPiece(move, findBishops);
             if (piece != null) move.PiecePosition = piece.CurrentPosition;

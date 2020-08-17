@@ -40,10 +40,7 @@ namespace ChessTable
 
         public Piece PlayMove(string moveAN, PieceColor currentPlayer)
         {
-
-            var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
-
-             move.DestinationCell = TransformCoordonatesIntoCell(move.Coordinate);
+            Move move = GetMoveFromNotation(moveAN, currentPlayer);
 
             var isPiece = FindPieceWhoNeedsToBeMoved(move);
             Piece piece = null;
@@ -51,9 +48,9 @@ namespace ChessTable
 
             if (piece == null) throw new InvalidOperationException("Invalid move!");
 
-            if (move.IsKingCastling && !move.IsCheck) return castling.TryKingCastling(currentPlayer, move, move.DestinationCell, piece);
+            if (move.IsKingCastling && !move.IsCheck) return castling.TryKingCastling(currentPlayer, move, piece);
 
-            if (move.IsQueenCastling && !move.IsCheck) return castling.TryQueenCastling(currentPlayer, move, move.DestinationCell, piece);
+            if (move.IsQueenCastling && !move.IsCheck) return castling.TryQueenCastling(currentPlayer, move, piece);
 
             if (move.IsCapture)
             {
@@ -65,17 +62,25 @@ namespace ChessTable
             move.MovePiece(piece, move.DestinationCell);
 
             PawnPromotion(move, piece);
-            
-            IsKingInCheckMate(currentPlayer, move, piece);
+
+            IsKingInCheckMate(currentPlayer, move);
 
             return piece;
         }
 
-        private void IsKingInCheckMate(PieceColor currentPlayer, Move move, Piece piece)
+        private Move GetMoveFromNotation(string moveAN, PieceColor currentPlayer)
+        {
+            var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
+
+            move.DestinationCell = TransformCoordonatesIntoCell(move.Coordinate);
+            return move;
+        }
+
+        private void IsKingInCheckMate(PieceColor currentPlayer, Move move)
         {
             if (move.IsCheckMate)
             {
-                GetWin = kingValidation.IsCheckMate(currentPlayer, move, piece);
+                GetWin = kingValidation.IsCheckMate(currentPlayer, move);
                 if (!GetWin)  throw new InvalidOperationException("Illegal win, king is not in checkmate!");   
             }
         }
@@ -91,14 +96,14 @@ namespace ChessTable
 
         public bool FindPieceWhoNeedsToBeMoved(string moveAN, PieceColor playerColor)
         {
-            var move = MoveNotationConverter.ParseMoveNotation(moveAN, playerColor);
+            Move move = GetMoveFromNotation(moveAN, playerColor);
             return FindPieceWhoNeedsToBeMoved(move);
         }
 
         public bool FindPieceWhoNeedsToBeMoved(Move move)
         {
             move.DestinationCell = TransformCoordonatesIntoCell(move.Coordinate);
-            return IsPiece(move);
+            return move.IsPiece();
         }
 
         public Piece PromotePawn(Move move, Piece pawn)
@@ -125,39 +130,6 @@ namespace ChessTable
                 {
                     whitePieces.Add(cells[i, j].Piece);
                 }
-            }
-        }
-
-        private bool IsPiece(Move move)
-        {
-            switch (move.PieceName)
-            {
-                case PieceName.Pawn:
-                    Piece pawn = new Pawn(move.Color);
-                    return pawn.ValidateMovement(move);
-
-                case PieceName.Queen:
-                    Piece queen = new Queen(move.Color);
-                    return queen.ValidateMovement(move);
-
-                case PieceName.Bishop:
-                    Piece bishop = new Bishop(move.Color);
-                    return bishop.ValidateMovement(move);
-
-                case PieceName.Rook:
-                    Piece rook = new Rook(move.Color);
-                    return rook.ValidateMovement(move);
-
-                case PieceName.King:
-                    Piece king = new King(move.Color);
-                    return king.ValidateMovement(move);
-
-                case PieceName.Knight:
-                    Piece knight = new Knight(move.Color);
-                    return knight.ValidateMovement(move);
-
-                default:
-                    return false;
             }
         }
     }

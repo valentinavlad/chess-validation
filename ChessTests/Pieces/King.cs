@@ -79,14 +79,14 @@ namespace ChessTests.Pieces
                 {
                     move.PiecePosition = currentCell.Piece.CurrentPosition;
                     return true;
-                    //return currentCell.Piece;
                 }
             }
             return false;
         }
-        public override bool CheckForOpponentKingOnSpecificRoutes(Cell currentPosition, PieceColor playerColor)
+
+        public override bool CheckForOpponentKingOnSpecificRoutes(Move move)
         {
-            throw new NotImplementedException();
+            return boardAction.FindPieces(move, PieceName.King, KingOrientation).Count != 0 ? true : false;
         }
     }
 }

@@ -169,7 +169,6 @@ namespace ChessTests
             board.PlayMove("Nxb8", PieceColor.Black);
 
 
-
             // Assert.False(board.GetWin);
             Action exception = () => board.PlayMove("Rd8++", PieceColor.White);
             Assert.Throws<InvalidOperationException>(exception);

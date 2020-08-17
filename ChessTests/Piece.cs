@@ -1,6 +1,4 @@
 ﻿using ChessTests.Helpers;
-using System;
-using System.Collections.Generic;
 
 namespace ChessTests
 {
@@ -29,7 +27,7 @@ namespace ChessTests
 
         public abstract bool ValidateMovement(Move move);
 
-        public abstract bool CheckForOpponentKingOnSpecificRoutes(Cell currentPosition, PieceColor playerColor);
+        public abstract bool CheckForOpponentKingOnSpecificRoutes(Move move);
 
     }
 }

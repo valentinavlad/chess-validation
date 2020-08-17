@@ -17,16 +17,19 @@ namespace ChessTests.Pieces
         public override bool ValidateMovement(Move move)
         {
             move.DestinationCell.CheckDestinationCellAvailability(move.Color);
-            List<Piece> findRooks = boardAction.FindPieces(move, RookOrientation, PieceName.Rook);
+
+            List<Piece> findRooks = boardAction.FindPieces(move, PieceName.Rook, RookOrientation);
             
             var piece = boardAction.FoundedPiece(move, findRooks);
+            
             if (piece != null) move.PiecePosition = piece.CurrentPosition;
+            
             return piece != null ? true : false;
         }
 
-        public override bool CheckForOpponentKingOnSpecificRoutes(Cell currentPosition, PieceColor playerColor)
+        public override bool CheckForOpponentKingOnSpecificRoutes(Move move)
         {
-            return boardAction.FindKing(currentPosition, playerColor, RookOrientation) != null ? true : false;
+            return boardAction.FindPieces(move, PieceName.King, RookOrientation).Count != 0 ? true : false;     
         }
 
   

@@ -20,7 +20,7 @@ namespace ChessTests
         {
             move.DestinationCell.CheckDestinationCellAvailability(move.Color);
 
-            List<Piece> findQueens = boardAction.FindPieces(move, QueenOrientation, PieceName.Queen);
+            List<Piece> findQueens = boardAction.FindPieces(move, PieceName.Queen, QueenOrientation);
 
             var piece = boardAction.FoundedPiece(move, findQueens);
 
@@ -29,9 +29,10 @@ namespace ChessTests
             return piece != null ? true : false;
         }
 
-        public override bool CheckForOpponentKingOnSpecificRoutes(Cell currentPosition, PieceColor playerColor)
+        public override bool CheckForOpponentKingOnSpecificRoutes(Move move)
         {
-            return boardAction.FindKing(currentPosition, playerColor, QueenOrientation) != null ? true : false;
+           // return boardAction.FindKing(currentPosition, playerColor, QueenOrientation) != null ? true : false;
+            return boardAction.FindPieces(move, PieceName.King, QueenOrientation).Count != 0 ? true : false;
         }
     }
 }

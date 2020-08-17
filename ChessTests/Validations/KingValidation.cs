@@ -9,6 +9,14 @@ namespace ChessTests.Validations
 {
     internal class KingValidation
     {
+        private readonly List<Orientation> orientations = new List<Orientation>
+        {
+            Orientation.Up,  Orientation.DownLeft,
+            Orientation.UpRight, Orientation.Right,
+            Orientation.DownRight, Orientation.Down,
+            Orientation.Left,  Orientation.UpLeft
+        };
+
         private readonly Board board;
         private readonly Helpers.Action action;
         internal BoardAction boardAction = new BoardAction();
@@ -86,7 +94,6 @@ namespace ChessTests.Validations
 
         internal Cell AvailableCellsAroundKing(King king, List<Cell> cellsWhereKingCanMove, Cell currentCell)
         {
-            var orientations = king.KingOrientation;
             foreach (var orientation in orientations)
             {
                 currentCell = king.CurrentPosition;
@@ -123,9 +130,9 @@ namespace ChessTests.Validations
             return isPiece;
         }
 
-        internal bool IsCheckMate(PieceColor currentPlayer, Move move, Piece piece)
+        internal bool IsCheckMate(PieceColor currentPlayer, Move move)
         {
-            var king = (King)boardAction.FindKing(piece.CurrentPosition, currentPlayer);
+            var king = (King)boardAction.FindPieces(move, move.PieceName, orientations).First();
             return CheckIfKingIsInCheckMate(king, currentPlayer, move);
         }
     }

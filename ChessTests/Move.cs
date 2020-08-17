@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChessTests.Pieces;
+using System;
 
 namespace ChessTests
 {
@@ -16,7 +17,6 @@ namespace ChessTests
         public bool IsQueenCastling { get; set; }
         public PieceName PieceName { get; set; }
         public Piece Promotion { get; set; }
-        //the file(a-h) from which the piece departed
         public int Y { get; set; } = -1;
 
         public void CapturePiece(Piece attacker, Cell cellDestination)
@@ -38,7 +38,39 @@ namespace ChessTests
             previousPosition.Piece = null;
             piece.CurrentPosition = destinationCell;
         }
- 
+
+        internal bool IsPiece()
+        {
+            switch (PieceName)
+            {
+                case PieceName.Pawn:
+                    Piece pawn = new Pawn(Color);
+                    return pawn.ValidateMovement(this);
+
+                case PieceName.Queen:
+                    Piece queen = new Queen(Color);
+                    return queen.ValidateMovement(this);
+
+                case PieceName.Bishop:
+                    Piece bishop = new Bishop(Color);
+                    return bishop.ValidateMovement(this);
+
+                case PieceName.Rook:
+                    Piece rook = new Rook(Color);
+                    return rook.ValidateMovement(this);
+
+                case PieceName.King:
+                    Piece king = new King(Color);
+                    return king.ValidateMovement(this);
+
+                case PieceName.Knight:
+                    Piece knight = new Knight(Color);
+                    return knight.ValidateMovement(this);
+
+                default:
+                    return false;
+            }
+        }
         private bool CellHasOpponentPiece(Piece attacker, Cell cellDestination)
         {
             var opponent = cellDestination.Piece;

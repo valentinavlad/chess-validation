@@ -4,7 +4,7 @@ namespace ChessTests
 {
     public class Knight : Piece
     {
-        private List<KnightOrientation> KnightOrientation =  new List<KnightOrientation>()
+        private readonly List<KnightOrientation> KnightOrientation =  new List<KnightOrientation>()
         {
             ChessTests.KnightOrientation.DownLeftDown, ChessTests.KnightOrientation.DownLeftUp, ChessTests.KnightOrientation.DownRightDown,
             ChessTests.KnightOrientation.DownRightUp, ChessTests.KnightOrientation.UpLeftDown, ChessTests.KnightOrientation.UpLeftUp,
@@ -15,7 +15,6 @@ namespace ChessTests
         {
             Name = PieceName.Knight;
         }
-
 
         public override bool ValidateMovement(Move move)
         {
@@ -29,11 +28,11 @@ namespace ChessTests
         }
 
 
-        public override bool CheckForOpponentKingOnSpecificRoutes(Cell currentPosition, PieceColor playerColor)
+        public override bool CheckForOpponentKingOnSpecificRoutes(Move move)
         {
             foreach (var orientation in KnightOrientation)
             {
-                var currentCell = currentPosition;
+                var currentCell = move.DestinationCell;
                 while (true)
                 {
                     //there is no piece on the cells
@@ -44,7 +43,7 @@ namespace ChessTests
 
                     if (currentCell.Piece == null) continue;
 
-                    if (currentCell.Piece.Name == PieceName.King && playerColor != currentCell.Piece.pieceColor)
+                    if (currentCell.Piece.Name == PieceName.King && move.Color != currentCell.Piece.pieceColor)
                     {
                         //we find the king, which is in check
                         return true;

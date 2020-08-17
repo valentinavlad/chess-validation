@@ -24,12 +24,13 @@ namespace ChessTests
             return piece != null? true : false;
         }
 
-        public override bool CheckForOpponentKingOnSpecificRoutes(Cell currentPosition, PieceColor playerColor)
+        public override bool CheckForOpponentKingOnSpecificRoutes(Move move)
         {
-            var orientations = playerColor == PieceColor.White 
+            var orientations = move.Color == PieceColor.White 
                 ? WhitePawnCaptureOrientation 
                 : BlackPawnCaptureOrientation;
-            return boardAction.FindKing(currentPosition, playerColor, orientations) != null ? true : false;   
+            return boardAction.FindPieces(move, PieceName.King, orientations).Count != 0 ? true : false;
+            //return boardAction.FindKing(currentPosition, playerColor, orientations) != null ? true : false;   
         }
 
         private Piece GetPawn(Cell destinationCell, PieceColor playerColor, Move move)

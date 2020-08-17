@@ -5,14 +5,14 @@ namespace ChessTests.GameAction
 {
     internal class CastlingHelpers
     {
-       Castling castling = new Castling();
+        readonly Castling castling = new Castling();
 
-        internal Piece TryKingCastling(PieceColor currentPlayer, Move move, Cell destinationCell, Piece piece)
+        internal Piece TryKingCastling(PieceColor currentPlayer, Move move, Piece piece)
         {
             if (piece.IsOnInitialPosition())
             {
-                castling.KingCastling(piece, currentPlayer, destinationCell, move);
-                Console.WriteLine(currentPlayer + " makes king castling!");
+                castling.KingCastling(piece, currentPlayer, move.DestinationCell, move);
+                //Console.WriteLine(currentPlayer + " makes king castling!");
                 return piece;
             }
             else
@@ -21,12 +21,12 @@ namespace ChessTests.GameAction
             }
         }
 
-        internal Piece TryQueenCastling(PieceColor currentPlayer, Move move, Cell destinationCell, Piece piece)
+        internal Piece TryQueenCastling(PieceColor currentPlayer, Move move, Piece piece)
         {
             if (piece.IsOnInitialPosition())
             {
-                castling.QueenCastling(piece, currentPlayer, destinationCell, move);
-                Console.WriteLine(currentPlayer + " makes queen castling!");
+                castling.QueenCastling(piece, currentPlayer, move.DestinationCell, move);
+                //Console.WriteLine(currentPlayer + " makes queen castling!");
                 return piece;
             }
             else
