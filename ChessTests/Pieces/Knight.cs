@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using ChessTests.Interfaces;
+using System.Collections.Generic;
 
 namespace ChessTests
 {
-    public class Knight : Piece
+    public class Knight : Piece, ICheckOpponentKing
     {
         private readonly List<KnightOrientation> KnightOrientation =  new List<KnightOrientation>()
         {
@@ -28,7 +29,7 @@ namespace ChessTests
         }
 
 
-        public override bool CheckForOpponentKingOnSpecificRoutes(Move move)
+        public bool CheckForOpponentKingOnSpecificRoutes(Move move)
         {
             foreach (var orientation in KnightOrientation)
             {

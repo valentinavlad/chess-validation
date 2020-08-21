@@ -1,10 +1,11 @@
-﻿using ChessTests.Validations;
+﻿using ChessTests.Interfaces;
+using ChessTests.Validations;
 using System;
 using System.Collections.Generic;
 
 namespace ChessTests
 {
-    public class Pawn : Piece
+    public class Pawn : Piece, ICheckOpponentKing
     {
         private readonly List<Orientation> WhitePawnCaptureOrientation = new List<Orientation>()
                 { Orientation.UpLeft, Orientation.UpRight };
@@ -24,7 +25,7 @@ namespace ChessTests
             return piece != null? true : false;
         }
 
-        public override bool CheckForOpponentKingOnSpecificRoutes(Move move)
+        public bool CheckForOpponentKingOnSpecificRoutes(Move move)
         {
             var orientations = move.Color == PieceColor.White 
                 ? WhitePawnCaptureOrientation 

@@ -1,11 +1,12 @@
 ﻿using ChessTable;
 using ChessTests.Helpers;
+using ChessTests.Interfaces;
 using System;
 using System.Collections.Generic;
 
 namespace ChessTests
 {
-    public class Bishop : Piece
+    public class Bishop : Piece, ICheckOpponentKing
     {
         private readonly List<Orientation> BishopOrientation = new List<Orientation>()
         {
@@ -18,7 +19,7 @@ namespace ChessTests
             Name = PieceName.Bishop;
         }
 
-        public override bool CheckForOpponentKingOnSpecificRoutes(Move move)
+        public bool CheckForOpponentKingOnSpecificRoutes(Move move)
         {
             return boardAction.FindPieces(move, PieceName.King, BishopOrientation).Count != 0 ? true : false;  
         } 

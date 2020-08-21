@@ -2,9 +2,8 @@
 
 namespace ChessTests
 {
-    public abstract class Piece
+    public abstract class Piece 
     {
-        
         internal BoardAction boardAction = new BoardAction();
        
         public PieceColor pieceColor;
@@ -26,8 +25,6 @@ namespace ChessTests
         }
 
         public abstract bool ValidateMovement(Move move);
-
-        public abstract bool CheckForOpponentKingOnSpecificRoutes(Move move);
 
     }
 }

@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using ChessTests.Interfaces;
+using System.Collections.Generic;
 
 namespace ChessTests
 {
-    public class Queen : Piece
+    public class Queen : Piece, ICheckOpponentKing
     {
         private readonly List<Orientation> QueenOrientation = new List<Orientation>()
         {
@@ -29,7 +30,7 @@ namespace ChessTests
             return piece != null ? true : false;
         }
 
-        public override bool CheckForOpponentKingOnSpecificRoutes(Move move)
+        public bool CheckForOpponentKingOnSpecificRoutes(Move move)
         {
            // return boardAction.FindKing(currentPosition, playerColor, QueenOrientation) != null ? true : false;
             return boardAction.FindPieces(move, PieceName.King, QueenOrientation).Count != 0 ? true : false;

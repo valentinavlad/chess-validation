@@ -1,11 +1,12 @@
 ﻿using ChessTable;
+using ChessTests.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace ChessTests.Pieces
 {
-    public class King : Piece
+    public class King : Piece, ICheckOpponentKing
     {
         public List<Orientation> KingOrientation = new List<Orientation>()
         {
@@ -84,7 +85,7 @@ namespace ChessTests.Pieces
             return false;
         }
 
-        public override bool CheckForOpponentKingOnSpecificRoutes(Move move)
+        public bool CheckForOpponentKingOnSpecificRoutes(Move move)
         {
             return boardAction.FindPieces(move, PieceName.King, KingOrientation).Count != 0 ? true : false;
         }
