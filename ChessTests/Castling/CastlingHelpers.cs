@@ -1,6 +1,5 @@
 ﻿using System;
 
-
 namespace ChessTests.GameAction
 {
     internal class CastlingHelpers

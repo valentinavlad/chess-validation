@@ -1,4 +1,5 @@
 ﻿using ChessTests.Directions;
+using ChessTests.Pieces;
 using System;
 
 namespace ChessTests
@@ -7,6 +8,7 @@ namespace ChessTests
     {
         protected internal Cell[,] cells;
         private Piece piece;
+
         public Cell()
         {
         }

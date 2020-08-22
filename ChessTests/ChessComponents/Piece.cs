@@ -1,8 +1,9 @@
 ﻿using ChessTests.Helpers;
+using ChessTests.Interfaces;
 
 namespace ChessTests
 {
-    public abstract class Piece 
+    public abstract class Piece : ICheckOpponentKing
     {
         internal BoardAction boardAction = new BoardAction();
        
@@ -26,5 +27,9 @@ namespace ChessTests
 
         public abstract bool ValidateMovement(Move move);
 
+        public virtual bool CheckForOpponentKingOnSpecificRoutes(Move move)
+        {
+            return false;
+        }
     }
 }

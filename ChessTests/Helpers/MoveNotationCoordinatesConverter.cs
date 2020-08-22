@@ -19,16 +19,16 @@ namespace ChessTests.Helpers
 
             return coordinate;
         }
+
         public static Coordinate ConvertChessCoordinatesToArrayIndexes(int x, int y)
         {
-            Coordinate coordinate = new Coordinate
+            return new Coordinate
             {
                 X = x,
                 Y = y
             };
-
-            return coordinate;
         }
+
         public static int ConvertChessCoordinateFileToArrayIndex(string coordsAN)
         {
             string files = "abcdefgh"; //refers to columns => x
@@ -37,6 +37,7 @@ namespace ChessTests.Helpers
 
             return files.IndexOf(file);
         }
+
         public static int ConvertChessCoordinateRankToArrayIndex(string coordsAN)
         {
             string ranks = "87654321"; //refers to rows => y

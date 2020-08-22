@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ChessTests
 {
-    public class Knight : Piece, ICheckOpponentKing
+    public class Knight : Piece
     {
         private readonly List<KnightOrientation> KnightOrientation =  new List<KnightOrientation>()
         {
@@ -28,8 +28,7 @@ namespace ChessTests
             return piece != null ? true : false;
         }
 
-
-        public bool CheckForOpponentKingOnSpecificRoutes(Move move)
+        public override bool CheckForOpponentKingOnSpecificRoutes(Move move)
         {
             foreach (var orientation in KnightOrientation)
             {

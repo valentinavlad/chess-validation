@@ -14,9 +14,8 @@ namespace ChessTable
         private readonly InitializeBoard initialize;
         private readonly KingValidation kingValidation;
         private readonly ChessTests.Helpers.Action action;
-        private CastlingHelpers castling = new CastlingHelpers();
+        private readonly CastlingHelpers castling = new CastlingHelpers();
 
-      
         internal readonly List<Piece> whitePieces = new List<Piece>();
 
         public Board(bool withPieces = true)

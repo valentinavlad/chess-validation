@@ -48,18 +48,18 @@ namespace ChessTests
             if (move.IsCheck)
             {
                 //verify if king is actually in check
-                if (!GameValidation.CheckIfKingIsInCheck(piece, currentPlayer, move))
+  
+                if (!piece.CheckForOpponentKingOnSpecificRoutes(move))
                 {
                     move.IsCapture = false;
                 }
-                 //Console.WriteLine(currentPlayer + " puts opponent king in check!");
+                //Console.WriteLine(currentPlayer + " puts opponent king in check!");
             }
             if (move.IsCheckMate)
             {
                 Winner = move.Color;
                //Console.WriteLine(Winner + " won!");
             }
-
 
             if (currentPlayer == PieceColor.White)
             {

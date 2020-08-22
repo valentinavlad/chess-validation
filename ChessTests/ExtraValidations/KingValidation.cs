@@ -26,13 +26,56 @@ namespace ChessTests.Validations
             this.board = board;
             action = new Helpers.Action(board);
         }
+        internal Cell AvailableCellsAroundKing(King king, List<Cell> cellsWhereKingCanMove, Cell currentCell)
+        {
+            foreach (var orientation in orientations)
+            {
+                currentCell = king.CurrentPosition;
 
-        internal bool CheckIfKingIsInCheckMate(King king, PieceColor playerColor, Move move)
+                //there is no piece on the cells
+                currentCell = currentCell.Look(orientation);
+
+                //Search looks out of board
+                if (currentCell == null) continue;
+
+                if (currentCell.Piece == null || currentCell.Piece.pieceColor != king.pieceColor)
+                {
+                    cellsWhereKingCanMove.Add(currentCell);
+                    continue;
+                }
+            }
+
+            return currentCell;
+        }
+
+        internal bool VerifyIfKingIsInCheck(Cell currentCell)
+        {
+            var isPiece = false;
+            foreach (var item in board.whitePieces)
+            {
+                Move move = MoveNotationConverter.TransformIntoMoveInstance(item, currentCell);
+
+                if (item.Name == PieceName.Pawn)
+                {
+                    move.IsCapture = true;
+                }
+                isPiece = board.FindPieceWhoNeedsToBeMoved(move);
+            }
+            return isPiece;
+        }
+
+        internal bool IsCheckMate(PieceColor currentPlayer, Move move)
+        {
+            var king = (King)boardAction.FindPieces(move, move.PieceName, orientations).First();
+            return CheckIfKingIsInCheckMate(king, currentPlayer, move);
+        }
+
+        private bool CheckIfKingIsInCheckMate(King king, PieceColor playerColor, Move move)
         {
             var cellsWhereKingCanMove = new List<Cell>();
             var isCheck = new List<bool>();
             cellsWhereKingCanMove.Add(king.CurrentPosition);
-            isCheck.Add(VerifyIfKingIsInCheck(playerColor, cellsWhereKingCanMove[0]));
+            isCheck.Add(VerifyIfKingIsInCheck(cellsWhereKingCanMove[0]));
             Cell currentCell = null;
             _ = AvailableCellsAroundKing(king, cellsWhereKingCanMove, currentCell);
              
@@ -45,7 +88,7 @@ namespace ChessTests.Validations
                 if (currentCell.Piece != null)
                 {
                     Piece piece = KingMovesCapture(king, move, currentCell);
-                    result = VerifyIfKingIsInCheck(playerColor, currentCell);
+                    result = VerifyIfKingIsInCheck(currentCell);
                     if (result)
                     {
                         UndoPlayMove(king, currentCell, kingCoords, piece);
@@ -58,7 +101,7 @@ namespace ChessTests.Validations
                 else
                 {
                     move.MovePiece(king, currentCell);
-                    result = VerifyIfKingIsInCheck(playerColor, currentCell);
+                    result = VerifyIfKingIsInCheck(currentCell);
                     if (result)
                     {
                         move.MovePiece(king, kingCoords);
@@ -90,50 +133,6 @@ namespace ChessTests.Validations
             action.AddPiece(moveTwo.Coordinate, king);
 
             board.whitePieces.Add(piece);
-        }
-
-        internal Cell AvailableCellsAroundKing(King king, List<Cell> cellsWhereKingCanMove, Cell currentCell)
-        {
-            foreach (var orientation in orientations)
-            {
-                currentCell = king.CurrentPosition;
-
-                //there is no piece on the cells
-                currentCell = currentCell.Look(orientation);
-
-                //Search looks out of board
-                if (currentCell == null) continue;
-
-                if (currentCell.Piece == null || currentCell.Piece.pieceColor != king.pieceColor)
-                {
-                    cellsWhereKingCanMove.Add(currentCell);
-                    continue;
-                }
-            }
-
-            return currentCell;
-        }
-
-        internal bool VerifyIfKingIsInCheck(PieceColor playerColor, Cell currentCell)
-        {
-            var isPiece = false;
-            foreach (var item in board.whitePieces)
-            {
-                Move move = MoveNotationConverter.TransformIntoMoveInstance(item, currentCell);
-
-                if (item.Name == PieceName.Pawn)
-                {
-                    move.IsCapture = true;
-                }
-                isPiece = board.FindPieceWhoNeedsToBeMoved(move);
-            }
-            return isPiece;
-        }
-
-        internal bool IsCheckMate(PieceColor currentPlayer, Move move)
-        {
-            var king = (King)boardAction.FindPieces(move, move.PieceName, orientations).First();
-            return CheckIfKingIsInCheckMate(king, currentPlayer, move);
         }
     }
 }

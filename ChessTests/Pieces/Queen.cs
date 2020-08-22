@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ChessTests
 {
-    public class Queen : Piece, ICheckOpponentKing
+    public class Queen : Piece
     {
         private readonly List<Orientation> QueenOrientation = new List<Orientation>()
         {
@@ -30,7 +30,7 @@ namespace ChessTests
             return piece != null ? true : false;
         }
 
-        public bool CheckForOpponentKingOnSpecificRoutes(Move move)
+        public override bool CheckForOpponentKingOnSpecificRoutes(Move move)
         {
            // return boardAction.FindKing(currentPosition, playerColor, QueenOrientation) != null ? true : false;
             return boardAction.FindPieces(move, PieceName.King, QueenOrientation).Count != 0 ? true : false;
