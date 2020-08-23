@@ -60,7 +60,11 @@ namespace ChessTests
                     return rook.ValidateMovement(this);
 
                 case PieceName.King:
-                    Piece king = new King(Color);
+                    King king = new King(Color);
+                    if (IsKingCastling || IsQueenCastling)
+                    {
+                       return king.Castling(this);
+                    }
                     return king.ValidateMovement(this);
 
                 case PieceName.Knight:

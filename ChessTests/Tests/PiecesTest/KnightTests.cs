@@ -25,9 +25,9 @@ namespace ChessTests.Tests.PiecesTest
             var knight = board.PlayMove(moveAN, currentPlayer);
 
             //Assert
-            Assert.Equal(knight, action.CellAt(move.Coordinate).Piece);
+            Assert.Equal(knight, board.CellAt(move.Coordinate).Piece);
             Assert.IsType<Knight>(knight);
-            Assert.Null(action.CellAt("d5").Piece);
+            Assert.Null(board.CellAt("d5").Piece);
         }
 
         //TO DO test for move with obstacle
@@ -68,7 +68,7 @@ namespace ChessTests.Tests.PiecesTest
             Piece knight = board.PlayMove(moveAN, currentPlayer);
 
             //Assert
-            Assert.Equal(knight, action.CellAt("b4").Piece);
+            Assert.Equal(knight, board.CellAt("b4").Piece);
         }
 
         //TO DO for ambiguous moves
@@ -87,7 +87,7 @@ namespace ChessTests.Tests.PiecesTest
             Piece knight = board.PlayMove(moveAN, currentPlayer);
           
             //Assert
-             Assert.Equal(knight, action.CellAt("b4").Piece);
+             Assert.Equal(knight, board.CellAt("b4").Piece);
         }
 
         [Theory]

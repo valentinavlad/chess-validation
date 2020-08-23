@@ -14,6 +14,7 @@ namespace ChessTests
         public int MovesCounter { get; set; }
         public PieceColor Winner { get; set; }
         public bool IsGameOver { get; set; }
+  
         //lista piese capturate
         public void Play(List<string> listOfMoves)
         {
@@ -39,7 +40,43 @@ namespace ChessTests
                 
             } 
         }
-        
+        //private void NextTurn(PieceColor player, string moveAN)
+        //{
+        //    Move move = GetMoveFromNotation(moveAN, player);
+        //    //if (move.IsKingCastling && !move.IsCheck) return castling.TryKingCastling(currentPlayer, move, piece);
+        //    var isPiece = board.FindPieceWhoNeedsToBeMoved(move);
+        //    Piece piece = null;
+        //    if (isPiece) piece = move.PiecePosition.Piece;
+
+        //    if (piece == null) throw new InvalidOperationException("Invalid move!");
+
+
+        //    if (move.IsCheck)
+        //    {
+        //        //verify if king is actually in check
+
+        //        if (!piece.CheckForOpponentKingOnSpecificRoutes(move))
+        //        {
+        //            move.IsCapture = false;
+        //        }
+        //        //Console.WriteLine(currentPlayer + " puts opponent king in check!");
+        //    }
+        //    if (move.IsCheckMate)
+        //    {
+        //        Winner = move.Color;
+        //        //Console.WriteLine(Winner + " won!");
+        //    }
+
+        //    currentPlayer = currentPlayer == PieceColor.White ? PieceColor.Black : PieceColor.White;
+
+        //}
+        //private Move GetMoveFromNotation(string moveAN, PieceColor currentPlayer)
+        //{
+        //    var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
+
+        //    move.DestinationCell = board.CellAt(move.Coordinate);
+        //    return move;
+        //}
         private void NextTurn(PieceColor player, string moveAN)
         {
             var piece = board.PlayMove(moveAN, player);
@@ -48,7 +85,7 @@ namespace ChessTests
             if (move.IsCheck)
             {
                 //verify if king is actually in check
-  
+
                 if (!piece.CheckForOpponentKingOnSpecificRoutes(move))
                 {
                     move.IsCapture = false;
@@ -58,19 +95,10 @@ namespace ChessTests
             if (move.IsCheckMate)
             {
                 Winner = move.Color;
-               //Console.WriteLine(Winner + " won!");
+                //Console.WriteLine(Winner + " won!");
             }
 
-            if (currentPlayer == PieceColor.White)
-            {
-   
-                currentPlayer = PieceColor.Black;
-            }
-            else
-            {
-                currentPlayer = PieceColor.White;
-               // Console.WriteLine(currentPlayer +" player " + move.PieceName + " moves to " + move.Coordinates);
-            }
+            currentPlayer = currentPlayer == PieceColor.White ? PieceColor.Black : PieceColor.White;
 
         }
     }

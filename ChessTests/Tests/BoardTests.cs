@@ -12,13 +12,13 @@ namespace ChessTests
         {
             var board = new Board();
             var action = new Helpers.Action(board);
-            var rook = action.CellAt("a8").Piece;
+            var rook = board.CellAt("a8").Piece;
 
             Assert.NotNull(rook);
             Assert.IsType<Rook>(rook);
             Assert.Equal(PieceColor.Black, rook.pieceColor);
 
-            var rookWhite = action.CellAt("h1").Piece;
+            var rookWhite = board.CellAt("h1").Piece;
 
             Assert.NotNull(rookWhite);
             Assert.IsType<Rook>(rookWhite);
@@ -30,9 +30,9 @@ namespace ChessTests
         {
             var board = new Board();
             var action = new Helpers.Action(board);
-            var cell = action.CellAt("e4");
+            var cell = board.CellAt("e4");
 
-            var pawnOnInitialPos = action.CellAt("e2");
+            var pawnOnInitialPos = board.CellAt("e2");
 
             Assert.Null(cell.Piece);
             Assert.NotNull(pawnOnInitialPos.Piece);
@@ -43,7 +43,7 @@ namespace ChessTests
         {
             var board = new Board();
             var action = new Helpers.Action(board);
-            Action exception = () => action.CellAt("a9");
+            Action exception = () => board.CellAt("a9");
             Assert.Throws<IndexOutOfRangeException>(exception);
         }
 
@@ -52,7 +52,7 @@ namespace ChessTests
         {
             var board = new Board();
             var action = new Helpers.Action(board);
-            Action exception = () => action.CellAt("i8");
+            Action exception = () => board.CellAt("i8");
             Assert.Throws<IndexOutOfRangeException>(exception);
         }
 
@@ -61,12 +61,12 @@ namespace ChessTests
         {
             var board = new Board();
             var action = new Helpers.Action(board);
-            var pawn = action.CellAt("a2").Piece;
+            var pawn = board.CellAt("a2").Piece;
 
             Assert.True(pawn.IsOnInitialPosition());
 
             //to do move
-            var cell = action.CellAt("a4");
+            var cell = board.CellAt("a4");
             var move = MoveNotationConverter.ParseMoveNotation("a4", PieceColor.White);
             move.MovePiece(pawn, cell);
             Assert.False(pawn.IsOnInitialPosition());
@@ -77,13 +77,13 @@ namespace ChessTests
         {
             var board = new Board();
             var action = new Helpers.Action(board);
-            var pawn = action.CellAt("c2").Piece;
-            var cell = action.CellAt("e4");
+            var pawn = board.CellAt("c2").Piece;
+            var cell = board.CellAt("e4");
             var move = MoveNotationConverter.ParseMoveNotation("a4", PieceColor.White);
             move.MovePiece(pawn, cell);
 
             Assert.Equal(pawn, cell.Piece);
-            Assert.Null(action.CellAt("c2").Piece);
+            Assert.Null(board.CellAt("c2").Piece);
         }
 
         [Fact]
@@ -91,8 +91,8 @@ namespace ChessTests
         {
             var board = new Board();
             var action = new Helpers.Action(board);
-            var pawn = action.CellAt("e2").Piece;
-            var cell = action.CellAt("e3");
+            var pawn = board.CellAt("e2").Piece;
+            var cell = board.CellAt("e3");
             var move = MoveNotationConverter.ParseMoveNotation("a4", PieceColor.White);
             move.MovePiece(pawn, cell);
 

@@ -24,7 +24,7 @@ namespace ChessTests.Tests.PiecesTest
             var bishop = board.PlayMove(moveAN, currentPlayer);
 
             //Assert
-            Assert.Equal(bishop, action.CellAt(move.Coordinate).Piece);
+            Assert.Equal(bishop, board.CellAt(move.Coordinate).Piece);
             Assert.IsType<Bishop>(bishop);
         }
 
@@ -65,7 +65,7 @@ namespace ChessTests.Tests.PiecesTest
             var bishop = board.PlayMove(moveAN, currentPlayer);
 
             //Assert
-            Assert.Equal(bishop, action.CellAt(move.Coordinate).Piece);
+            Assert.Equal(bishop, board.CellAt(move.Coordinate).Piece);
             Assert.IsType<Bishop>(bishop);
         }
 
@@ -100,7 +100,7 @@ namespace ChessTests.Tests.PiecesTest
 
             Piece bishop = board.PlayMove(moveAN, PieceColor.Black);
 
-            Assert.Equal(bishop, action.CellAt("b8").Piece);
+            Assert.Equal(bishop, board.CellAt("b8").Piece);
         }
     }
 }

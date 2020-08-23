@@ -1,6 +1,8 @@
-﻿using ChessTests.Directions;
+﻿using ChessTable;
+using ChessTests.Directions;
 using ChessTests.Pieces;
 using System;
+using System.Runtime.CompilerServices;
 
 namespace ChessTests
 {
@@ -32,7 +34,7 @@ namespace ChessTests
             Y = y;
             this.cells = cells;
         }
-
+   
         public Piece Piece
         {
             get
@@ -65,6 +67,7 @@ namespace ChessTests
         {
             return Piece != null;
         }
+
 
         public Cell Look(Orientation orientation, int fileY = -1)
         {

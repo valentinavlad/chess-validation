@@ -1,4 +1,5 @@
 ﻿using ChessTable;
+using ChessTests.GameAction;
 using ChessTests.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ namespace ChessTests.Pieces
 {
     public class King : Piece
     {
+        private readonly CastlingHelpers castling = new CastlingHelpers();
         public List<Orientation> KingOrientation = new List<Orientation>()
         {
             Orientation.Up, Orientation.UpLeft, Orientation.Left,
@@ -16,7 +18,7 @@ namespace ChessTests.Pieces
             Orientation.Right, Orientation.UpRight
 
         };
-        
+
         public King(PieceColor pieceColor) : base(pieceColor)
         {
             Name = PieceName.King;
@@ -26,9 +28,9 @@ namespace ChessTests.Pieces
         {
             move.DestinationCell.CheckDestinationCellAvailability(move.Color);
 
-            if (move.IsQueenCastling) return IsQueenCastling(move.DestinationCell, move.Color, move);
+            //if (move.IsQueenCastling) return IsQueenCastling(move.DestinationCell, move.Color, move);
 
-            if (move.IsKingCastling) return IsKingCastling(move.DestinationCell, move.Color, move);
+            //if (move.IsKingCastling) return IsKingCastling(move.DestinationCell, move.Color, move);
 
             foreach (var orientation in KingOrientation)
             {
@@ -53,7 +55,27 @@ namespace ChessTests.Pieces
 
             return false;
         }
+        public override bool CheckForOpponentKingOnSpecificRoutes(Move move)
+        {
+            return boardAction.FindPieces(move, PieceName.King, KingOrientation).Count != 0 ? true : false;
+        }
 
+        public bool Castling(Move move)
+        {
+            if (move.IsQueenCastling && IsQueenCastling(move.DestinationCell, move.Color, move))
+            {
+                //make castling after rook is checked
+                return castling.TryQueenCastling(move.Color, move, move.PiecePosition.Piece);
+            }
+
+            if (move.IsKingCastling && IsKingCastling(move.DestinationCell, move.Color, move)) 
+            {
+                return castling.TryKingCastling(move.Color, move, move.PiecePosition.Piece);
+            }
+            
+            return false;
+        }
+        //check if king is able to perform castling
         private bool IsQueenCastling(Cell destinationCell, PieceColor playerColor, Move move)
         {
             var currentCell = destinationCell;
@@ -83,11 +105,6 @@ namespace ChessTests.Pieces
                 }
             }
             return false;
-        }
-
-        public override bool CheckForOpponentKingOnSpecificRoutes(Move move)
-        {
-            return boardAction.FindPieces(move, PieceName.King, KingOrientation).Count != 0 ? true : false;
         }
     }
 }

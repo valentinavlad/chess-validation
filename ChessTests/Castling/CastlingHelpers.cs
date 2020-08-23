@@ -6,13 +6,13 @@ namespace ChessTests.GameAction
     {
         readonly Castling castling = new Castling();
 
-        internal Piece TryKingCastling(PieceColor currentPlayer, Move move, Piece piece)
+        internal bool TryKingCastling(PieceColor currentPlayer, Move move, Piece piece)
         {
             if (piece.IsOnInitialPosition())
             {
                 castling.KingCastling(piece, currentPlayer, move.DestinationCell, move);
                 //Console.WriteLine(currentPlayer + " makes king castling!");
-                return piece;
+                return true;
             }
             else
             {
@@ -20,13 +20,13 @@ namespace ChessTests.GameAction
             }
         }
 
-        internal Piece TryQueenCastling(PieceColor currentPlayer, Move move, Piece piece)
+        internal bool TryQueenCastling(PieceColor currentPlayer, Move move, Piece piece)
         {
             if (piece.IsOnInitialPosition())
             {
                 castling.QueenCastling(piece, currentPlayer, move.DestinationCell, move);
                 //Console.WriteLine(currentPlayer + " makes queen castling!");
-                return piece;
+                return true;
             }
             else
             {
