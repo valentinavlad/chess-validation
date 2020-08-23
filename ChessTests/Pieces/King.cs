@@ -51,6 +51,7 @@ namespace ChessTests.Pieces
 
             return false;
         }
+
         public override bool CheckForOpponentKingOnSpecificRoutes(Move move)
         {
             return boardAction.FindPieces(move, PieceName.King, KingOrientation).Count != 0 ? true : false;
@@ -58,19 +59,20 @@ namespace ChessTests.Pieces
 
         public bool Castling(Move move)
         {
-            if (move.IsQueenCastling && IsQueenCastling(move.DestinationCell, move.Color, move))
+            if (move.IsQueenCastling)
             {
-                //make castling after rook is checked
-                return castling.TryQueenCastling(move.Color, move, move.PiecePosition.Piece);
+               
+                return IsQueenCastling(move.DestinationCell, move.Color, move);
             }
 
-            if (move.IsKingCastling && IsKingCastling(move.DestinationCell, move.Color, move)) 
+            if (move.IsKingCastling) 
             {
-                return castling.TryKingCastling(move.Color, move, move.PiecePosition.Piece);
+                return IsKingCastling(move.DestinationCell, move.Color, move);
             }
             
             return false;
         }
+
         //check if king is able to perform castling
         private bool IsQueenCastling(Cell destinationCell, PieceColor playerColor, Move move)
         {

@@ -11,11 +11,10 @@ namespace ChessTable
     public class Board
     {
         private readonly Cell[,] cells;
-
-
         private readonly InitializeBoard initialize;
         private readonly KingValidation kingValidation;
         internal readonly List<Piece> whitePieces = new List<Piece>();
+        private readonly CastlingHelpers castling = new CastlingHelpers();
 
         public Board(bool withPieces = true)
         {
@@ -35,15 +34,13 @@ namespace ChessTable
         }
 
         public bool GetWin { get; set; }
-        public Piece PlayMove(Move move, PieceColor currentPlayer)
+        public Piece PlayMove(string moveAN, PieceColor currentPlayer)
         {
-            var isPiece = FindPieceWhoNeedsToBeMoved(move);
+            GetPiece(moveAN, currentPlayer, out Move move, out Piece piece);
+            if (move.IsKingCastling && !move.IsCheck) return castling.TryKingCastling(currentPlayer, move, piece);
 
-            if (move.IsKingCastling || move.IsQueenCastling) return move.DestinationCell.Piece;
-
-            Piece piece = null;
-            if (isPiece) piece = move.PiecePosition.Piece;
-
+            if (move.IsQueenCastling && !move.IsCheck) return castling.TryQueenCastling(currentPlayer, move, piece);
+           
             if (move.IsCapture)
             {
                 whitePieces.Remove(move.DestinationCell.Piece);
@@ -58,12 +55,6 @@ namespace ChessTable
 
             return piece;
         }
-  
-        public Piece PlayMove(string moveAN, PieceColor currentPlayer)
-        {
-            Move move = GetMoveFromNotation(moveAN, currentPlayer);
-            return PlayMove(move, currentPlayer);
-        }
 
         internal Piece AddPiece(string coordsAN, Piece piece)
         {
@@ -77,13 +68,7 @@ namespace ChessTable
             cell.Piece = piece;
             return cell.Piece;
         }
-        private Move GetMoveFromNotation(string moveAN, PieceColor currentPlayer)
-        {
-            var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
 
-            move.DestinationCell = CellAt(move.Coordinate);
-            return move;
-        }
         internal Cell CellAt(string coordsAN)
         {
             var result = MoveNotationCoordinatesConverter.ConvertChessCoordinatesToArrayIndexes(coordsAN);
@@ -94,12 +79,10 @@ namespace ChessTable
         {
             return TransformCoordonatesIntoCell(coordinates);
         }
-      
 
         public bool FindPieceWhoNeedsToBeMoved(string moveAN, PieceColor playerColor)
         {
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, playerColor);
-
             move.DestinationCell = CellAt(move.Coordinate);
             return FindPieceWhoNeedsToBeMoved(move);
         }
@@ -133,7 +116,20 @@ namespace ChessTable
                 if (!GetWin) throw new InvalidOperationException("Illegal win, king is not in checkmate!");
             }
         }
+        private void GetPiece(string moveAN, PieceColor currentPlayer, out Move move, out Piece piece)
+        {
+            move = GetMoveFromNotation(moveAN, currentPlayer);
+            var isPiece = FindPieceWhoNeedsToBeMoved(move);
+            piece = null;
+            if (isPiece) piece = move.PiecePosition.Piece;
+        }
+        private Move GetMoveFromNotation(string moveAN, PieceColor currentPlayer)
+        {
+            var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
 
+            move.DestinationCell = CellAt(move.Coordinate);
+            return move;
+        }
         private void PopulateWhiteListPiece()
         {
             for (int i = 7; i >= 6; i--)

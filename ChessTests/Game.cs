@@ -40,28 +40,26 @@ namespace ChessTests
    
         private void NextTurn(PieceColor player, string moveAN)
         {
-            
+            var piece = board.PlayMove(moveAN, player);
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, player);
             if (move.IsKingCastling || move.IsQueenCastling)  
             {
                 Console.WriteLine("Performing castling.");
                 return;
             }
-            var piece = board.PlayMove(move, player);
+           
             if (move.IsCheck)
             {
-                //verify if king is actually in check
-
                 if (!piece.CheckForOpponentKingOnSpecificRoutes(move))
                 {
                     move.IsCapture = false;
                 }
-                //Console.WriteLine(currentPlayer + " puts opponent king in check!");
+                Console.WriteLine(currentPlayer + " puts opponent king in check!");
             }
             if (move.IsCheckMate)
             {
                 Winner = move.Color;
-                //Console.WriteLine(Winner + " won!");
+                Console.WriteLine(Winner + " won!");
             }
 
             currentPlayer = currentPlayer == PieceColor.White ? PieceColor.Black : PieceColor.White;
