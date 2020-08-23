@@ -28,10 +28,6 @@ namespace ChessTests.Pieces
         {
             move.DestinationCell.CheckDestinationCellAvailability(move.Color);
 
-            //if (move.IsQueenCastling) return IsQueenCastling(move.DestinationCell, move.Color, move);
-
-            //if (move.IsKingCastling) return IsKingCastling(move.DestinationCell, move.Color, move);
-
             foreach (var orientation in KingOrientation)
             {
                 var currentCell = move.DestinationCell;

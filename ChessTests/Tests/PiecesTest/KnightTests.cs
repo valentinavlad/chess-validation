@@ -15,10 +15,9 @@ namespace ChessTests.Tests.PiecesTest
         {
             //Arange
             var board = new Board(false);
-            var action = new Helpers.Action(board);
-            action.AddPiece(knightCoords, new Knight(currentPlayer));
+          
+            board.AddPiece(knightCoords, new Knight(currentPlayer));
         
-
             //Act
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
 
@@ -37,9 +36,9 @@ namespace ChessTests.Tests.PiecesTest
         {
             //Arange
             var board = new Board(false);
-            var action = new Helpers.Action(board);
-            action.AddPiece(knightCoords, new Knight(currentPlayer));
-            action.AddPiece(obstacleCoords, new Bishop(currentPlayer));
+
+            board.AddPiece(knightCoords, new Knight(currentPlayer));
+            board.AddPiece(obstacleCoords, new Bishop(currentPlayer));
 
             //Act
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
@@ -58,10 +57,10 @@ namespace ChessTests.Tests.PiecesTest
         {
             //Arange
             var board = new Board(false);
-            var action = new Helpers.Action(board);
-            action.AddPiece(knightCoords, new Knight(currentPlayer));
-            action.AddPiece(obstacleCoords, new Bishop(currentPlayer));
-            action.AddPiece("b4", new Rook(PieceColor.White));
+
+            board.AddPiece(knightCoords, new Knight(currentPlayer));
+            board.AddPiece(obstacleCoords, new Bishop(currentPlayer));
+            board.AddPiece("b4", new Rook(PieceColor.White));
 
             //Act
           
@@ -78,10 +77,10 @@ namespace ChessTests.Tests.PiecesTest
         {
             //Arange
             var board = new Board(false);
-            var action = new Helpers.Action(board);
-            action.AddPiece(knightCoords, new Knight(currentPlayer));
-            action.AddPiece(knightCoords2, new Knight(currentPlayer));
-            action.AddPiece("b4", new Rook(PieceColor.White));
+       
+            board.AddPiece(knightCoords, new Knight(currentPlayer));
+            board.AddPiece(knightCoords2, new Knight(currentPlayer));
+            board.AddPiece("b4", new Rook(PieceColor.White));
 
             //Act
             Piece knight = board.PlayMove(moveAN, currentPlayer);
@@ -96,10 +95,10 @@ namespace ChessTests.Tests.PiecesTest
         {
             //Arange
             var board = new Board(false);
-            var action = new Helpers.Action(board);
-            action.AddPiece(knightCoords, new Knight(currentPlayer));
-            var knight1 = action.AddPiece(knightCoords2, new Knight(currentPlayer));
-            action.AddPiece("b4", new Rook(PieceColor.White));
+
+            board.AddPiece(knightCoords, new Knight(currentPlayer));
+            var knight1 = board.AddPiece(knightCoords2, new Knight(currentPlayer));
+            board.AddPiece("b4", new Rook(PieceColor.White));
 
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
             //Assert

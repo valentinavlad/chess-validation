@@ -18,13 +18,13 @@ namespace ChessTests.Validations
         };
 
         private readonly Board board;
-        private readonly Helpers.Action action;
+
         internal BoardAction boardAction = new BoardAction();
 
         public KingValidation(Board board)
         {
             this.board = board;
-            action = new Helpers.Action(board);
+           
         }
         internal Cell AvailableCellsAroundKing(King king, List<Cell> cellsWhereKingCanMove, Cell currentCell)
         {
@@ -127,10 +127,10 @@ namespace ChessTests.Validations
         private void UndoPlayMove(King king, Cell currentCell, Cell kingCoords, Piece piece)
         {
             var moveOne = MoveNotationConverter.TransformIntoMoveInstance(piece, currentCell);
-            action.AddPiece(moveOne.Coordinate, piece);
+            board.AddPiece(moveOne.Coordinate, piece);
 
             var moveTwo = MoveNotationConverter.TransformIntoMoveInstance(king, kingCoords);
-            action.AddPiece(moveTwo.Coordinate, king);
+            board.AddPiece(moveTwo.Coordinate, king);
 
             board.whitePieces.Add(piece);
         }

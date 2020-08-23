@@ -13,8 +13,8 @@ namespace ChessTests.Tests.PiecesTest
         {
             //Arange
             var board = new Board(false);
-            var action = new Helpers.Action(board);
-            action.AddPiece(rooksCoords, new Rook(currentPlayer));
+            
+            board.AddPiece(rooksCoords, new Rook(currentPlayer));
 
             //Act
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
@@ -32,9 +32,9 @@ namespace ChessTests.Tests.PiecesTest
         {
             //Arange
             var board = new Board(false);
-            var action = new Helpers.Action(board);
-            action.AddPiece(rookCoords, new Bishop(currentPlayer));
-            action.AddPiece(obstacleCoords, new Pawn(PieceColor.Black));
+     
+            board.AddPiece(rookCoords, new Bishop(currentPlayer));
+            board.AddPiece(obstacleCoords, new Pawn(PieceColor.Black));
 
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
 
@@ -50,9 +50,9 @@ namespace ChessTests.Tests.PiecesTest
         {
             //Arange
             var board = new Board(false);
-            var action = new Helpers.Action(board);
-            action.AddPiece(rookCoords, new Rook(currentPlayer));
-            action.AddPiece("d5", new Pawn(PieceColor.White));
+
+            board.AddPiece(rookCoords, new Rook(currentPlayer));
+            board.AddPiece("d5", new Pawn(PieceColor.White));
 
             //Act
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
@@ -69,9 +69,9 @@ namespace ChessTests.Tests.PiecesTest
         public void FindPieceWhoNeedsToBeMovedWithTwoBlackRooksShouldReturnTheRightRook()
         {
             var board = new Board(false);
-            var action = new Helpers.Action(board);
-            action.AddPiece("b5", new Rook(PieceColor.Black));
-            action.AddPiece("f5", new Rook(PieceColor.Black));
+           
+            board.AddPiece("b5", new Rook(PieceColor.Black));
+            board.AddPiece("f5", new Rook(PieceColor.Black));
 
             var moveAN = "Rbd5";
 

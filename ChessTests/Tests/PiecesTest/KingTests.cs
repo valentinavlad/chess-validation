@@ -16,8 +16,8 @@ namespace ChessTests.Tests.PiecesTest
         {
             //Arange
             var board = new Board(false);
-            var action = new Helpers.Action(board);
-            action.AddPiece(kingCoords, new King(currentPlayer));
+        
+            board.AddPiece(kingCoords, new King(currentPlayer));
             
             //Act
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
@@ -36,14 +36,13 @@ namespace ChessTests.Tests.PiecesTest
         {
             //Arange
             var board = new Board(false);
-            var action = new Helpers.Action(board);
-            action.AddPiece(kingCoords, new King(currentPlayer));
-            action.AddPiece(obstacleCoords, new Pawn(PieceColor.Black));
+
+            board.AddPiece(kingCoords, new King(currentPlayer));
+            board.AddPiece(obstacleCoords, new Pawn(PieceColor.Black));
 
 
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
 
-          
             Action exception = () => board.FindPieceWhoNeedsToBeMoved(move);
 
             Assert.Throws<InvalidOperationException>(exception);
@@ -56,9 +55,9 @@ namespace ChessTests.Tests.PiecesTest
         {
             //Arange
             var board = new Board(false);
-            var action = new Helpers.Action(board);
-            action.AddPiece(kingCoords, new King(currentPlayer));
-            action.AddPiece("d5", new Pawn(PieceColor.White));
+
+            board.AddPiece(kingCoords, new King(currentPlayer));
+            board.AddPiece("d5", new Pawn(PieceColor.White));
 
             //Act
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
@@ -76,7 +75,7 @@ namespace ChessTests.Tests.PiecesTest
         public void WhiteQueenCastling()
         {
             var board = new Board();
-            var action = new Helpers.Action(board);
+            
             board.PlayMove("d4", PieceColor.White);
             board.PlayMove("e6", PieceColor.Black);
 
@@ -101,7 +100,7 @@ namespace ChessTests.Tests.PiecesTest
         public void WhiteKingCastling()
         {
             var board = new Board();
-            var action = new Helpers.Action(board);
+           
 
             board.PlayMove("e3", PieceColor.White);
             board.PlayMove("e5", PieceColor.Black);
@@ -126,7 +125,7 @@ namespace ChessTests.Tests.PiecesTest
         public void BlackQueenCastling()
         {
             var board = new Board();
-            var action = new Helpers.Action(board);
+          
             board.PlayMove("c4", PieceColor.White);
             board.PlayMove("d6", PieceColor.Black);
 
@@ -153,9 +152,9 @@ namespace ChessTests.Tests.PiecesTest
         public void WhiteKingCastlingPiecesMovedShouldThrowException()
         {
             var board = new Board(false);
-            var action = new Helpers.Action(board);
-            action.AddPiece("a1", new Rook(PieceColor.White));
-            action.AddPiece("e1", new King(PieceColor.White));
+
+            board.AddPiece("a1", new Rook(PieceColor.White));
+            board.AddPiece("e1", new King(PieceColor.White));
 
             var move = MoveNotationConverter.ParseMoveNotation("0-0", PieceColor.White);
 

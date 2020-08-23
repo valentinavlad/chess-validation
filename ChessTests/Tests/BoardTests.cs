@@ -11,7 +11,7 @@ namespace ChessTests
         public void InitialBoardShouldHavePiecesOnPLace()
         {
             var board = new Board();
-            var action = new Helpers.Action(board);
+         
             var rook = board.CellAt("a8").Piece;
 
             Assert.NotNull(rook);
@@ -29,7 +29,7 @@ namespace ChessTests
         public void InitializeBoardShoudReturnPiecesInInitialPosition()
         {
             var board = new Board();
-            var action = new Helpers.Action(board);
+         
             var cell = board.CellAt("e4");
 
             var pawnOnInitialPos = board.CellAt("e2");
@@ -42,7 +42,7 @@ namespace ChessTests
         public void CoordonateXOutOfBoundShouldThrowError()
         {
             var board = new Board();
-            var action = new Helpers.Action(board);
+          
             Action exception = () => board.CellAt("a9");
             Assert.Throws<IndexOutOfRangeException>(exception);
         }
@@ -51,7 +51,7 @@ namespace ChessTests
         public void CoordonatYsOutOfBoundShouldThrowError()
         {
             var board = new Board();
-            var action = new Helpers.Action(board);
+        
             Action exception = () => board.CellAt("i8");
             Assert.Throws<IndexOutOfRangeException>(exception);
         }
@@ -60,7 +60,7 @@ namespace ChessTests
         public void IsOnInitialPositionShouldReturnTRue()
         {
             var board = new Board();
-            var action = new Helpers.Action(board);
+           
             var pawn = board.CellAt("a2").Piece;
 
             Assert.True(pawn.IsOnInitialPosition());
@@ -76,7 +76,7 @@ namespace ChessTests
         public void Move()
         {
             var board = new Board();
-            var action = new Helpers.Action(board);
+       
             var pawn = board.CellAt("c2").Piece;
             var cell = board.CellAt("e4");
             var move = MoveNotationConverter.ParseMoveNotation("a4", PieceColor.White);
@@ -90,7 +90,7 @@ namespace ChessTests
         public void FindPieceWhoNeedsToBeMovedShouldThrowAnException()
         {
             var board = new Board();
-            var action = new Helpers.Action(board);
+          
             var pawn = board.CellAt("e2").Piece;
             var cell = board.CellAt("e3");
             var move = MoveNotationConverter.ParseMoveNotation("a4", PieceColor.White);
@@ -104,9 +104,9 @@ namespace ChessTests
         public void Test()
         {
             var board = new Board(false);
-            var action = new Helpers.Action(board);
-            action.AddPiece("c3", new Knight(PieceColor.Black));
-            action.AddPiece("c2", new Pawn(PieceColor.White));
+
+            board.AddPiece("c3", new Knight(PieceColor.Black));
+            board.AddPiece("c2", new Pawn(PieceColor.White));
             var moveAN = "c3";
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, PieceColor.White);
 
@@ -179,10 +179,10 @@ namespace ChessTests
         public void WhitePawnPutsKingInCheck()
         {
             var board = new Board(false);
-            var action = new Helpers.Action(board);
-            action.AddPiece("e6", new Pawn(PieceColor.White));
-            action.AddPiece("d7", new Pawn(PieceColor.Black));
-            action.AddPiece("e8", new King(PieceColor.Black));
+
+            board.AddPiece("e6", new Pawn(PieceColor.White));
+            board.AddPiece("d7", new Pawn(PieceColor.Black));
+            board.AddPiece("e8", new King(PieceColor.Black));
 
             board.PlayMove("exd7+", PieceColor.White);
             var move = MoveNotationConverter.ParseMoveNotation("exd7+", PieceColor.White);

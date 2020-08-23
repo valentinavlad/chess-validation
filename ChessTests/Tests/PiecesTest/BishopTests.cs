@@ -15,8 +15,8 @@ namespace ChessTests.Tests.PiecesTest
         {
             //Arange
             var board = new Board(false);
-            var action = new Helpers.Action(board);
-            action.AddPiece(bishopCoords, new Bishop(currentPlayer));
+
+            board.AddPiece(bishopCoords, new Bishop(currentPlayer));
 
             //Act
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
@@ -34,10 +34,9 @@ namespace ChessTests.Tests.PiecesTest
         {
             //Arange
             var board = new Board(false);
-            var action = new Helpers.Action(board);
-            action.AddPiece(bishopCoords, new Bishop(currentPlayer));
-            action.AddPiece(obstacleCoords, new Pawn(PieceColor.White));
 
+            board.AddPiece(bishopCoords, new Bishop(currentPlayer));
+            board.AddPiece(obstacleCoords, new Pawn(PieceColor.White));
 
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
 
@@ -55,9 +54,9 @@ namespace ChessTests.Tests.PiecesTest
         {
             //Arange
             var board = new Board(false);
-            var action = new Helpers.Action(board);
-            action.AddPiece(bishopCoords, new Bishop(currentPlayer));
-            action.AddPiece("d6", new Pawn(PieceColor.Black));
+
+            board.AddPiece(bishopCoords, new Bishop(currentPlayer));
+            board.AddPiece("d6", new Pawn(PieceColor.Black));
 
             //Act
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
@@ -76,9 +75,9 @@ namespace ChessTests.Tests.PiecesTest
         {
             //Arange
             var board = new Board(false);
-            var action = new Helpers.Action(board);
-            action.AddPiece(bishopCoords, new Bishop(currentPlayer));
-            action.AddPiece(obstacleCoords, new Bishop(PieceColor.White));
+
+            board.AddPiece(bishopCoords, new Bishop(currentPlayer));
+            board.AddPiece(obstacleCoords, new Bishop(PieceColor.White));
 
             var bishop = board.FindPieceWhoNeedsToBeMoved(moveAN, currentPlayer);
 
@@ -92,9 +91,9 @@ namespace ChessTests.Tests.PiecesTest
         public void FindPieceWhoNeedsToBeMovedWithTwoBlackBishopsShouldReturnTheRightBishop()
         {
             var board = new Board(false);
-            var action = new Helpers.Action(board);
-            action.AddPiece("a7", new Bishop(PieceColor.Black));
-            action.AddPiece("d6", new Bishop(PieceColor.Black));
+
+            board.AddPiece("a7", new Bishop(PieceColor.Black));
+            board.AddPiece("d6", new Bishop(PieceColor.Black));
 
             var moveAN = "Bdb8";
 
