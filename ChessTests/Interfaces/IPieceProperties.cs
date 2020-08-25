@@ -9,6 +9,5 @@ namespace ChessTests.Interfaces
         public PieceName Name { get; set; }
 
         public PieceColor pieceColor { get; }
-  
     }
 }

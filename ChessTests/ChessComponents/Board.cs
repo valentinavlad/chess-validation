@@ -90,8 +90,7 @@ namespace ChessTable
         public bool FindPieceWhoNeedsToBeMoved(Move move)
         {
             move.DestinationCell = CellAt(move.Coordinate);
-            //return move.IsPiece();
-            return move.IsPieceV(move.PieceName, move.Color);
+            return move.IsPiece(move.PieceName, move.Color);
         }
 
         public Piece PromotePawn(Move move, Piece pawn)

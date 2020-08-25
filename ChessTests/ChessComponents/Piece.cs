@@ -3,7 +3,7 @@ using ChessTests.Interfaces;
 
 namespace ChessTests
 {
-    public abstract class Piece :  IPieceProperties
+    public abstract class Piece :  IPieceProperties, IValidateMovement
     {
         internal BoardAction boardAction = new BoardAction();
        

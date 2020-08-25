@@ -4,21 +4,21 @@ using System;
 
 namespace ChessTests
 {
-    public class Move : ICoordinate
+    public class Move : ICoordinate, IMoveCastling, IMoveCheck, IPiecePosition
     {
         public Cell DestinationCell { get; set; }
         public Cell PiecePosition { get; set; }
         public PieceColor Color { get; set; }
+        public PieceName PieceName { get; set; }
         public Coordinate Coordinate { get; set; }
         public string Coordinates { get; set; }
+        public int Y { get; set; } = -1;
         public bool IsCapture { get; set; }
         public bool IsCheck { get; set; }
         public bool IsCheckMate { get; set; }
         public bool IsKingCastling { get; set; }
         public bool IsQueenCastling { get; set; }
-        public PieceName PieceName { get; set; }
         public Piece Promotion { get; set; }
-        public int Y { get; set; } = -1;
 
         public void CapturePiece(Piece attacker, Cell cellDestination)
         {
@@ -39,47 +39,14 @@ namespace ChessTests
             previousPosition.Piece = null;
             piece.CurrentPosition = destinationCell;
         }
-        internal bool IsPieceV(PieceName pieceName, PieceColor color)
+
+        internal bool IsPiece(PieceName pieceName, PieceColor color)
         {
             IPieceProperties piece = PieceFactory.CreatePiece(pieceName, color);
             return piece.ValidateMovement(this);
         }
-        internal bool IsPiece()
-        {
-            switch (PieceName)
-            {
-                case PieceName.Pawn:
-                    Piece pawn = new Pawn(Color);
-                    return pawn.ValidateMovement(this);
-
-                case PieceName.Queen:
-                    Piece queen = new Queen(Color);
-                    return queen.ValidateMovement(this);
-
-                case PieceName.Bishop:
-                    Piece bishop = new Bishop(Color);
-                    return bishop.ValidateMovement(this);
-
-                case PieceName.Rook:
-                    Piece rook = new Rook(Color);
-                    return rook.ValidateMovement(this);
-
-                case PieceName.King:
-                    King king = new King(Color);
-                    if (IsKingCastling || IsQueenCastling)
-                    {
-                       return king.Castling(this);
-                    }
-                    return king.ValidateMovement(this);
-
-                case PieceName.Knight:
-                    Piece knight = new Knight(Color);
-                    return knight.ValidateMovement(this);
-
-                default:
-                    return false;
-            }
-        }
+        
+        
         private bool CellHasOpponentPiece(Piece attacker, Cell cellDestination)
         {
             var opponent = cellDestination.Piece;
