@@ -3,7 +3,7 @@ using ChessTests.Interfaces;
 
 namespace ChessTests
 {
-    public abstract class Piece : ICheckOpponentKing, IPieceProperties
+    public abstract class Piece :  IPieceProperties
     {
         internal BoardAction boardAction = new BoardAction();
        
@@ -25,10 +25,5 @@ namespace ChessTests
         }
 
         public abstract bool ValidateMovement(Move move);
-
-        public virtual bool CheckForOpponentKingOnSpecificRoutes(Move move)
-        {
-            return false;
-        }
     }
 }

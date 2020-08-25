@@ -50,11 +50,6 @@ namespace ChessTests
             if (move.IsCheck)
             {
                 //verify if king is actually in check
-
-                if (!piece.CheckForOpponentKingOnSpecificRoutes(move))
-                {
-                    move.IsCapture = false;
-                }
                 Console.WriteLine(currentPlayer + " puts opponent king in check!");
             }
             if (move.IsCheckMate)

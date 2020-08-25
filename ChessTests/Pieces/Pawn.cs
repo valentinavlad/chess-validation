@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace ChessTests
 {
-    public class Pawn : Piece
+    public class Pawn : Piece, ICheckOpponentKing
     {
         private readonly List<Orientation> WhitePawnCaptureOrientation = new List<Orientation>()
                 { Orientation.UpLeft, Orientation.UpRight };
@@ -25,13 +25,12 @@ namespace ChessTests
             return piece != null? true : false;
         }
 
-        public override bool CheckForOpponentKingOnSpecificRoutes(Move move)
+        public bool CheckForOpponentKingOnSpecificRoutes(Move move)
         {
             var orientations = move.Color == PieceColor.White 
                 ? WhitePawnCaptureOrientation 
                 : BlackPawnCaptureOrientation;
             return boardAction.FindPieces(move, PieceName.King, orientations).Count != 0 ? true : false;
-            //return boardAction.FindKing(currentPosition, playerColor, orientations) != null ? true : false;   
         }
 
         private Piece GetPawn(Cell destinationCell, PieceColor playerColor, Move move)
