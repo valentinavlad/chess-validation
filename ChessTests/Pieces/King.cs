@@ -27,6 +27,9 @@ namespace ChessTests.Pieces
         public override bool ValidateMovement(Move move)
         {
             move.DestinationCell.CheckDestinationCellAvailability(move.Color);
+            if (move.IsQueenCastling) return IsQueenCastling(move.DestinationCell, move.Color, move);
+
+            if (move.IsKingCastling) return IsKingCastling(move.DestinationCell, move.Color, move);
 
             foreach (var orientation in KingOrientation)
             {
@@ -60,8 +63,7 @@ namespace ChessTests.Pieces
         public bool Castling(Move move)
         {
             if (move.IsQueenCastling)
-            {
-               
+            {             
                 return IsQueenCastling(move.DestinationCell, move.Color, move);
             }
 

@@ -3,11 +3,12 @@ using ChessTests.Interfaces;
 
 namespace ChessTests
 {
-    public abstract class Piece : ICheckOpponentKing
+    public abstract class Piece : ICheckOpponentKing, IPieceProperties
     {
         internal BoardAction boardAction = new BoardAction();
        
-        public PieceColor pieceColor;
+        public PieceColor pieceColor { get; }
+         public PieceName Name { get; set; }
 
         public Piece(PieceColor pieceColor)
         {
@@ -17,8 +18,6 @@ namespace ChessTests
         public Cell CurrentPosition { get; set; }
 
         public Cell InitialPosition { get; set; }
-
-        public PieceName Name { get; set; }
 
         public bool IsOnInitialPosition()
         {

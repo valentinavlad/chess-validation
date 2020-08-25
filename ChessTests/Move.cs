@@ -1,9 +1,10 @@
-﻿using ChessTests.Pieces;
+﻿using ChessTests.Interfaces;
+using ChessTests.Pieces;
 using System;
 
 namespace ChessTests
 {
-    public class Move
+    public class Move : ICoordinate
     {
         public Cell DestinationCell { get; set; }
         public Cell PiecePosition { get; set; }
@@ -38,7 +39,11 @@ namespace ChessTests
             previousPosition.Piece = null;
             piece.CurrentPosition = destinationCell;
         }
-
+        internal bool IsPieceV(PieceName pieceName, PieceColor color)
+        {
+            IPieceProperties piece = PieceFactory.CreatePiece(pieceName, color);
+            return piece.ValidateMovement(this);
+        }
         internal bool IsPiece()
         {
             switch (PieceName)

@@ -40,6 +40,7 @@ namespace ChessTable
             if (move.IsKingCastling && !move.IsCheck) return castling.TryKingCastling(currentPlayer, move, piece);
 
             if (move.IsQueenCastling && !move.IsCheck) return castling.TryQueenCastling(currentPlayer, move, piece);
+           
             if (move.IsCapture)
             {
                 whitePieces.Remove(move.DestinationCell.Piece);
@@ -89,7 +90,8 @@ namespace ChessTable
         public bool FindPieceWhoNeedsToBeMoved(Move move)
         {
             move.DestinationCell = CellAt(move.Coordinate);
-            return move.IsPiece();
+            //return move.IsPiece();
+            return move.IsPieceV(move.PieceName, move.Color);
         }
 
         public Piece PromotePawn(Move move, Piece pawn)
