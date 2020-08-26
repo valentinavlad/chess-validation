@@ -18,14 +18,14 @@ namespace ChessTests
 
         public bool CheckForOpponentKingOnSpecificRoutes(Move move)
         {
-            return boardAction.FindPieces(move, PieceName.King, BishopOrientation).Count != 0 ? true : false;  
+            return boardAction.FindPieces(move,  BishopOrientation).Count != 0 ? true : false;  
         }
 
         public override bool ValidateMovement(Move move)
         {
             move.DestinationCell.CheckDestinationCellAvailability(move.Color);
 
-            List<Piece> findBishops = boardAction.FindPieces(move, PieceName.Bishop, BishopOrientation);
+            List<Piece> findBishops = boardAction.FindPieces(move, BishopOrientation);
 
             var piece = boardAction.FoundedPiece(move, findBishops);
 

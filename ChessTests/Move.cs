@@ -40,9 +40,9 @@ namespace ChessTests
             piece.CurrentPosition = destinationCell;
         }
 
-        internal bool IsPiece(PieceName pieceName, PieceColor color)
+        internal bool IsPiece()
         {
-            IPieceProperties piece = PieceFactory.CreatePiece(pieceName, color);
+            IPieceProperties piece = PieceFactory.CreatePiece(PieceName, Color);
             return piece.ValidateMovement(this);
         }
         
@@ -50,7 +50,7 @@ namespace ChessTests
         private bool CellHasOpponentPiece(Piece attacker, Cell cellDestination)
         {
             var opponent = cellDestination.Piece;
-            return opponent != null && opponent.pieceColor != attacker.pieceColor;
+            return opponent != null && opponent.PieceColor != attacker.PieceColor;
         }
     }
 }

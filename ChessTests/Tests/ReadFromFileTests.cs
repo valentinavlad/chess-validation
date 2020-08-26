@@ -55,7 +55,7 @@ namespace ChessTests.Tests
             Assert.NotNull(move.Coordinate);
             Assert.NotNull(move.Promotion);
             Assert.IsType<Queen>(move.Promotion);
-            Assert.Equal(color, move.Promotion.pieceColor);
+            Assert.Equal(color, move.Promotion.PieceColor);
             Assert.False(move.IsCheck);
             Assert.True(move.IsCheckMate);
         }
@@ -103,7 +103,7 @@ namespace ChessTests.Tests
             Assert.NotNull(move.Coordinate);
             Assert.NotNull(move.Promotion);
             Assert.IsType<Queen>(move.Promotion);
-            Assert.Equal(color, move.Promotion.pieceColor);
+            Assert.Equal(color, move.Promotion.PieceColor);
             Assert.True(move.IsCheck);
             Assert.False(move.IsCheckMate);
             Assert.True(move.IsCapture);

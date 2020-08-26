@@ -12,7 +12,7 @@ namespace ChessTests.GameAction
             if (currentCell.Piece != null) throw new InvalidOperationException("Invalid state!");
 
             currentCell = currentCell.Look(Orientation.Right);
-            if (currentCell.Piece.Name == PieceName.Rook && currentPlayer == currentCell.Piece.pieceColor && king.IsOnInitialPosition())
+            if (currentCell.Piece.Name == PieceName.Rook && currentPlayer == currentCell.Piece.PieceColor && king.IsOnInitialPosition())
             {
                 var rook = currentCell.Piece;
                 if (rook.IsOnInitialPosition())
@@ -39,7 +39,7 @@ namespace ChessTests.GameAction
                     if (currentCell.Piece != null && currentCell.Y != 0) throw new InvalidOperationException("Invalid state!");
                     if (currentCell.Y == 0)
                     {
-                        if (currentCell.Piece.Name == PieceName.Rook && currentPlayer == currentCell.Piece.pieceColor && king.IsOnInitialPosition())
+                        if (currentCell.Piece.Name == PieceName.Rook && currentPlayer == currentCell.Piece.PieceColor && king.IsOnInitialPosition())
                         {
                             var rook = currentCell.Piece;
                             move.MovePiece(king, destinationCell);

@@ -38,7 +38,7 @@ namespace ChessTests.Validations
                 //Search looks out of board
                 if (currentCell == null) continue;
 
-                if (currentCell.Piece == null || currentCell.Piece.pieceColor != king.pieceColor)
+                if (currentCell.Piece == null || currentCell.Piece.PieceColor != king.PieceColor)
                 {
                     cellsWhereKingCanMove.Add(currentCell);
                     continue;
@@ -66,7 +66,7 @@ namespace ChessTests.Validations
 
         internal bool IsCheckMate(PieceColor currentPlayer, Move move)
         {
-            var king = (King)boardAction.FindPieces(move, move.PieceName, orientations).First();
+            var king = (King)boardAction.FindPieces(move, orientations).First();
             return CheckIfKingIsInCheckMate(king, currentPlayer, move);
         }
 

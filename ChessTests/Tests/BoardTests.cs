@@ -16,13 +16,13 @@ namespace ChessTests
 
             Assert.NotNull(rook);
             Assert.IsType<Rook>(rook);
-            Assert.Equal(PieceColor.Black, rook.pieceColor);
+            Assert.Equal(PieceColor.Black, rook.PieceColor);
 
             var rookWhite = board.CellAt("h1").Piece;
 
             Assert.NotNull(rookWhite);
             Assert.IsType<Rook>(rookWhite);
-            Assert.Equal(PieceColor.White, rookWhite.pieceColor);
+            Assert.Equal(PieceColor.White, rookWhite.PieceColor);
         }
 
         [Fact]

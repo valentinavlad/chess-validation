@@ -21,7 +21,7 @@ namespace ChessTests
         {
             move.DestinationCell.CheckDestinationCellAvailability(move.Color);
 
-            List<Piece> findQueens = boardAction.FindPieces(move, PieceName.Queen, QueenOrientation);
+            List<Piece> findQueens = boardAction.FindPieces(move, QueenOrientation);
 
             var piece = boardAction.FoundedPiece(move, findQueens);
 

@@ -30,7 +30,7 @@ namespace ChessTests
             var orientations = move.Color == PieceColor.White 
                 ? WhitePawnCaptureOrientation 
                 : BlackPawnCaptureOrientation;
-            return boardAction.FindPieces(move, PieceName.King, orientations).Count != 0 ? true : false;
+            return boardAction.FindPieces(move, orientations).Count != 0 ? true : false;
         }
 
         private Piece GetPawn(Cell destinationCell, PieceColor playerColor, Move move)

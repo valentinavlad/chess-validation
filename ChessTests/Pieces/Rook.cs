@@ -19,7 +19,7 @@ namespace ChessTests.Pieces
         {
             move.DestinationCell.CheckDestinationCellAvailability(move.Color);
 
-            List<Piece> findRooks = boardAction.FindPieces(move, PieceName.Rook, RookOrientation);
+            List<Piece> findRooks = boardAction.FindPieces(move, RookOrientation);
             
             var piece = boardAction.FoundedPiece(move, findRooks);
             

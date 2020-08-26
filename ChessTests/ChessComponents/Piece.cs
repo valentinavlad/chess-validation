@@ -7,12 +7,12 @@ namespace ChessTests
     {
         internal BoardAction boardAction = new BoardAction();
        
-        public PieceColor pieceColor { get; }
-         public PieceName Name { get; set; }
+        public PieceColor PieceColor { get; }
+        public PieceName Name { get; set; }
 
         public Piece(PieceColor pieceColor)
         {
-            this.pieceColor = pieceColor;
+            this.PieceColor = pieceColor;
         }
 
         public Cell CurrentPosition { get; set; }

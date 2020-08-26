@@ -8,6 +8,7 @@ namespace ChessTests
 {
     public static class MoveNotationConverter
     {
+
         public static PieceName ConvertPieceInitialFromMoveToPieceName(string pieceUppercase)
         {
             PieceName pieceName;
@@ -171,7 +172,7 @@ namespace ChessTests
             var coords = MoveNotationCoordinatesConverter.ConvertChessCoordinatesToArrayIndexes(currentCell.X, currentCell.Y);
             move.Coordinate = coords;
             move.PieceName = item.Name;
-            move.Color = item.pieceColor;
+            move.Color = item.PieceColor;
             return move;
         }
 

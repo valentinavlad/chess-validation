@@ -55,7 +55,7 @@ namespace ChessTests
         public int Y { get; }
         public bool BelongsTo(PieceColor playerColor)
         {
-            return HasPiece() && Piece.pieceColor == playerColor;
+            return HasPiece() && Piece.PieceColor == playerColor;
         }
 
         public bool HasPawn()

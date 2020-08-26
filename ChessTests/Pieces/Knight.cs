@@ -43,7 +43,7 @@ namespace ChessTests
 
                     if (currentCell.Piece == null) continue;
 
-                    if (currentCell.Piece.Name == PieceName.King && move.Color != currentCell.Piece.pieceColor)
+                    if (currentCell.Piece.Name == PieceName.King && move.Color != currentCell.Piece.PieceColor)
                     {
                         //we find the king, which is in check
                         return true;
@@ -68,7 +68,7 @@ namespace ChessTests
                 currentCell = currentCell.LookLShape(orientation);
                 if (currentCell == null || currentCell.Piece == null) continue;
 
-                if (currentCell.Piece.Name == PieceName.Knight && playerColor == currentCell.Piece.pieceColor)
+                if (currentCell.Piece.Name == PieceName.Knight && playerColor == currentCell.Piece.PieceColor)
                 {
                     findKnight.Add(currentCell.Piece);
                 }

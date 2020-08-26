@@ -43,7 +43,7 @@ namespace ChessTests.Pieces
 
                 if (currentCell.Piece == null) continue;
 
-                if (currentCell.Piece.Name == PieceName.King && move.Color == currentCell.Piece.pieceColor)
+                if (currentCell.Piece.Name == PieceName.King && move.Color == currentCell.Piece.PieceColor)
                 {
                     move.PiecePosition = currentCell.Piece.CurrentPosition;
                     return true;
@@ -57,7 +57,7 @@ namespace ChessTests.Pieces
 
         public bool CheckForOpponentKingOnSpecificRoutes(Move move)
         {
-            return boardAction.FindPieces(move, PieceName.King, KingOrientation).Count != 0 ? true : false;
+            return boardAction.FindPieces(move, KingOrientation).Count != 0 ? true : false;
         }
 
         public bool Castling(Move move)
@@ -83,7 +83,7 @@ namespace ChessTests.Pieces
             {
                 currentCell = currentCell.Look(Orientation.Right);
                 if (currentCell.Piece != null && currentCell.Y != 4) throw new InvalidOperationException("Invalid move!");
-                if (currentCell.Y == 4 && currentCell.Piece.Name == PieceName.King && playerColor == currentCell.Piece.pieceColor)
+                if (currentCell.Y == 4 && currentCell.Piece.Name == PieceName.King && playerColor == currentCell.Piece.PieceColor)
                 {
                     move.PiecePosition = currentCell.Piece.CurrentPosition;
                     return true;
@@ -98,7 +98,7 @@ namespace ChessTests.Pieces
             {
                 currentCell = currentCell.Look(Orientation.Left);
                 if (currentCell.Piece != null && currentCell.Y != 4) throw new InvalidOperationException("Invalid move!");
-                if (currentCell.Y == 4 && currentCell.Piece.Name == PieceName.King && playerColor == currentCell.Piece.pieceColor)
+                if (currentCell.Y == 4 && currentCell.Piece.Name == PieceName.King && playerColor == currentCell.Piece.PieceColor)
                 {
                     move.PiecePosition = currentCell.Piece.CurrentPosition;
                     return true;
