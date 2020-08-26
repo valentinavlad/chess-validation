@@ -6,21 +6,21 @@
         {
         }
 
-        internal Cell LookDown()
+        public Cell LookDown()
         {
             int i = X + 1;
             if (i >= 8) return null;
             return cells[i, Y];
         }
 
-        internal Cell LookUp()
+        public Cell LookUp()
         {
             int i = X - 1;
             if (i < 0) return null;
             return cells[i, Y];
         }
 
-        internal Cell LookDownRight()
+        public Cell LookDownRight()
         {
             int i = X + 1;
             int j = Y + 1;
@@ -28,7 +28,7 @@
             return cells[i, j];
         }
 
-        internal Cell LookDownLeft()
+        public Cell LookDownLeft()
         {
             int i = X + 1;
             int j = Y - 1;
@@ -36,7 +36,7 @@
             return cells[i, j];
         }
 
-        internal Cell LookUpLeft()
+        public Cell LookUpLeft()
         {
             int i = X - 1;
             int j = Y - 1;
@@ -44,7 +44,7 @@
             return cells[i, j];
         }
 
-        internal Cell LookUpRight()
+        public Cell LookUpRight()
         {
             int i = X - 1;
             int j = Y + 1;
@@ -52,7 +52,7 @@
             return cells[i, j];
         }
 
-        internal Cell LookRight()
+        public Cell LookRight()
         {
             int j = Y + 1;
 
@@ -60,7 +60,7 @@
             return cells[X, j];
         }
 
-        internal Cell LookLeft()
+        public Cell LookLeft()
         {
             int j = Y - 1;
             if (j < 0) return null;

@@ -5,7 +5,7 @@ namespace ChessTests.Helpers
 {
     internal class BoardAction
     {
-        internal List<Piece> FindPieces(Move move,List<Orientation> orientations)
+        internal List<Piece> FindPieces(Move move,PieceName pieceName, List<Orientation> orientations)
         {
             var findPieces = new List<Piece>();
             foreach (var orientation in orientations)
@@ -21,7 +21,7 @@ namespace ChessTests.Helpers
 
                     if (currentCell.Piece == null) continue;
 
-                    if (currentCell.Piece.Name == move.PieceName && move.Color == currentCell.Piece.PieceColor)
+                    if (currentCell.Piece.Name == pieceName && move.Color == currentCell.Piece.PieceColor)
                     {
                         findPieces.Add(currentCell.Piece);
                     }

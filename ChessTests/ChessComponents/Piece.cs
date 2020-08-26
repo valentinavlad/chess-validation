@@ -3,10 +3,8 @@ using ChessTests.Interfaces;
 
 namespace ChessTests
 {
-    public abstract class Piece :  IPieceProperties, IValidateMovement
+    public abstract class Piece : IPiece
     {
-        internal BoardAction boardAction = new BoardAction();
-       
         public PieceColor PieceColor { get; }
         public PieceName Name { get; set; }
 
@@ -24,6 +22,6 @@ namespace ChessTests
             return InitialPosition == CurrentPosition;
         }
 
-        public abstract bool ValidateMovement(Move move);
+        public abstract bool ValidateMovement(IBoard board, Move move);
     }
 }

@@ -3,6 +3,7 @@ using ChessTests.GameAction;
 using ChessTests.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace ChessTests.Pieces
@@ -24,7 +25,7 @@ namespace ChessTests.Pieces
             Name = PieceName.King;
         }
 
-        public override bool ValidateMovement(Move move)
+        public override bool ValidateMovement(IBoard board, Move move)
         {
             move.DestinationCell.CheckDestinationCellAvailability(move.Color);
             if (move.IsQueenCastling) return IsQueenCastling(move.DestinationCell, move.Color, move);
@@ -55,9 +56,9 @@ namespace ChessTests.Pieces
             return false;
         }
 
-        public bool CheckForOpponentKingOnSpecificRoutes(Move move)
+        public bool CheckForOpponentKingOnSpecificRoutes(IBoard board, Move move)
         {
-            return boardAction.FindPieces(move, KingOrientation).Count != 0 ? true : false;
+            return board.FindPieces(move, KingOrientation).Count() != 0 ? true : false;
         }
 
         public bool Castling(Move move)

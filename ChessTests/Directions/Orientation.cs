@@ -1,4 +1,6 @@
-﻿namespace ChessTests
+﻿using ChessTests.Directions;
+
+namespace ChessTests
 {
     public enum Orientation
     {

@@ -5,12 +5,14 @@ using System.Collections.Generic;
 using ChessTests.Helpers;
 using ChessTests.Validations;
 using ChessTests.GameAction;
+using ChessTests.Interfaces;
+using System.Linq;
 
 namespace ChessTable
 {
-    public class Board
+    public class Board : IBoard
     {
-        private readonly Cell[,] cells;
+        private Cell[,] cells;
         private readonly InitializeBoard initialize;
         private readonly KingValidation kingValidation;
         internal readonly List<Piece> whitePieces = new List<Piece>();
@@ -34,6 +36,8 @@ namespace ChessTable
         }
 
         public bool GetWin { get; set; }
+
+
         public Piece PlayMove(string moveAN, PieceColor currentPlayer)
         {
             GetPiece(moveAN, currentPlayer, out Move move, out Piece piece);
@@ -75,7 +79,7 @@ namespace ChessTable
             return TransformCoordonatesIntoCell(result);
         }
 
-        internal Cell CellAt(Coordinate coordinates)
+        public Cell CellAt(Coordinate coordinates)
         {
             return TransformCoordonatesIntoCell(coordinates);
         }
@@ -90,7 +94,7 @@ namespace ChessTable
         public bool FindPieceWhoNeedsToBeMoved(Move move)
         {
             move.DestinationCell = CellAt(move.Coordinate);
-            return move.IsPiece();
+            return IsPiece(move);
         }
 
         public Piece PromotePawn (Move move, Piece pawn)
@@ -142,6 +146,54 @@ namespace ChessTable
                     whitePieces.Add(cells[i, j].Piece);
                 }
             }
+        }
+
+        public IEnumerable<Piece> FindPieces(Move move, IEnumerable<Orientation> orientations)
+        {    
+            foreach (var orientation in orientations)
+            {
+                var currentCell = move.DestinationCell;
+                while (true)
+                {
+                    //there is no piece on the cells
+                    currentCell = currentCell.Look(orientation);
+
+                    //Search looks out of board
+                    if (currentCell == null) break;
+
+                    if (currentCell.Piece == null) continue;
+
+                    if (currentCell.Piece.Name == move.PieceName && move.Color == currentCell.Piece.PieceColor)
+                    {
+                        yield return currentCell.Piece;
+                    }
+                    if (currentCell.Piece.Name == PieceName.King && move.Color != currentCell.Piece.PieceColor)
+                    {
+                        yield return currentCell.Piece;
+                    }
+                    break;
+                }
+            }
+            
+        }
+
+        public Piece FoundedPiece(Move move, IEnumerable<Piece> findPieces)
+        {
+            IEnumerable<Piece> list = findPieces.Where(x => x.Name == move.PieceName);
+            if (list.Count() == 1)
+            {
+                return list.First();
+            }
+            else if (list.Count() > 1)
+            {
+                return list.Where(q => q.CurrentPosition.Y == move.Y).First();
+            }
+            return null;
+        }
+        internal bool IsPiece(Move move)
+        {
+            IPieceProperties piece = PieceFactory.CreatePiece(move.PieceName, move.Color);
+            return piece.ValidateMovement(this, move);
         }
     }
 }

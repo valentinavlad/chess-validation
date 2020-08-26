@@ -2,6 +2,7 @@
 using ChessTests.Validations;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ChessTests
 {
@@ -18,19 +19,19 @@ namespace ChessTests
             Name = PieceName.Pawn;
         }
 
-        public override bool ValidateMovement(Move move)
+        public override bool ValidateMovement(IBoard board,Move move)
         {
             Piece piece = GetPawn(move.DestinationCell, move.Color, move);
 
             return piece != null? true : false;
         }
 
-        public bool CheckForOpponentKingOnSpecificRoutes(Move move)
+        public bool CheckForOpponentKingOnSpecificRoutes(IBoard board, Move move)
         {
             var orientations = move.Color == PieceColor.White 
                 ? WhitePawnCaptureOrientation 
                 : BlackPawnCaptureOrientation;
-            return boardAction.FindPieces(move, orientations).Count != 0 ? true : false;
+            return board.FindPieces(move, orientations).Count() != 0 ? true : false;
         }
 
         private Piece GetPawn(Cell destinationCell, PieceColor playerColor, Move move)

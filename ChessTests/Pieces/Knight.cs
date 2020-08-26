@@ -17,18 +17,18 @@ namespace ChessTests
             Name = PieceName.Knight;
         }
 
-        public override bool ValidateMovement(Move move)
+        public override bool ValidateMovement(IBoard board, Move move)
         {
             move.DestinationCell.CheckDestinationCellAvailability(move.Color);
 
             List<Piece> findKnights = FindPieces(move.Color, move.DestinationCell);
 
-            var piece = boardAction.FoundedPiece(move, findKnights);
+            var piece = board.FoundedPiece(move, findKnights);
             if (piece != null) move.PiecePosition = piece.CurrentPosition;
             return piece != null ? true : false;
         }
 
-        public bool CheckForOpponentKingOnSpecificRoutes(Move move)
+        public bool CheckForOpponentKingOnSpecificRoutes(IBoard board, Move move)
         {
             foreach (var orientation in KnightOrientation)
             {

@@ -19,7 +19,7 @@ namespace ChessTests.Validations
 
         private readonly Board board;
 
-        internal BoardAction boardAction = new BoardAction();
+       
 
         public KingValidation(Board board)
         {
@@ -66,7 +66,7 @@ namespace ChessTests.Validations
 
         internal bool IsCheckMate(PieceColor currentPlayer, Move move)
         {
-            var king = (King)boardAction.FindPieces(move, orientations).First();
+            var king = (King)board.FindPieces(move, orientations).First();
             return CheckIfKingIsInCheckMate(king, currentPlayer, move);
         }
 

@@ -2,7 +2,7 @@
 {
     public interface ICheckOpponentKing
     {
-        public bool CheckForOpponentKingOnSpecificRoutes(Move move);
+        public bool CheckForOpponentKingOnSpecificRoutes(IBoard board, Move move);
  
     }
 }

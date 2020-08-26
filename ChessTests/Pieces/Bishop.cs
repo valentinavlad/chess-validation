@@ -1,5 +1,6 @@
 ﻿using ChessTests.Interfaces;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ChessTests
 {
@@ -16,18 +17,18 @@ namespace ChessTests
             Name = PieceName.Bishop;
         }
 
-        public bool CheckForOpponentKingOnSpecificRoutes(Move move)
+        public bool CheckForOpponentKingOnSpecificRoutes(IBoard board, Move move)
         {
-            return boardAction.FindPieces(move,  BishopOrientation).Count != 0 ? true : false;  
+            return board.FindPieces(move,  BishopOrientation).Count() != 0 ? true : false;  
         }
 
-        public override bool ValidateMovement(Move move)
+        public override bool ValidateMovement(IBoard board, Move move)
         {
             move.DestinationCell.CheckDestinationCellAvailability(move.Color);
 
-            List<Piece> findBishops = boardAction.FindPieces(move, BishopOrientation);
+            IEnumerable<Piece> findBishops = board.FindPieces(move, BishopOrientation);
 
-            var piece = boardAction.FoundedPiece(move, findBishops);
+            var piece = board.FoundedPiece(move, findBishops);
 
             if (piece != null) move.PiecePosition = piece.CurrentPosition;
 

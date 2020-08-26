@@ -5,56 +5,56 @@
         public KnightLook(int x, int y, Cell[,] cells = null) : base(x,  y, cells)
         {
         }
-        internal Cell LShapeLookUpLeftDown()
+        public Cell LShapeLookUpLeftDown()
         {
             int i = X - 1;
             int j = Y - 2;
             if (i < 0 || j < 0) return null;
             return cells[i, j];
         }
-        internal Cell LShapeLookUpLeftUp()
+        public Cell LShapeLookUpLeftUp()
         {
             int i = X - 2;
             int j = Y - 1;
             if (i < 0 || j < 0) return null;
             return cells[i, j];
         }
-        internal Cell LShapeLookUpRightUp()
+        public Cell LShapeLookUpRightUp()
         {
             int i = X - 2;
             int j = Y + 1;
             if (i < 0 || j >= 8) return null;
             return cells[i, j];
         }
-        internal Cell LShapeLookUpRightDown()
+        public Cell LShapeLookUpRightDown()
         {
             int i = X - 1;
             int j = Y + 2;
             if (i < 0 || j >= 8) return null;
             return cells[i, j];
         }
-        internal Cell LShapeLookDownLeftUp()
+        public Cell LShapeLookDownLeftUp()
         {
             int i = X + 1;
             int j = Y - 2;
             if (i >= 8 || j < 0) return null;
             return cells[i, j];
         }
-        internal Cell LShapeLookDownLeftDown()
+        public Cell LShapeLookDownLeftDown()
         {
             int i = X + 2;
             int j = Y - 1;
             if (i >= 8 || j < 0) return null;
             return cells[i, j];
         }
-        internal Cell LShapeLookDownRightUp()
+        public Cell LShapeLookDownRightUp()
         {
             int i = X + 1;
             int j = Y + 2;
             if (i >= 8 || j >= 8) return null;
             return cells[i, j];
         }
-        internal Cell LShapeLookDownLRightDown()
+        public Cell LShapeLookDownLRightDown()
         {
             int i = X + 2;
             int j = Y + 1;
