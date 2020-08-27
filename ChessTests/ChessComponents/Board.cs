@@ -13,6 +13,8 @@ namespace ChessTable
     public class Board : IBoard
     {
         private Cell[,] cells;
+        private IEnumerable<IPiece> pieces = new List<IPiece>();
+ 
         private readonly InitializeBoard initialize;
         private readonly KingValidation kingValidation;
         internal readonly List<Piece> whitePieces = new List<Piece>();
@@ -31,12 +33,16 @@ namespace ChessTable
             else
             {
                 initialize.InitializeBoardWithoutPieces();
-            }
-            PopulateWhiteListPiece();
+            }  
         }
 
         public bool GetWin { get; set; }
+        public IEnumerable<IPiece> Pieces
+        {
+            get => pieces = PutPiecesIntoList();
 
+            set => pieces = value;
+        }
 
         public Piece PlayMove(string moveAN, PieceColor currentPlayer)
         {
@@ -47,7 +53,8 @@ namespace ChessTable
            
             if (move.IsCapture)
             {
-                whitePieces.Remove(move.DestinationCell.Piece);
+                pieces.ToList().Remove(move.DestinationCell.Piece);
+               
                 move.CapturePiece(piece, move.DestinationCell);
             }
 
@@ -60,29 +67,6 @@ namespace ChessTable
             return piece;
         }
 
-        internal Piece AddPiece(string coordsAN, Piece piece)
-        {
-            var coordinates = MoveNotationCoordinatesConverter.ConvertChessCoordinatesToArrayIndexes(coordsAN);
-            return AddPiece(coordinates, piece);
-        }
-
-        internal Piece AddPiece(Coordinate coordinates, Piece piece)
-        {
-            var cell = CellAt(coordinates);
-            cell.Piece = piece;
-            return cell.Piece;
-        }
-
-        internal Cell CellAt(string coordsAN)
-        {
-            var result = MoveNotationCoordinatesConverter.ConvertChessCoordinatesToArrayIndexes(coordsAN);
-            return TransformCoordonatesIntoCell(result);
-        }
-
-        public Cell CellAt(Coordinate coordinates)
-        {
-            return TransformCoordonatesIntoCell(coordinates);
-        }
 
         public bool FindPieceWhoNeedsToBeMoved(string moveAN, PieceColor playerColor)
         {
@@ -101,17 +85,11 @@ namespace ChessTable
         {
             pawn.DestinationCell = null;
             var pawnPromovatesTo = AddPiece(move.Coordinate, move.Promotion);
+            pieces.Append(pawnPromovatesTo);
+            
             return pawnPromovatesTo;
         }
 
-        private Cell TransformCoordonatesIntoCell(Coordinate coordinate)
-        {
-            if (coordinate.X >= 0 && coordinate.X <= 7 && coordinate.Y >= 0 && coordinate.Y <= 7)
-            {
-                return cells[coordinate.X, coordinate.Y];
-            }
-            throw new IndexOutOfRangeException("Index out of bound");
-        }
 
         private void IsKingInCheckMate(PieceColor currentPlayer, Move move)
         {
@@ -138,17 +116,6 @@ namespace ChessTable
             return move;
         }
 
-        private void PopulateWhiteListPiece()
-        {
-            for (int i = 7; i >= 6; i--)
-            {
-                for (int j = 0; j < 8; j++)
-                {
-                    whitePieces.Add(cells[i, j].Piece);
-                }
-            }
-        }
-
         public IEnumerable<Piece> FindPieces(IMove move, IEnumerable<Orientation> orientations)
         {    
             foreach (var orientation in orientations)
@@ -166,8 +133,7 @@ namespace ChessTable
                     if (currentCell.Piece == null) continue;
 
                     if (currentCell.Piece.Name == move.Name && move.PieceColor == currentCell.Piece.PieceColor)
-                        
-                        {
+                    {
                         yield return currentCell.Piece;
                     }
                     if (currentCell.Piece.Name == PieceName.King && move.PieceColor != currentCell.Piece.PieceColor)
@@ -200,5 +166,52 @@ namespace ChessTable
             IPiece piece = PieceFactory.CreatePiece(move.Name, move.PieceColor);
             return piece.ValidateMovement(this, move);
         }
+
+        private IEnumerable<IPiece> PutPiecesIntoList()
+        {
+            foreach (var cell in cells)
+            {
+                if (cell.Piece != null)
+                {
+                    yield return cell.Piece;
+                }
+            }
+        }
+        //Created for testing purpose
+        internal Piece AddPiece(string coordsAN, Piece piece)
+        {
+            var coordinates = MoveNotationCoordinatesConverter.ConvertChessCoordinatesToArrayIndexes(coordsAN);
+            return AddPiece(coordinates, piece);
+        }
+
+        internal Piece AddPiece(Coordinate coordinates, Piece piece)
+        {
+            var cell = CellAt(coordinates);
+            cell.Piece = piece;
+            return cell.Piece;
+        }
+
+        internal Cell CellAt(string coordsAN)
+        {
+            var result = MoveNotationCoordinatesConverter.ConvertChessCoordinatesToArrayIndexes(coordsAN);
+            return TransformCoordonatesIntoCell(result);
+        }
+
+        public Cell CellAt(Coordinate coordinates)
+        {
+            return TransformCoordonatesIntoCell(coordinates);
+        }
+        //Created for testing purpose
+
+        //board specific methods
+        private Cell TransformCoordonatesIntoCell(Coordinate coordinate)
+        {
+            if (coordinate.X >= 0 && coordinate.X <= 7 && coordinate.Y >= 0 && coordinate.Y <= 7)
+            {
+                return cells[coordinate.X, coordinate.Y];
+            }
+            throw new IndexOutOfRangeException("Index out of bound");
+        }
+
     }
 }

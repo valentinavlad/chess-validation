@@ -13,7 +13,7 @@ namespace ChessTests
             var board = new Board();
          
             var rook = board.CellAt("a8").Piece;
-
+           var dd= board.Pieces;
             Assert.NotNull(rook);
             Assert.IsType<Rook>(rook);
             Assert.Equal(PieceColor.Black, rook.PieceColor);

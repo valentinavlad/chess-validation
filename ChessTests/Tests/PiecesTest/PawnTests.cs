@@ -66,10 +66,10 @@ namespace ChessTests.Tests.PiecesTest
             //Arrange
             var board = new Board(false);
             var opponentColor = attackerColor == PieceColor.Black ? PieceColor.White : PieceColor.Black;
-
+           
             board.AddPiece(attackerCoords, new Pawn(attackerColor));
             board.AddPiece(opponentCoords, new Rook(opponentColor));
-
+            var list = board.Pieces;
             //Act
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, attackerColor);
             //caut piesa care face capturarea

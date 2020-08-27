@@ -1,6 +1,7 @@
 ﻿using ChessTable;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Xunit;
 namespace ChessTests.Tests.PiecesTest
@@ -60,9 +61,9 @@ namespace ChessTests.Tests.PiecesTest
 
             //Act
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
-
+            var list = board.Pieces;
             var bishop = board.PlayMove(moveAN, currentPlayer);
-
+            int x = list.Count();
             //Assert
             Assert.Equal(bishop, board.CellAt(move.Coordinate).Piece);
             Assert.IsType<Bishop>(bishop);
