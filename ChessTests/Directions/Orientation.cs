@@ -1,4 +1,4 @@
-﻿using ChessTests.Directions;
+﻿
 
 namespace ChessTests
 {

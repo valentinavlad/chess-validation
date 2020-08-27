@@ -1,4 +1,4 @@
-﻿using ChessTests.Directions;
+﻿
 using System;
 
 namespace ChessTests
@@ -67,47 +67,46 @@ namespace ChessTests
 
         public Cell Look(Orientation orientation, int fileY = -1)
         {
-            var look = new Look(X, Y, cells);
             if (fileY > -1)
             {
                 if (Orientation.Down == orientation)
                 {
-                    var cellRight = look.LookDownRight();
-                    var cellLeft = look.LookDownLeft();
+                    var cellRight = LookDownRight();
+                    var cellLeft = LookDownLeft();
                     return fileY == cellRight.Y ? cellRight : cellLeft;
                 }
                 if (Orientation.Up == orientation)
                 {
-                    var cellRight = look.LookUpRight();
-                    var cellLeft = look.LookUpLeft();
+                    var cellRight = LookUpRight();
+                    var cellLeft = LookUpLeft();
                     return fileY == cellRight.Y ? cellRight : cellLeft;
                 }
             }
             else
             {
-                if (Orientation.Up == orientation) return look.LookUp();
-                if (Orientation.Down == orientation) return look.LookDown();
-                if (Orientation.DownRight == orientation) return look.LookDownRight();
-                if (Orientation.DownLeft == orientation) return look.LookDownLeft();
-                if (Orientation.Left == orientation) return look.LookLeft();
-                if (Orientation.Right == orientation) return look.LookRight();
-                if (Orientation.UpLeft == orientation) return look.LookUpLeft();
-                if (Orientation.UpRight == orientation) return look.LookUpRight();
+                if (Orientation.Up == orientation) return LookUp();
+                if (Orientation.Down == orientation) return LookDown();
+                if (Orientation.DownRight == orientation) return LookDownRight();
+                if (Orientation.DownLeft == orientation) return LookDownLeft();
+                if (Orientation.Left == orientation) return LookLeft();
+                if (Orientation.Right == orientation) return LookRight();
+                if (Orientation.UpLeft == orientation) return LookUpLeft();
+                if (Orientation.UpRight == orientation) return LookUpRight();
             }
             return null;
         }
 
         public Cell LookLShape(KnightOrientation orientation)
         {
-            var knightLook = new KnightLook(X, Y, cells);
-            if (KnightOrientation.DownLeftDown == orientation) return knightLook.LShapeLookDownLeftDown();
-            if (KnightOrientation.DownLeftUp == orientation) return knightLook.LShapeLookDownLeftUp();
-            if (KnightOrientation.DownRightDown == orientation) return knightLook.LShapeLookDownLRightDown();
-            if (KnightOrientation.DownRightUp == orientation) return knightLook.LShapeLookDownRightUp();
-            if (KnightOrientation.UpLeftDown == orientation) return knightLook.LShapeLookUpLeftDown();
-            if (KnightOrientation.UpLeftUp == orientation) return knightLook.LShapeLookUpLeftUp();
-            if (KnightOrientation.UpRightDown == orientation) return knightLook.LShapeLookUpRightDown();
-            if (KnightOrientation.UpRightUp == orientation) return knightLook.LShapeLookUpRightUp();
+          
+            if (KnightOrientation.DownLeftDown == orientation) return LShapeLookDownLeftDown();
+            if (KnightOrientation.DownLeftUp == orientation) return LShapeLookDownLeftUp();
+            if (KnightOrientation.DownRightDown == orientation) return LShapeLookDownLRightDown();
+            if (KnightOrientation.DownRightUp == orientation) return LShapeLookDownRightUp();
+            if (KnightOrientation.UpLeftDown == orientation) return LShapeLookUpLeftDown();
+            if (KnightOrientation.UpLeftUp == orientation) return LShapeLookUpLeftUp();
+            if (KnightOrientation.UpRightDown == orientation) return LShapeLookUpRightDown();
+            if (KnightOrientation.UpRightUp == orientation) return LShapeLookUpRightUp();
             return null;
         }
         public Cell LookDown()
