@@ -1,13 +1,18 @@
 ﻿using ChessTests.Interfaces;
 using ChessTests.Pieces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace ChessTests
 {
     public class Move : IMove
     {
+
+        //dectination cell
+        public Cell DestinationCell { get; set; }
+        //piece position
+        public Cell PiecePosition { get; set; }
+        public PieceColor PieceColor { get; set; }
+        public PieceName Name { get; set; }
 
         public Coordinate Coordinate { get; set; }
         public string Coordinates { get; set; }
@@ -18,8 +23,7 @@ namespace ChessTests
         public bool IsQueenCastling { get; set; }
         public Piece Promotion { get; set; }
         public bool IsCapture { get; set; }
-        public IPiece Piece { get; set; }
-
+ 
         public void CapturePiece(IPiece attacker, Cell cellDestination)
         {
             if (!CellHasOpponentPiece(attacker, cellDestination))
@@ -39,7 +43,9 @@ namespace ChessTests
             previousPosition.Piece = null;
             piece.DestinationCell = destinationCell;
         }
+     
 
+     
         private bool CellHasOpponentPiece(IPiece attacker, Cell cellDestination)
         {
             var opponent = cellDestination.Piece;

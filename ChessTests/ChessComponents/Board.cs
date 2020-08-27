@@ -127,7 +127,7 @@ namespace ChessTable
             move = GetMoveFromNotation(moveAN, currentPlayer);
             FindPieceWhoNeedsToBeMoved(move);
             piece = move.PiecePosition.Piece;
-            move.Piece = piece;
+         
         }
 
         private Move GetMoveFromNotation(string moveAN, PieceColor currentPlayer)

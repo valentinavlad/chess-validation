@@ -24,5 +24,6 @@ namespace ChessTests
         }
 
         public abstract bool ValidateMovement(IBoard board, IMove move);
+
     }
 }

@@ -62,8 +62,8 @@ namespace ChessTests
 
             move.Coordinate = coordinate;
             move.Promotion = CreatePiece(promotion, pieceColor);
-            move.Piece.Name = ConvertPieceInitialFromMoveToPieceName(pieceUppercase);
-            move.Piece.PieceColor = pieceColor;
+            move.Name = ConvertPieceInitialFromMoveToPieceName(pieceUppercase);
+            move.PieceColor = pieceColor;
             move.IsCheck = checkOrCheckMate.Length == 1 ? true : false;
             move.IsCheckMate = checkOrCheckMate.Length == 2 ? true : false;
             move.Coordinates = coordinatesFromMove;
@@ -170,8 +170,8 @@ namespace ChessTests
             Move move = new Move();
             var coords = MoveNotationCoordinatesConverter.ConvertChessCoordinatesToArrayIndexes(currentCell.X, currentCell.Y);
             move.Coordinate = coords;
-            move.Piece.Name = item.Name;
-            move.Piece.PieceColor = item.PieceColor;
+            move.Name = item.Name;
+            move.PieceColor = item.PieceColor;
             return move;
         }
 
