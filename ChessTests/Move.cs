@@ -8,12 +8,7 @@ namespace ChessTests
 {
     public class Move : IMove
     {
-        //dectination cell
-        public Cell DestinationCell { get; set; }
-        //piece position
-        public Cell PiecePosition { get; set; }
-        public PieceColor PieceColor { get; set; }
-        public PieceName Name { get; set; }
+
         public Coordinate Coordinate { get; set; }
         public string Coordinates { get; set; }
         public int Y { get; set; } = -1;

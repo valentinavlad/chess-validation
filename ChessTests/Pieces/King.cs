@@ -27,14 +27,14 @@ namespace ChessTests.Pieces
 
         public override bool ValidateMovement(IBoard board, IMove move)
         {
-            move.DestinationCell.CheckDestinationCellAvailability(move.PieceColor);
-            if (move.IsQueenCastling) return IsQueenCastling(move.DestinationCell, move.PieceColor, move);
+            move.Piece.DestinationCell.CheckDestinationCellAvailability(move.Piece.PieceColor);
+            if (move.IsQueenCastling) return IsQueenCastling(move);
 
-            if (move.IsKingCastling) return IsKingCastling(move.DestinationCell, move.PieceColor, move);
+            if (move.IsKingCastling) return IsKingCastling(move);
 
             foreach (var orientation in KingOrientation)
             {
-                var currentCell = move.DestinationCell;
+                var currentCell = move.Piece.DestinationCell;
 
                 //there is no piece on the cells
                 currentCell = currentCell.Look(orientation);
@@ -44,9 +44,9 @@ namespace ChessTests.Pieces
 
                 if (currentCell.Piece == null) continue;
 
-                if (currentCell.Piece.Name == PieceName.King && move.PieceColor == currentCell.Piece.PieceColor)
+                if (currentCell.Piece.Name == PieceName.King && move.Piece.PieceColor == currentCell.Piece.PieceColor)
                 {
-                    move.PiecePosition = currentCell.Piece.DestinationCell;
+                    move.Piece.PiecePosition = currentCell.Piece.DestinationCell;
                     return true;
                 }
 
@@ -65,43 +65,43 @@ namespace ChessTests.Pieces
         {
             if (move.IsQueenCastling)
             {             
-                return IsQueenCastling(move.DestinationCell, move.PieceColor, move);
+                return IsQueenCastling(move);
             }
 
             if (move.IsKingCastling) 
             {
-                return IsKingCastling(move.DestinationCell, move.PieceColor, move);
+                return IsKingCastling(move);
             }
             
             return false;
         }
 
         //check if king is able to perform castling
-        private bool IsQueenCastling(Cell destinationCell, PieceColor playerColor, IMove move)
+        private bool IsQueenCastling(IMove move)
         {
-            var currentCell = destinationCell;
+            var currentCell = move.Piece.DestinationCell;
             for (int i = currentCell.Y + 1; i <= 4; i++)
             {
                 currentCell = currentCell.Look(Orientation.Right);
                 if (currentCell.Piece != null && currentCell.Y != 4) throw new InvalidOperationException("Invalid move!");
-                if (currentCell.Y == 4 && currentCell.Piece.Name == PieceName.King && playerColor == currentCell.Piece.PieceColor)
+                if (currentCell.Y == 4 && currentCell.Piece.Name == PieceName.King && move.Piece.PieceColor == currentCell.Piece.PieceColor)
                 {
-                    move.PiecePosition = currentCell.Piece.DestinationCell;
+                    move.Piece.PiecePosition = currentCell.Piece.DestinationCell;
                     return true;
                 }
             }
             return false;
         }
-        private bool IsKingCastling(Cell destinationCell, PieceColor playerColor, IMove move)
+        private bool IsKingCastling(IMove move)
         {
-            var currentCell = destinationCell;
+            var currentCell = move.Piece.DestinationCell;
             for (int i = currentCell.Y - 1; i >= 4; i--)
             {
                 currentCell = currentCell.Look(Orientation.Left);
                 if (currentCell.Piece != null && currentCell.Y != 4) throw new InvalidOperationException("Invalid move!");
-                if (currentCell.Y == 4 && currentCell.Piece.Name == PieceName.King && playerColor == currentCell.Piece.PieceColor)
+                if (currentCell.Y == 4 && currentCell.Piece.Name == PieceName.King && move.Piece.PieceColor == currentCell.Piece.PieceColor)
                 {
-                    move.PiecePosition = currentCell.Piece.DestinationCell;
+                    move.Piece.PiecePosition = currentCell.Piece.DestinationCell;
                     return true;
                 }
             }
