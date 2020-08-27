@@ -6,6 +6,6 @@ namespace ChessTests.Interfaces
 {
     public interface IValidateMovement
     {
-        bool ValidateMovement(IBoard board, Move move);
+        bool ValidateMovement(IBoard board, IMove move);
     }
 }

@@ -20,13 +20,13 @@ namespace ChessTests
 
         public override bool ValidateMovement(IBoard board, IMove move)
         {
-            move.CurrentPosition.CheckDestinationCellAvailability(move.PieceColor);
+            move.DestinationCell.CheckDestinationCellAvailability(move.PieceColor);
 
             IEnumerable<Piece> findQueens = board.FindPieces(move, QueenOrientation);
 
             var piece = board.FoundedPiece(move, findQueens);
 
-            if (piece != null) move.InitialPosition = piece.CurrentPosition;
+            if (piece != null) move.PiecePosition = piece.DestinationCell;
 
             return piece != null ? true : false;
         }

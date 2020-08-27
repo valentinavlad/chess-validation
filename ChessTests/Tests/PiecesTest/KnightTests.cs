@@ -102,7 +102,7 @@ namespace ChessTests.Tests.PiecesTest
 
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
             //Assert
-            Assert.Equal(knight1.CurrentPosition.Y, move.Y);
+            Assert.Equal(knight1.DestinationCell.Y, move.Y);
 
         }
     }

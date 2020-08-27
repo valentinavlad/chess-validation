@@ -19,12 +19,12 @@ namespace ChessTests
 
         public override bool ValidateMovement(IBoard board, IMove move)
         {
-            move.CurrentPosition.CheckDestinationCellAvailability(move.PieceColor);
+            move.DestinationCell.CheckDestinationCellAvailability(move.PieceColor);
 
-            List<Piece> findKnights = FindPieces(move.PieceColor, move.CurrentPosition);
+            List<Piece> findKnights = FindPieces(move.PieceColor, move.DestinationCell);
 
             var piece = board.FoundedPiece(move, findKnights);
-            if (piece != null) move.InitialPosition = piece.CurrentPosition;
+            if (piece != null) move.PiecePosition = piece.DestinationCell;
             return piece != null ? true : false;
         }
 
@@ -32,7 +32,7 @@ namespace ChessTests
         {
             foreach (var orientation in KnightOrientation)
             {
-                var currentCell = move.CurrentPosition;
+                var currentCell = move.DestinationCell;
                 while (true)
                 {
                     //there is no piece on the cells

@@ -13,14 +13,14 @@ namespace ChessTests
             this.PieceColor = pieceColor;
         }
 
-        public Cell CurrentPosition { get; set; }
+        public Cell DestinationCell { get; set; }
 
-        public Cell InitialPosition { get; set; }
+        public Cell PiecePosition { get; set; }
       
 
         public bool IsOnInitialPosition()
         {
-            return InitialPosition == CurrentPosition;
+            return PiecePosition == DestinationCell;
         }
 
         public abstract bool ValidateMovement(IBoard board, IMove move);

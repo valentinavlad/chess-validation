@@ -50,7 +50,7 @@ namespace ChessTests.Tests.PiecesTest
 
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, pieceColor);
            var x =board.PlayMove(moveAN, pieceColor);
-            Assert.Null(pawnBlack.CurrentPosition);
+            Assert.Null(pawnBlack.DestinationCell);
             Assert.IsType<Queen>(board.CellAt(move.Coordinate).Piece);
 
         }
@@ -85,7 +85,7 @@ namespace ChessTests.Tests.PiecesTest
 
             board.PlayMove(moveAN, attackerColor);
 
-            Assert.Null(opponent.CurrentPosition);
+            Assert.Null(opponent.DestinationCell);
             Assert.IsType<Queen>(board.CellAt(move.Coordinate).Piece);
 
         }
@@ -123,7 +123,7 @@ namespace ChessTests.Tests.PiecesTest
                     Assert.Equal(attackerPawn, board.CellAt(blackPawnCoordinates).Piece);
 
                     //verific ca pionul negru nu mai exista pe board
-                    Assert.Null(pawnBlack.CurrentPosition);
+                    Assert.Null(pawnBlack.DestinationCell);
                 }
                 else
                 {
@@ -131,7 +131,7 @@ namespace ChessTests.Tests.PiecesTest
                     Assert.Equal(attackerPawn, board.CellAt(whitePawnCoordinates).Piece);
 
                     //verific ca pionul alb nu mai exista pe board
-                    Assert.Null(pawnWhite.CurrentPosition);
+                    Assert.Null(pawnWhite.DestinationCell);
                 }
             }
             else

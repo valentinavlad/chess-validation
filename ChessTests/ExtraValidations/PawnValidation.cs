@@ -1,10 +1,11 @@
-﻿using System;
+﻿using ChessTests.Interfaces;
+using System;
 
 namespace ChessTests.Validations
 {
     internal class PawnValidation
     {
-        internal Pawn FindPawnWhoCaptures(Cell destinationCell, PieceColor playerColor, Move move)
+        internal Pawn FindPawnWhoCaptures(Cell destinationCell, PieceColor playerColor, IMove move)
         {
             Orientation orientation = GetPawnOrientation(playerColor);
             var cell = destinationCell.Look(orientation, move.Y);

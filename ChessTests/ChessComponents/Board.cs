@@ -47,11 +47,11 @@ namespace ChessTable
            
             if (move.IsCapture)
             {
-                whitePieces.Remove(move.CurrentPosition.Piece);
-                move.CapturePiece(piece, move.CurrentPosition);
+                whitePieces.Remove(move.DestinationCell.Piece);
+                move.CapturePiece(piece, move.DestinationCell);
             }
 
-            move.MovePiece(piece, move.CurrentPosition);
+            move.MovePiece(piece, move.DestinationCell);
 
             if (move.Promotion != null) PromotePawn(move, piece);
 
@@ -87,19 +87,19 @@ namespace ChessTable
         public bool FindPieceWhoNeedsToBeMoved(string moveAN, PieceColor playerColor)
         {
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, playerColor);
-            move.CurrentPosition = CellAt(move.Coordinate);
+            move.DestinationCell = CellAt(move.Coordinate);
             return FindPieceWhoNeedsToBeMoved(move);
         }
 
         public bool FindPieceWhoNeedsToBeMoved(Move move)
         {
-            move.CurrentPosition = CellAt(move.Coordinate);
+            move.DestinationCell = CellAt(move.Coordinate);
             return IsPiece(move);
         }
 
         public Piece PromotePawn (Move move, Piece pawn)
         {
-            pawn.CurrentPosition = null;
+            pawn.DestinationCell = null;
             var pawnPromovatesTo = AddPiece(move.Coordinate, move.Promotion);
             return pawnPromovatesTo;
         }
@@ -126,14 +126,15 @@ namespace ChessTable
         {
             move = GetMoveFromNotation(moveAN, currentPlayer);
             FindPieceWhoNeedsToBeMoved(move);
-            piece = move.InitialPosition.Piece;
+            piece = move.PiecePosition.Piece;
+            move.Piece = piece;
         }
 
         private Move GetMoveFromNotation(string moveAN, PieceColor currentPlayer)
         {
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
 
-            move.CurrentPosition = CellAt(move.Coordinate);
+            move.DestinationCell = CellAt(move.Coordinate);
             return move;
         }
 
@@ -165,7 +166,8 @@ namespace ChessTable
                     if (currentCell.Piece == null) continue;
 
                     if (currentCell.Piece.Name == move.Name && move.PieceColor == currentCell.Piece.PieceColor)
-                    {
+                        
+                        {
                         yield return currentCell.Piece;
                     }
                     if (currentCell.Piece.Name == PieceName.King && move.PieceColor != currentCell.Piece.PieceColor)
@@ -187,10 +189,12 @@ namespace ChessTable
             }
             else if (list.Count() > 1)
             {
-                return list.Where(q => q.CurrentPosition.Y == move.Y).First();
+                return list.Where(q => q.DestinationCell.Y == move.Y).First();
             }
             return null;
         }
+
+   
         internal bool IsPiece(Move move)
         {
             IPiece piece = PieceFactory.CreatePiece(move.Name, move.PieceColor);

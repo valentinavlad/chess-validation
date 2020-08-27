@@ -19,7 +19,7 @@ namespace ChessTests
             Piece = piece;
             if (piece != null)
             {
-                piece.InitialPosition = this;
+                piece.PiecePosition = this;
             }
             this.cells = cells;
         }
@@ -43,7 +43,7 @@ namespace ChessTests
                 piece = value;
                 if (piece != null)
                 {
-                    piece.CurrentPosition = this;
+                    piece.DestinationCell = this;
                 }
             }
         }

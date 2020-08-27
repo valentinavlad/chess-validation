@@ -27,14 +27,14 @@ namespace ChessTests.Pieces
 
         public override bool ValidateMovement(IBoard board, IMove move)
         {
-            move.CurrentPosition.CheckDestinationCellAvailability(move.PieceColor);
-            if (move.IsQueenCastling) return IsQueenCastling(move.CurrentPosition, move.PieceColor, move);
+            move.DestinationCell.CheckDestinationCellAvailability(move.PieceColor);
+            if (move.IsQueenCastling) return IsQueenCastling(move.DestinationCell, move.PieceColor, move);
 
-            if (move.IsKingCastling) return IsKingCastling(move.CurrentPosition, move.PieceColor, move);
+            if (move.IsKingCastling) return IsKingCastling(move.DestinationCell, move.PieceColor, move);
 
             foreach (var orientation in KingOrientation)
             {
-                var currentCell = move.CurrentPosition;
+                var currentCell = move.DestinationCell;
 
                 //there is no piece on the cells
                 currentCell = currentCell.Look(orientation);
@@ -46,7 +46,7 @@ namespace ChessTests.Pieces
 
                 if (currentCell.Piece.Name == PieceName.King && move.PieceColor == currentCell.Piece.PieceColor)
                 {
-                    move.InitialPosition = currentCell.Piece.CurrentPosition;
+                    move.PiecePosition = currentCell.Piece.DestinationCell;
                     return true;
                 }
 
@@ -65,19 +65,19 @@ namespace ChessTests.Pieces
         {
             if (move.IsQueenCastling)
             {             
-                return IsQueenCastling(move.CurrentPosition, move.PieceColor, move);
+                return IsQueenCastling(move.DestinationCell, move.PieceColor, move);
             }
 
             if (move.IsKingCastling) 
             {
-                return IsKingCastling(move.CurrentPosition, move.PieceColor, move);
+                return IsKingCastling(move.DestinationCell, move.PieceColor, move);
             }
             
             return false;
         }
 
         //check if king is able to perform castling
-        private bool IsQueenCastling(Cell destinationCell, PieceColor playerColor, Move move)
+        private bool IsQueenCastling(Cell destinationCell, PieceColor playerColor, IMove move)
         {
             var currentCell = destinationCell;
             for (int i = currentCell.Y + 1; i <= 4; i++)
@@ -86,13 +86,13 @@ namespace ChessTests.Pieces
                 if (currentCell.Piece != null && currentCell.Y != 4) throw new InvalidOperationException("Invalid move!");
                 if (currentCell.Y == 4 && currentCell.Piece.Name == PieceName.King && playerColor == currentCell.Piece.PieceColor)
                 {
-                    move.InitialPosition = currentCell.Piece.CurrentPosition;
+                    move.PiecePosition = currentCell.Piece.DestinationCell;
                     return true;
                 }
             }
             return false;
         }
-        private bool IsKingCastling(Cell destinationCell, PieceColor playerColor, Move move)
+        private bool IsKingCastling(Cell destinationCell, PieceColor playerColor, IMove move)
         {
             var currentCell = destinationCell;
             for (int i = currentCell.Y - 1; i >= 4; i--)
@@ -101,7 +101,7 @@ namespace ChessTests.Pieces
                 if (currentCell.Piece != null && currentCell.Y != 4) throw new InvalidOperationException("Invalid move!");
                 if (currentCell.Y == 4 && currentCell.Piece.Name == PieceName.King && playerColor == currentCell.Piece.PieceColor)
                 {
-                    move.InitialPosition = currentCell.Piece.CurrentPosition;
+                    move.PiecePosition = currentCell.Piece.DestinationCell;
                     return true;
                 }
             }

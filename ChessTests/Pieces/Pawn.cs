@@ -21,7 +21,7 @@ namespace ChessTests
 
         public override bool ValidateMovement(IBoard board, IMove move)
         {
-            Piece piece = GetPawn(move.CurrentPosition, move.PieceColor, move);
+            Piece piece = GetPawn(move.DestinationCell, move.PieceColor, move);
 
             return piece != null? true : false;
         }
@@ -34,7 +34,7 @@ namespace ChessTests
             return board.FindPieces(move, orientations).Count() != 0 ? true : false;
         }
 
-        private Piece GetPawn(Cell destinationCell, PieceColor playerColor, Move move)
+        private Piece GetPawn(Cell destinationCell, PieceColor playerColor, IMove move)
         {
             var piece = !move.IsCapture 
                 ? validation.FindPawn(destinationCell, playerColor)
@@ -42,7 +42,7 @@ namespace ChessTests
     
             try
             {
-                if (piece != null) move.InitialPosition = piece.CurrentPosition;
+                if (piece != null) move.PiecePosition = piece.DestinationCell;
             }
             catch (Exception)
             {

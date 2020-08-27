@@ -30,7 +30,7 @@ namespace ChessTests.Validations
         {
             foreach (var orientation in orientations)
             {
-                currentCell = king.CurrentPosition;
+                currentCell = king.DestinationCell;
 
                 //there is no piece on the cells
                 currentCell = currentCell.Look(orientation);
@@ -74,7 +74,7 @@ namespace ChessTests.Validations
         {
             var cellsWhereKingCanMove = new List<Cell>();
             var isCheck = new List<bool>();
-            cellsWhereKingCanMove.Add(king.CurrentPosition);
+            cellsWhereKingCanMove.Add(king.DestinationCell);
             isCheck.Add(VerifyIfKingIsInCheck(cellsWhereKingCanMove[0]));
             Cell currentCell = null;
             _ = AvailableCellsAroundKing(king, cellsWhereKingCanMove, currentCell);
@@ -83,7 +83,7 @@ namespace ChessTests.Validations
             {
                 currentCell = cellsWhereKingCanMove[i];
 
-                var kingCoords = king.CurrentPosition;
+                var kingCoords = king.DestinationCell;
                 bool result;
                 if (currentCell.Piece != null)
                 {

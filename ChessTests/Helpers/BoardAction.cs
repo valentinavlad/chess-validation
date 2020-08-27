@@ -10,7 +10,7 @@ namespace ChessTests.Helpers
             var findPieces = new List<Piece>();
             foreach (var orientation in orientations)
             {
-                var currentCell = move.CurrentPosition;
+                var currentCell = move.DestinationCell;
                 while (true)
                 {
                     //there is no piece on the cells
@@ -45,7 +45,7 @@ namespace ChessTests.Helpers
             }
             else if (list.Count() > 1)
             {
-                return list.Where(q => q.CurrentPosition.Y == move.Y).First();
+                return list.Where(q => q.DestinationCell.Y == move.Y).First();
             }
             return null;
         }

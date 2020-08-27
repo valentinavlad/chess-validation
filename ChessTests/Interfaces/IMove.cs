@@ -8,6 +8,7 @@ namespace ChessTests.Interfaces
     {
         public Piece Promotion { get; set; }
         public bool IsCapture { get; set; }
+        public IPiece Piece { get; set; }
         public void CapturePiece(IPiece attacker, Cell cellDestination);
         public void MovePiece(IPiece piece, Cell destinationCell);
     }
