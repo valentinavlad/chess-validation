@@ -10,7 +10,7 @@ namespace ChessTests.GameAction
         {
             if (piece.IsOnInitialPosition())
             {
-                castling.KingCastling(piece, currentPlayer, move.DestinationCell, move);
+                castling.KingCastling(piece, currentPlayer, move.CurrentPosition, move);
                 //Console.WriteLine(currentPlayer + " makes king castling!");
                 return piece;
             }
@@ -24,7 +24,7 @@ namespace ChessTests.GameAction
         {
             if (piece.IsOnInitialPosition())
             {
-                castling.QueenCastling(piece, currentPlayer, move.DestinationCell, move);
+                castling.QueenCastling(piece, currentPlayer, move.CurrentPosition, move);
                 //Console.WriteLine(currentPlayer + " makes queen castling!");
                 return piece;
             }

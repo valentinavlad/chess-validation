@@ -16,15 +16,15 @@ namespace ChessTests.Pieces
             Name = PieceName.Rook;
         }
 
-        public override bool ValidateMovement(IBoard board, Move move)
+        public override bool ValidateMovement(IBoard board, IMove move)
         {
-            move.DestinationCell.CheckDestinationCellAvailability(move.Color);
+            move.CurrentPosition.CheckDestinationCellAvailability(move.PieceColor);
 
             IEnumerable<Piece> findRooks = board.FindPieces(move, RookOrientation);
             
             var piece = board.FoundedPiece(move, findRooks);
             
-            if (piece != null) move.PiecePosition = piece.CurrentPosition;
+            if (piece != null) move.InitialPosition = piece.CurrentPosition;
             
             return piece != null ? true : false;
         }

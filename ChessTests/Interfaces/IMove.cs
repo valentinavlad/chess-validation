@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ChessTests.Interfaces
 {
-    public interface IMove : ICoordinate, IMoveCastling, IMoveCheck, IPiecePosition
+    public interface IMove : ICoordinate, IMoveCastling, IMoveCheck, IPiecePosition, IPieceProperties
     {
         public Piece Promotion { get; set; }
         public bool IsCapture { get; set; }

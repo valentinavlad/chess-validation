@@ -8,7 +8,7 @@ namespace ChessTests
 {
      class PieceFactory
     {
-        public static IPieceProperties CreatePiece(PieceName Piece, PieceColor Color)
+        public static IPiece CreatePiece(PieceName Piece, PieceColor Color)
         {
             return Piece switch
             {

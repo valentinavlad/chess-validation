@@ -70,8 +70,8 @@ namespace ChessTests.Tests
             Assert.NotNull(move.Coordinate);
             Assert.Null(move.Promotion);
 
-            Assert.Equal(color, move.Color);
-            Assert.Equal(PieceName.Bishop, move.PieceName);
+            Assert.Equal(color, move.PieceColor);
+            Assert.Equal(PieceName.Bishop, move.Name);
             Assert.True(move.IsCheck);
             Assert.False(move.IsCheckMate);
         }
@@ -86,8 +86,8 @@ namespace ChessTests.Tests
             Assert.NotNull(move.Coordinate);
             Assert.Null(move.Promotion);
 
-            Assert.Equal(color, move.Color);
-            Assert.Equal(PieceName.Bishop, move.PieceName);
+            Assert.Equal(color, move.PieceColor);
+            Assert.Equal(PieceName.Bishop, move.Name);
             Assert.False(move.IsCheck);
             Assert.False(move.IsCheckMate);
             Assert.True(move.IsCapture);

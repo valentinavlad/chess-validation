@@ -4,10 +4,8 @@ using System.Text;
 
 namespace ChessTests.Interfaces
 {
-    public interface IPiece : IPieceProperties, IValidateMovement
+    public interface IPiece : IPieceProperties, IValidateMovement, IPiecePosition
     {
-        public Cell CurrentPosition { get; set; }
-        public Cell InitialPosition { get; set; }
         public bool IsOnInitialPosition();
     }
 }

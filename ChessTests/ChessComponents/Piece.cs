@@ -5,7 +5,7 @@ namespace ChessTests
 {
     public abstract class Piece : IPiece
     {
-        public PieceColor PieceColor { get; }
+        public PieceColor PieceColor { get; set; }
         public PieceName Name { get; set; }
 
         public Piece(PieceColor pieceColor)
@@ -16,12 +16,13 @@ namespace ChessTests
         public Cell CurrentPosition { get; set; }
 
         public Cell InitialPosition { get; set; }
+      
 
         public bool IsOnInitialPosition()
         {
             return InitialPosition == CurrentPosition;
         }
 
-        public abstract bool ValidateMovement(IBoard board, Move move);
+        public abstract bool ValidateMovement(IBoard board, IMove move);
     }
 }

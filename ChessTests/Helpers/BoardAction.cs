@@ -10,7 +10,7 @@ namespace ChessTests.Helpers
             var findPieces = new List<Piece>();
             foreach (var orientation in orientations)
             {
-                var currentCell = move.DestinationCell;
+                var currentCell = move.CurrentPosition;
                 while (true)
                 {
                     //there is no piece on the cells
@@ -21,11 +21,11 @@ namespace ChessTests.Helpers
 
                     if (currentCell.Piece == null) continue;
 
-                    if (currentCell.Piece.Name == pieceName && move.Color == currentCell.Piece.PieceColor)
+                    if (currentCell.Piece.Name == pieceName && move.PieceColor == currentCell.Piece.PieceColor)
                     {
                         findPieces.Add(currentCell.Piece);
                     }
-                    if (currentCell.Piece.Name == PieceName.King && move.Color != currentCell.Piece.PieceColor)
+                    if (currentCell.Piece.Name == PieceName.King && move.PieceColor != currentCell.Piece.PieceColor)
                     {
                         findPieces.Add(currentCell.Piece);
                      
@@ -38,7 +38,7 @@ namespace ChessTests.Helpers
 
         internal Piece FoundedPiece(Move move, List<Piece> findPieces)
         {
-            IEnumerable<Piece> list = findPieces.Where(x => x.Name == move.PieceName);
+            IEnumerable<Piece> list = findPieces.Where(x => x.Name == move.Name);
             if (list.Count() == 1)
             {
                 return list.First();

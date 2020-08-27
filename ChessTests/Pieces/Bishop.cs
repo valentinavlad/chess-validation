@@ -22,15 +22,15 @@ namespace ChessTests
             return board.FindPieces(move,  BishopOrientation).Count() != 0 ? true : false;  
         }
 
-        public override bool ValidateMovement(IBoard board, Move move)
+        public override bool ValidateMovement(IBoard board, IMove move)
         {
-            move.DestinationCell.CheckDestinationCellAvailability(move.Color);
+            move.CurrentPosition.CheckDestinationCellAvailability(move.PieceColor);
 
             IEnumerable<Piece> findBishops = board.FindPieces(move, BishopOrientation);
 
             var piece = board.FoundedPiece(move, findBishops);
 
-            if (piece != null) move.PiecePosition = piece.CurrentPosition;
+            if (piece != null) move.InitialPosition = piece.CurrentPosition;
 
             return piece != null ? true : false;
         }

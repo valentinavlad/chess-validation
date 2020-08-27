@@ -17,14 +17,14 @@ namespace ChessTests
             Name = PieceName.Knight;
         }
 
-        public override bool ValidateMovement(IBoard board, Move move)
+        public override bool ValidateMovement(IBoard board, IMove move)
         {
-            move.DestinationCell.CheckDestinationCellAvailability(move.Color);
+            move.CurrentPosition.CheckDestinationCellAvailability(move.PieceColor);
 
-            List<Piece> findKnights = FindPieces(move.Color, move.DestinationCell);
+            List<Piece> findKnights = FindPieces(move.PieceColor, move.CurrentPosition);
 
             var piece = board.FoundedPiece(move, findKnights);
-            if (piece != null) move.PiecePosition = piece.CurrentPosition;
+            if (piece != null) move.InitialPosition = piece.CurrentPosition;
             return piece != null ? true : false;
         }
 
@@ -32,7 +32,7 @@ namespace ChessTests
         {
             foreach (var orientation in KnightOrientation)
             {
-                var currentCell = move.DestinationCell;
+                var currentCell = move.CurrentPosition;
                 while (true)
                 {
                     //there is no piece on the cells
@@ -43,7 +43,7 @@ namespace ChessTests
 
                     if (currentCell.Piece == null) continue;
 
-                    if (currentCell.Piece.Name == PieceName.King && move.Color != currentCell.Piece.PieceColor)
+                    if (currentCell.Piece.Name == PieceName.King && move.PieceColor != currentCell.Piece.PieceColor)
                     {
                         //we find the king, which is in check
                         return true;

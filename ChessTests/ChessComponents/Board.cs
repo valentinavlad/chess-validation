@@ -47,11 +47,11 @@ namespace ChessTable
            
             if (move.IsCapture)
             {
-                whitePieces.Remove(move.DestinationCell.Piece);
-                move.CapturePiece(piece, move.DestinationCell);
+                whitePieces.Remove(move.CurrentPosition.Piece);
+                move.CapturePiece(piece, move.CurrentPosition);
             }
 
-            move.MovePiece(piece, move.DestinationCell);
+            move.MovePiece(piece, move.CurrentPosition);
 
             if (move.Promotion != null) PromotePawn(move, piece);
 
@@ -87,13 +87,13 @@ namespace ChessTable
         public bool FindPieceWhoNeedsToBeMoved(string moveAN, PieceColor playerColor)
         {
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, playerColor);
-            move.DestinationCell = CellAt(move.Coordinate);
+            move.CurrentPosition = CellAt(move.Coordinate);
             return FindPieceWhoNeedsToBeMoved(move);
         }
 
         public bool FindPieceWhoNeedsToBeMoved(Move move)
         {
-            move.DestinationCell = CellAt(move.Coordinate);
+            move.CurrentPosition = CellAt(move.Coordinate);
             return IsPiece(move);
         }
 
@@ -126,14 +126,14 @@ namespace ChessTable
         {
             move = GetMoveFromNotation(moveAN, currentPlayer);
             FindPieceWhoNeedsToBeMoved(move);
-            piece = move.PiecePosition.Piece;
+            piece = move.InitialPosition.Piece;
         }
 
         private Move GetMoveFromNotation(string moveAN, PieceColor currentPlayer)
         {
             var move = MoveNotationConverter.ParseMoveNotation(moveAN, currentPlayer);
 
-            move.DestinationCell = CellAt(move.Coordinate);
+            move.CurrentPosition = CellAt(move.Coordinate);
             return move;
         }
 
@@ -148,11 +148,12 @@ namespace ChessTable
             }
         }
 
-        public IEnumerable<Piece> FindPieces(Move move, IEnumerable<Orientation> orientations)
+        public IEnumerable<Piece> FindPieces(IMove move, IEnumerable<Orientation> orientations)
         {    
             foreach (var orientation in orientations)
             {
-                var currentCell = move.DestinationCell;
+                var currentCell = TransformCoordonatesIntoCell(move.Coordinate);
+               // var currentCell = move.CurrentPosition;
                 while (true)
                 {
                     //there is no piece on the cells
@@ -163,11 +164,11 @@ namespace ChessTable
 
                     if (currentCell.Piece == null) continue;
 
-                    if (currentCell.Piece.Name == move.PieceName && move.Color == currentCell.Piece.PieceColor)
+                    if (currentCell.Piece.Name == move.Name && move.PieceColor == currentCell.Piece.PieceColor)
                     {
                         yield return currentCell.Piece;
                     }
-                    if (currentCell.Piece.Name == PieceName.King && move.Color != currentCell.Piece.PieceColor)
+                    if (currentCell.Piece.Name == PieceName.King && move.PieceColor != currentCell.Piece.PieceColor)
                     {
                         yield return currentCell.Piece;
                     }
@@ -177,9 +178,9 @@ namespace ChessTable
             
         }
 
-        public Piece FoundedPiece(Move move, IEnumerable<Piece> findPieces)
+        public Piece FoundedPiece(IMove move, IEnumerable<Piece> findPieces)
         {
-            IEnumerable<Piece> list = findPieces.Where(x => x.Name == move.PieceName);
+            IEnumerable<Piece> list = findPieces.Where(x => x.Name == move.Name);
             if (list.Count() == 1)
             {
                 return list.First();
@@ -192,7 +193,7 @@ namespace ChessTable
         }
         internal bool IsPiece(Move move)
         {
-            IPieceProperties piece = PieceFactory.CreatePiece(move.PieceName, move.Color);
+            IPiece piece = PieceFactory.CreatePiece(move.Name, move.PieceColor);
             return piece.ValidateMovement(this, move);
         }
     }

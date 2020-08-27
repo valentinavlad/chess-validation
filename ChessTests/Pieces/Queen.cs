@@ -18,15 +18,15 @@ namespace ChessTests
             Name = PieceName.Queen;
         }
 
-        public override bool ValidateMovement(IBoard board,Move move)
+        public override bool ValidateMovement(IBoard board, IMove move)
         {
-            move.DestinationCell.CheckDestinationCellAvailability(move.Color);
+            move.CurrentPosition.CheckDestinationCellAvailability(move.PieceColor);
 
             IEnumerable<Piece> findQueens = board.FindPieces(move, QueenOrientation);
 
             var piece = board.FoundedPiece(move, findQueens);
 
-            if (piece != null) move.PiecePosition = piece.CurrentPosition;
+            if (piece != null) move.InitialPosition = piece.CurrentPosition;
 
             return piece != null ? true : false;
         }

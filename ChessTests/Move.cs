@@ -6,10 +6,12 @@ namespace ChessTests
 {
     public class Move : IMove
     {
-        public Cell DestinationCell { get; set; }
-        public Cell PiecePosition { get; set; }
-        public PieceColor Color { get; set; }
-        public PieceName PieceName { get; set; }
+        //dectination cell
+        public Cell CurrentPosition { get; set; }
+        //piece position
+        public Cell InitialPosition { get; set; }
+        public PieceColor PieceColor { get; set; }
+        public PieceName Name { get; set; }
         public Coordinate Coordinate { get; set; }
         public string Coordinates { get; set; }
         public int Y { get; set; } = -1;
@@ -19,6 +21,7 @@ namespace ChessTests
         public bool IsQueenCastling { get; set; }
         public Piece Promotion { get; set; }
         public bool IsCapture { get; set; }
+ 
         public void CapturePiece(IPiece attacker, Cell cellDestination)
         {
             if (!CellHasOpponentPiece(attacker, cellDestination))

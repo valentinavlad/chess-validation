@@ -19,16 +19,16 @@ namespace ChessTests
             Name = PieceName.Pawn;
         }
 
-        public override bool ValidateMovement(IBoard board,Move move)
+        public override bool ValidateMovement(IBoard board, IMove move)
         {
-            Piece piece = GetPawn(move.DestinationCell, move.Color, move);
+            Piece piece = GetPawn(move.CurrentPosition, move.PieceColor, move);
 
             return piece != null? true : false;
         }
 
         public bool CheckForOpponentKingOnSpecificRoutes(IBoard board, Move move)
         {
-            var orientations = move.Color == PieceColor.White 
+            var orientations = move.PieceColor == PieceColor.White 
                 ? WhitePawnCaptureOrientation 
                 : BlackPawnCaptureOrientation;
             return board.FindPieces(move, orientations).Count() != 0 ? true : false;
@@ -42,7 +42,7 @@ namespace ChessTests
     
             try
             {
-                if (piece != null) move.PiecePosition = piece.CurrentPosition;
+                if (piece != null) move.InitialPosition = piece.CurrentPosition;
             }
             catch (Exception)
             {
